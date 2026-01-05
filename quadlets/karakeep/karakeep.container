@@ -1,0 +1,23 @@
+[Unit]
+Description=Karakeep container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=karakeep
+Pod=karakeep.pod
+Image=ghcr.io/karakeep-app/karakeep:release
+Volume=karakeep-data.volume:/data:Z
+Secret=karakeep-nextauth-secret,type=env,target=NEXTAUTH_SECRET
+Secret=karakeep-meili-master-key,type=env,target=MEILI_MASTER_KEY
+Secret=karakeep-nextauth-url,type=env,target=NEXTAUTH_URL
+Secret=karakeep-oauth-wellknown-url,type=env,target=OAUTH_WELLKNOWN_URL
+Secret=karakeep-oauth-client-id,type=env,target=OAUTH_CLIENT_ID
+Secret=karakeep-oauth-client-secret,type=env,target=OAUTH_CLIENT_SECRET
+Secret=karakeep-allowed-internal-hostname,type=env,target=CRAWLER_ALLOWED_INTERNAL_HOSTNAMES
+EnvironmentFile=./%n.d/env
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

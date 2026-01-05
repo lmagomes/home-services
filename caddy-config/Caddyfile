@@ -1,0 +1,154 @@
+{
+	# Admin API endpoint
+	# admin off
+
+	# Enable logging
+	log {
+		output stdout
+		format console
+	}
+}
+
+jellyfin.{env.DOMAIN} {
+	reverse_proxy jellyfin.pod:8096
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}
+
+transmission.{env.DOMAIN} {
+	reverse_proxy transmission.pod:9091
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}
+
+mealie.{env.DOMAIN} {
+	reverse_proxy mealie.pod:9000
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}
+
+forgejo.{env.DOMAIN} {
+	reverse_proxy forgejo.pod:3000
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}
+
+calibre.{env.DOMAIN} {
+	reverse_proxy calibre.pod:8083
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}
+
+immich.{env.DOMAIN} {
+	reverse_proxy immich.pod:2283
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}
+
+audiobookshelf.{env.DOMAIN} {
+	encode gzip zstd
+	reverse_proxy audiobookshelf.pod:80
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}
+
+miniflux.{env.DOMAIN} {
+	reverse_proxy miniflux.pod:8080
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}
+
+it-tools.{env.DOMAIN} {
+	reverse_proxy it-tools.pod:80
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}
+
+karakeep.{env.DOMAIN} {
+	reverse_proxy karakeep.pod:3000
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}
+
+firefly.{env.DOMAIN} {
+	reverse_proxy firefly.pod:8080
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}
+
+bentopdf.{env.DOMAIN} {
+	reverse_proxy bentopdf.pod:8080
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}
+
+authentik.{env.DOMAIN} {
+	reverse_proxy authentik.pod:9000
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+	header {
+		websocket
+	}
+}
+
+mila.{env.DOMAIN} {
+	reverse_proxy mila:9090
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}

@@ -1,0 +1,18 @@
+[Unit]
+Description=Calibre Web container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=calibre
+Pod=calibre.pod
+Image=lscr.io/linuxserver/calibre-web:latest
+Volume=calibre-config.volume:/config:Z
+# Volume=/mnt/nas/media/books:/books:Z
+Mount=type=bind,source=/mnt/nas/media/books,destination=/books,relabel=private
+EnvironmentFile=./%n.d/env
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

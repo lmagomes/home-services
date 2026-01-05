@@ -1,0 +1,8 @@
+[Unit]
+Description=SQL Server container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=mssql.pod
+PublishPort=1433:1433
+Network=mssql.network

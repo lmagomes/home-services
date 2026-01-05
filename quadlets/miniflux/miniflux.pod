@@ -1,0 +1,7 @@
+[Unit]
+Description=Miniflux container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=miniflux.pod
+Network=services.network

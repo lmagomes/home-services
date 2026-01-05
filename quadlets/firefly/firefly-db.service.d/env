@@ -1,0 +1,2 @@
+POSTGRES_USER=firefly
+POSTGRES_DB=firefly

@@ -1,0 +1,9 @@
+[Unit]
+Description=Transmission container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=transmission.pod
+PublishPort=51413:51413
+PublishPort=51413:51413/udp
+Network=services.network

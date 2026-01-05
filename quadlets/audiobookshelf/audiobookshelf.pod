@@ -1,0 +1,7 @@
+[Unit]
+Description=Audiobookshelf container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=audiobookshelf.pod
+Network=services.network

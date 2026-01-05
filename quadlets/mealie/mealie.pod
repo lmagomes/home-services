@@ -1,0 +1,7 @@
+[Unit]
+Description=Mealie container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=mealie.pod
+Network=services.network

@@ -1,0 +1,16 @@
+[Unit]
+Description=Meilisearch container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=meilisearch
+Pod=karakeep.pod
+Image=docker.io/getmeili/meilisearch:v1.13.3
+Volume=karakeep-meilisearch-data.volume:/app/data:Z
+Environment=MEILI_NO_ANALYTICS="true"
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

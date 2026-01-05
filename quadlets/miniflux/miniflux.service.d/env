@@ -1,0 +1,9 @@
+RUN_MIGRATIONS=1
+CREATE_ADMIN=1
+ADMIN_USERNAME=admin
+OAUTH2_PROVIDER=oidc
+# OAUTH2_CLIENT_ID=<Client ID from authentik>
+# OAUTH2_CLIENT_SECRET=<Client Secret from authentik>
+# OAUTH2_REDIRECT_URL=https://miniflux.company/oauth2/oidc/callback
+# OAUTH2_OIDC_DISCOVERY_ENDPOINT=https://authentik.company/application/o/<application_slug>/
+OAUTH2_USER_CREATION=1

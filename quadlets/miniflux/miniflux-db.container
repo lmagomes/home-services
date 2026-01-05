@@ -1,0 +1,17 @@
+[Unit]
+Description=Miniflux db container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=miniflux-db
+Pod=miniflux.pod
+Image=docker.io/postgres:18
+EnvironmentFile=./miniflux.service.d/env
+Secret=miniflux-db-password,type=env,target=POSTGRES_PASSWORD
+Volume=miniflux-db-data.volume:/var/lib/postgresql:Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

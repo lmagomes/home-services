@@ -1,0 +1,20 @@
+[Unit]
+Description=Mealie container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=mealie
+Pod=mealie.pod
+Image=ghcr.io/mealie-recipes/mealie:v3.9.2
+Volume=mealie-data.volume:/app/data:Z
+EnvironmentFile=./%n.d/env
+Secret=mealie-base-url,type=env,target=BASE_URL
+Secret=mealie-oidc-configuration-url,type=env,target=OIDC_CONFIGURATION_URL
+Secret=mealie-oidc-client-id,type=env,target=OIDC_CLIENT_ID
+Secret=mealie-oidc-client-secret,type=env,target=OIDC_CLIENT_SECRET
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

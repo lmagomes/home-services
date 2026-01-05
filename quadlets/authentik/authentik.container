@@ -1,0 +1,24 @@
+[Unit]
+Description=Authentik container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=authentik
+Pod=authentik.pod
+Exec=server
+Image=ghcr.io/goauthentik/server:2025.10.3
+EnvironmentFile=./%n.d/env
+Secret=authentik-db-password,type=env,target=AUTHENTIK_POSTGRESQL__PASSWORD
+Secret=authentik-db-password,type=env,target=AUTHENTIK_POSTGRESQL__PASSWORD
+Secret=authentik-secret-key,type=env,target=AUTHENTIK_SECRET_KEY
+Secret=authentik-email-username,type=env,target=AUTHENTIK_EMAIL__USERNAME
+Secret=authentik-email-password,type=env,target=AUTHENTIK_EMAIL__PASSWORD
+Secret=authentik-email-from,type=env,target=AUTHENTIK_EMAIL__FROM
+Volume=authentik-media.volume:/media:Z
+Volume=authentik-custom-templates.volume:/templates:Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

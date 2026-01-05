@@ -1,0 +1,18 @@
+[Unit]
+Description=Firefly container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=firefly
+Pod=firefly.pod
+Image=docker.io/fireflyiii/core:latest
+EnvironmentFile=./%n.d/env
+Secret=firefly-db-password,type=env,target=DB_PASSWORD
+Secret=firefly-app-url,type=env,target=APP_URL
+Volume=firefly-upload.volume:/var/www/html/storage/upload:Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

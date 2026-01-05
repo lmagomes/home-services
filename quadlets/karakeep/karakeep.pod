@@ -1,0 +1,7 @@
+[Unit]
+Description=Karakeep container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=karakeep.pod
+Network=services.network

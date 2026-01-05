@@ -1,0 +1,15 @@
+[Unit]
+Description=Audiobookshelf container managed by Podman
+
+[Container]
+ContainerName=audiobookshelf
+Pod=audiobookshelf.pod
+Image=ghcr.io/advplyr/audiobookshelf:latest
+EnvironmentFile=./%n.d/env
+Volume=audiobookshelf-config.volume:/config:Z
+Volume=audiobookshelf-metadata.volume:/metadata:Z
+Mount=type=bind,source=/mnt/nas/media/audiobooks,destination=/audiobooks,relabel=private
+Mount=type=bind,source=/mnt/nas/media/podcasts,destination=/podcasts,relabel=private
+
+[Service]
+Restart=on-failure

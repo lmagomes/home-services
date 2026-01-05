@@ -1,0 +1,7 @@
+[Unit]
+Description=bentopdf container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=bentopdf.pod
+Network=services.network

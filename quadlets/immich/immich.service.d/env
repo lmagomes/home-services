@@ -1,0 +1,10 @@
+DB_HOSTNAME=immich_postgres
+DB_USERNAME=postgres
+POSTGRES_USER=postgres
+
+DB_DATABASE_NAME=immich
+POSTGRES_DB=immich
+
+REDIS_HOSTNAME=immich_redis
+
+IMMICH_MACHINE_LEARNING_URL=http://immich_machine_learning:3003

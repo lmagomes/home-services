@@ -1,0 +1,18 @@
+[Unit]
+Description=Caddy container managed by Podman
+
+[Container]
+ContainerName=caddy
+Pod=caddy.pod
+Image=localhost/caddy-cloudflare:2.10.2
+PodmanArgs=--secret cloudflare-token,type=env,target=CF_API_TOKEN
+PodmanArgs=--secret domain-secret,type=env,target=DOMAIN
+Volume=caddy-data:/data:Z
+Volume=caddy-config:/config:Z
+Volume=../caddy-config/Caddyfile:/etc/caddy/Caddyfile:ro,Z
+
+[Service]
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

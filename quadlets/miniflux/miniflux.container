@@ -1,0 +1,21 @@
+[Unit]
+Description=Miniflux container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=miniflux
+Pod=miniflux.pod
+Image=docker.io/miniflux/miniflux:latest
+EnvironmentFile=./%n.d/env
+Secret=miniflux-admin-password,type=env,target=ADMIN_PASSWORD
+Secret=miniflux-db-url,type=env,target=DATABASE_URL
+Secret=miniflux-oauth2-client-id,type=env,target=OAUTH2_CLIENT_ID
+Secret=miniflux-oauth2-client-secret,type=env,target=OAUTH2_CLIENT_SECRET
+Secret=miniflux-oauth2-redirect-url,type=env,target=OAUTH2_REDIRECT_URL
+Secret=miniflux-oauth2-oidc-discovery-endpoint,type=env,target=OAUTH2_OIDC_DISCOVERY_ENDPOINT
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

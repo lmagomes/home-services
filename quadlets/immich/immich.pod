@@ -1,0 +1,7 @@
+[Unit]
+Description=Immich pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=immich.pod
+Network=services.network

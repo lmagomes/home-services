@@ -1,0 +1,14 @@
+[Unit]
+Description=it-tools container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=it-tools
+Pod=it-tools.pod
+Image=docker.io/corentinth/it-tools:latest
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

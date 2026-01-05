@@ -1,0 +1,15 @@
+PUID=1000
+PGID=1000
+TZ=Europe/Lisbon
+OIDC_AUTH_ENABLED=true
+OIDC_PROVIDER_NAME=authentik
+# OIDC_CONFIGURATION_URL=https://authentik.company/application/o/<application_slug>/.well-known/openid-configuration
+# OIDC_CLIENT_ID=<Client ID from authentik>
+# OIDC_CLIENT_SECRET=<Client secret from authentik>
+OIDC_SIGNUP_ENABLED=true
+OIDC_USER_GROUP=mealie-users
+OIDC_ADMIN_GROUP=mealie-admins
+# Optional: The login page will be bypassed and you will be sent directly to your Identity Provider.
+OIDC_AUTO_REDIRECT=true
+# Optional: By setting this value to true, a session will be extended as if "Remember Me" was checked.
+OIDC_REMEMBER_ME=true

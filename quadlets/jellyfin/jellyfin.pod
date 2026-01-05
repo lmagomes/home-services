@@ -1,0 +1,9 @@
+[Unit]
+Description=Jellyfin container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=jellyfin.pod
+PublishPort=8096:8096/tcp
+UserNS=keep-id:uid=1000,gid=1000
+Network=services.network

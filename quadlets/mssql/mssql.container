@@ -1,0 +1,16 @@
+[Unit]
+Description=SQL Server container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=mssql
+Pod=mssql.pod
+Image=mcr.microsoft.com/mssql/server:2022-latest
+Volume=mssql.volume:/var/opt/mssql:Z
+Environment=ACCEPT_EULA=Y MSSQL_SA_PASSWORD=Passw0rd
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

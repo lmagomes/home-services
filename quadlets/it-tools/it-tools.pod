@@ -1,0 +1,7 @@
+[Unit]
+Description=IT-Tools container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=it-tools.pod
+Network=services.network

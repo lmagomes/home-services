@@ -1,0 +1,7 @@
+[Unit]
+Description=Authentik container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=authentik.pod
+Network=services.network

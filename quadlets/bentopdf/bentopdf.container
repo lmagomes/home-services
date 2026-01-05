@@ -1,0 +1,13 @@
+[Unit]
+Description=Bentopdf container managed by Podman
+
+[Container]
+ContainerName=bentopdf
+Pod=bentopdf.pod
+Image=ghcr.io/alam00000/bentopdf-simple:latest
+
+[Service]
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

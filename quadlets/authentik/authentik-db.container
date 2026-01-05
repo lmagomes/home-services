@@ -1,0 +1,18 @@
+[Unit]
+Description=Authentik db container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=authentik-db
+Pod=authentik.pod
+Image=docker.io/postgres:18
+EnvironmentFile=./%n.d/env
+NoNewPrivileges=true
+Secret=authentik-db-password,type=env,target=POSTGRES_PASSWORD
+Volume=authentik-db-data.volume:/var/lib/postgresql:Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

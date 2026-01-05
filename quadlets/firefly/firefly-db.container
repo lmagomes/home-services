@@ -1,0 +1,18 @@
+[Unit]
+Description=Firefly db container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=firefly-db
+Pod=firefly.pod
+Image=docker.io/postgres:18
+EnvironmentFile=./%n.d/env
+NoNewPrivileges=true
+Secret=firefly-db-password,type=env,target=POSTGRES_PASSWORD
+Volume=firefly-db-data.volume:/var/lib/postgresql:Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

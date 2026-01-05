@@ -1,0 +1,16 @@
+[Unit]
+Description=Forgejo container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=forgejo
+Pod=forgejo.pod
+Image=codeberg.org/forgejo/forgejo:13
+Volume=forgejo-data.volume:/data:Z
+EnvironmentFile=./%n.d/env
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

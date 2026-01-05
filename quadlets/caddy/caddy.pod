@@ -1,0 +1,9 @@
+[Unit]
+Description=Caddy container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=caddy.pod
+PublishPort=443:443
+PublishPort=2019:2019
+Network=services.network
