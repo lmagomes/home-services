@@ -1,0 +1,8 @@
+[Unit]
+Description=Jotty container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=jotty.pod
+UserNS=keep-id:uid=1000,gid=1000
+Network=services.network

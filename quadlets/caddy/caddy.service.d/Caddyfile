@@ -143,6 +143,16 @@ authentik.{env.DOMAIN} {
 	}
 }
 
+jotty.{env.DOMAIN} {
+	reverse_proxy jotty.pod:3000
+
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		# Optional: use Cloudflare resolvers when validating TXT propagation
+		resolvers 1.1.1.1 1.0.0.1
+	}
+}
+
 mila.{env.DOMAIN} {
 	reverse_proxy mila:9090
 
