@@ -88,6 +88,11 @@ miniflux.{env.DOMAIN} {
 	import cloudflare
 }
 
+papra.{env.DOMAIN} {
+	reverse_proxy papra.pod:1221
+	import cloudflare
+}
+
 transmission.{env.DOMAIN} {
 	reverse_proxy transmission.pod:9091
 	import cloudflare
