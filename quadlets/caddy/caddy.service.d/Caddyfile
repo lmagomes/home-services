@@ -38,8 +38,8 @@ bentopdf.{env.DOMAIN} {
 	import cloudflare
 }
 
-calibre.{env.DOMAIN} {
-	reverse_proxy calibre.pod:8083
+booklore.{env.DOMAIN} {
+	reverse_proxy booklore.pod:6060
 	import cloudflare
 }
 

@@ -1,7 +1,0 @@
-[Unit]
-Description=Calibre Web container managed by Podman
-After=network-online.target
-
-[Pod]
-PodName=calibre.pod
-Network=services.network

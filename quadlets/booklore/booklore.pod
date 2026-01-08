@@ -1,0 +1,7 @@
+[Unit]
+Description=Booklore container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=booklore.pod
+Network=services.network

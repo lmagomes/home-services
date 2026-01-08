@@ -1,0 +1,10 @@
+# BookLore Application Settings
+USER_ID=0
+GROUP_ID=0
+TZ=Europe/Lisbon
+BOOKLORE_PORT=6060
+
+# Database Connection (BookLore)
+DATABASE_URL=jdbc:mariadb://booklore-mariadb:3306/booklore
+DATABASE_USERNAME=booklore
+# DB_PASSWORD=ChangeMe_BookLoreApp_2025!

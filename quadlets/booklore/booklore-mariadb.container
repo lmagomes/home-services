@@ -1,0 +1,24 @@
+[Unit]
+Description=booklore MariaDB Web container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=booklore-mariadb
+Pod=booklore.pod
+Image=lscr.io/linuxserver/mariadb:11.4.5
+Volume=booklore-mariadb-config.volume:/config:Z
+EnvironmentFile=./%n.d/env
+Secret=booklore-mysql-root-password,type=env,target=MYSQL_ROOT_PASSWORD
+Secret=booklore-database-password,type=env,target=MYSQL_PASSWORD
+HealthCmd="CMD mariadb-admin ping -h localhost"
+HealthStartPeriod=30s
+HealthInterval=10s
+HealthTimeout=5s
+HealthRetries=5
+Notify=healthy
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
