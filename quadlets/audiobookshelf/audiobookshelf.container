@@ -4,7 +4,7 @@ Description=Audiobookshelf container managed by Podman
 [Container]
 ContainerName=audiobookshelf
 Pod=audiobookshelf.pod
-Image=ghcr.io/advplyr/audiobookshelf:latest
+Image=ghcr.io/advplyr/audiobookshelf:2.32.1
 EnvironmentFile=./%n.d/env
 Volume=audiobookshelf-config.volume:/config:Z
 Volume=audiobookshelf-metadata.volume:/metadata:Z

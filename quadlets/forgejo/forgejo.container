@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=forgejo
 Pod=forgejo.pod
-Image=codeberg.org/forgejo/forgejo:13
+Image=codeberg.org/forgejo/forgejo:13.0.4
 Volume=forgejo-data.volume:/data:Z
 EnvironmentFile=./%n.d/env
 

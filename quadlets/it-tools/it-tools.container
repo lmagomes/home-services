@@ -6,6 +6,7 @@ After=network.target
 ContainerName=it-tools
 Pod=it-tools.pod
 Image=docker.io/corentinth/it-tools:latest
+AutoUpdate=registry
 
 [Service]
 Restart=always

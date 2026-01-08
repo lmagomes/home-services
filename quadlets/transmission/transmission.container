@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=transmission
 Pod=transmission.pod
-Image=lscr.io/linuxserver/transmission:latest
+Image=lscr.io/linuxserver/transmission:4.0.6
 Volume=transmission-data.volume:/config:Z
 Volume=transmission-watch-folder.volume:/watch:Z
 Volume=/mnt/nas/downloads:/downloads:Z

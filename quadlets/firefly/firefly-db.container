@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=firefly-db
 Pod=firefly.pod
-Image=docker.io/postgres:18
+Image=docker.io/postgres:18.1
 EnvironmentFile=./%n.d/env
 NoNewPrivileges=true
 Secret=firefly-db-password,type=env,target=POSTGRES_PASSWORD

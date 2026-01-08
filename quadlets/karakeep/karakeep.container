@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=karakeep
 Pod=karakeep.pod
-Image=ghcr.io/karakeep-app/karakeep:release
+Image=ghcr.io/karakeep-app/karakeep:0.30.0
 Volume=karakeep-data.volume:/data:Z
 Secret=karakeep-nextauth-secret,type=env,target=NEXTAUTH_SECRET
 Secret=karakeep-meili-master-key,type=env,target=MEILI_MASTER_KEY
