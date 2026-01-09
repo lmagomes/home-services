@@ -1,6 +1,7 @@
 # MariaDB Container Settings
-PUID=1000
-PGID=1000
+PUID=0
+PGID=0
 # MYSQL_ROOT_PASSWORD=ChangeMe_MariaDBRoot_2025!
 MYSQL_DATABASE=booklore
 MYSQL_USER=booklore
+TZ=Europe/Lisbon

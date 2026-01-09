@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=booklore-mariadb
 Pod=booklore.pod
-Image=lscr.io/linuxserver/mariadb:11.4.5
+Image=lscr.io/linuxserver/mariadb:11.4.8
 Volume=booklore-mariadb-config.volume:/config:Z
 EnvironmentFile=./%n.d/env
 Secret=booklore-mysql-root-password,type=env,target=MYSQL_ROOT_PASSWORD
@@ -16,6 +16,9 @@ HealthInterval=10s
 HealthTimeout=5s
 HealthRetries=5
 Notify=healthy
+
+DropCapability=all
+AddCapability=CAP_CHOWN CAP_SETUID CAP_SETGID CAP_FOWNER
 
 [Service]
 Restart=always

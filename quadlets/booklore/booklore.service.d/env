@@ -1,7 +1,8 @@
 # BookLore Application Settings
-USER_ID=0
-GROUP_ID=0
+# USER_ID=1000
+# GROUP_ID=1000
 TZ=Europe/Lisbon
+SWAGGER_ENABLED=false
 BOOKLORE_PORT=6060
 
 # Database Connection (BookLore)
