@@ -10,7 +10,7 @@ fi
 for dir in ./quadlets/*/; do
     # go through each item in the quadlet directory
     for item in "$dir"*; do
-        full_path=$(readlink -f "$dir")
+        full_path="$(readlink -f "$dir")/$(basename "$item")"
         systemd_path="$systemd_dir/$(basename "$item")"
 
         # check if a symlink already exists
