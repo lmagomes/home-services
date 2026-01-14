@@ -5,7 +5,7 @@ After=network.target
 [Container]
 Pod=immich.pod
 ContainerName=immich_machine_learning
-Image=ghcr.io/immich-app/immich-machine-learning:v2
+Image=ghcr.io/immich-app/immich-machine-learning:v2.4.1
 Volume=immich-machine-learning-model-cache.volume:/cache:Z
 EnvironmentFile=immich.service.d/env
 

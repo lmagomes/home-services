@@ -5,7 +5,7 @@ After=network.target
 [Container]
 Pod=immich.pod
 ContainerName=immich_redis
-Image=docker.io/valkey/valkey:9@sha256:fb8d272e529ea567b9bf1302245796f21a2672b8368ca3fcb938ac334e613c8f
+Image=docker.io/valkey/valkey:9.0.1
 HealthCmd="/usr/local/bin/redis-cli ping || exit 1"
 HealthStartPeriod=30s
 HealthInterval=10s
