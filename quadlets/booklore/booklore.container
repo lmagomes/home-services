@@ -6,7 +6,7 @@ After=network.target
 [Container]
 ContainerName=booklore
 Pod=booklore.pod
-Image=docker.io/booklore/booklore:v1.16.5
+Image=docker.io/booklore/booklore:v1.17.0
 Volume=booklore-data.volume:/app/data:Z
 Mount=type=bind,source=/mnt/nas/media/books,destination=/books,relabel=private
 Mount=type=bind,source=/mnt/nas/media/bookdrop,destination=/bookdrop,relabel=private
