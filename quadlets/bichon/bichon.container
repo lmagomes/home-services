@@ -1,0 +1,17 @@
+[Unit]
+Description=bichon container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=bichon
+Pod=bichon.pod
+Image=docker.io/rustmailer/bichon:0.3.1
+Volume=bichon-data.volume:/data:Z
+EnvironmentFile=./%n.d/env
+Secret=bichon-cors-origins,type=env,target=BICHON_CORS_ORIGINS
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -33,6 +33,11 @@ authentik.{env.DOMAIN} {
 	import cloudflare
 }
 
+bichon.{env.DOMAIN} {
+	reverse_proxy bichon.pod:15630
+	import cloudflare
+}
+
 bentopdf.{env.DOMAIN} {
 	reverse_proxy bentopdf.pod:8080
 	import cloudflare
