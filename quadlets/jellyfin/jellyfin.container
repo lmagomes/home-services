@@ -6,7 +6,6 @@ After=network.target
 ContainerName=jellyfin
 Pod=jellyfin.pod
 Image=docker.io/jellyfin/jellyfin:10.11.5
-Label="io.containers.autoupdate=registry"
 Volume=jellyfin-cache.volume:/cache:Z
 Volume=jellyfin-config.volume:/config:Z
 Mount=type=bind,source=/mnt/nas/media,destination=/media,ro=true,relabel=private
