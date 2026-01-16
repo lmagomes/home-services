@@ -1,0 +1,7 @@
+[Unit]
+Description=version-api container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=version-api.pod
+Network=services.network

@@ -1,0 +1,17 @@
+[Unit]
+Description=version-api container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=version-api
+Pod=version-api.pod
+Image=ghcr.io/lmagomes/version-api:0.1.0
+Volume=/run/user/%U/podman/podman.sock:/run/podman/podman.sock
+SecurityLabelDisable=true
+User=0
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

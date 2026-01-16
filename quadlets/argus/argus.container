@@ -1,0 +1,24 @@
+[Unit]
+Description=Argus container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=argus
+Pod=argus.pod
+Image=ghcr.io/release-argus/argus:0.29.2
+Volume=argus-data.volume:/app/data/:Z
+Volume=./%n.d/config.yml:/app/config.yml:ro,Z
+EnvironmentFile=./%n.d/env
+Secret=argus-base-version-api-url,type=env,target=BASE_VERSION_API_URL
+
+HealthCmd=/healthcheck http://localhost:8080/api/v1/healthcheck
+HealthInterval=1m
+HealthRetries=3
+HealthStartPeriod=10s
+HealthTimeout=10s
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+[Unit]
+Description=Argus container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=argus.pod
+Network=services.network

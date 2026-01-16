@@ -19,6 +19,11 @@
 
 # Home services (part of podman deployment)
 
+argus.{env.DOMAIN} {
+	reverse_proxy argus.pod:8080
+	import cloudflare
+}
+
 audiobookshelf.{env.DOMAIN} {
 	reverse_proxy audiobookshelf.pod:80
 	encode gzip zstd
@@ -100,6 +105,11 @@ papra.{env.DOMAIN} {
 
 transmission.{env.DOMAIN} {
 	reverse_proxy transmission.pod:9091
+	import cloudflare
+}
+
+version-api.{env.DOMAIN} {
+	reverse_proxy version-api.pod:8080
 	import cloudflare
 }
 

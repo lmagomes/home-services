@@ -1,0 +1,253 @@
+
+settings:
+  log:
+    level: INFO       # Log level, DEBUG/VERBOSE/INFO/WARNING/ERROR
+    timestamps: false # Log with timestamps
+  data:
+    database_file: data/argus.db # SQLite DB file used to track the state of services
+  web:
+    listen_host: 0.0.0.0  # IP address to listen on
+    listen_port: 8080     # Port to listen on
+    route_prefix: /       # Web route prefix, e.g. /demo means http://IP:PORT/demo to access
+    disabled_routes: []   # API Routes to disable (see below)
+
+defaults:
+  service:
+    options:
+      interval: 24h              # How often to query for new releases
+
+service:
+
+  release-argus/argus:
+    latest_version:
+      type: github
+      url: release-argus/argus
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}argus
+      json: version
+    dashboard:
+      web_url: https://github.com/release-argus/Argus/blob/master/CHANGELOG.md
+      icon: https://github.com/release-argus/Argus/raw/master/web/ui/react-app/public/favicon.svg
+
+  advplyr/audiobookshelf:
+    latest_version:
+      type: github
+      url: advplyr/audiobookshelf
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+    deployed_version:
+      method: GET
+      url: ${BASE_VERSION_API_URL}audiobookshelf
+      json: version
+    dashboard:
+      icon: https://raw.githubusercontent.com/advplyr/audiobookshelf/master/client/static/icon.svg
+      web_url: https://github.com/advplyr/audiobookshelf/releases/tag/v{{ version }}
+
+  goauthentik/authentik:
+    latest_version:
+      type: github
+      url: goauthentik/authentik
+      url_commands:
+        - type: regex
+          regex: version\/([0-9.]+[0-9]+(?:-rc[0-9])?)
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}authentik
+      json: version
+    dashboard:
+      web_url: https://goauthentik.io/docs/releases/{{ version | split:"." | slice:":-1" | join:"."  }}
+      icon: https://raw.githubusercontent.com/goauthentik/authentik/master/web/icons/icon.png
+
+  alam00000/bentopdf:
+    latest_version:
+      type: github
+      url: alam00000/bentopdf
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}bentopdf
+      json: version
+      regex: ^v([0-9.]+)$
+    dashboard:
+      icon: https://raw.githubusercontent.com/alam00000/bentopdf/main/public/images/favicon.svg
+      web_url: https://github.com/alam00000/bentopdf/releases/tag/v{{ version }}
+
+  rustmailer/bichon:
+    latest_version:
+      type: github
+      url: rustmailer/bichon
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}bichon
+      json: version
+      regex: ^([0-9.]+)$
+    dashboard:
+      web_url: https://github.com/rustmailer/bichon/releases/tag/{{ version }}
+      icon: https://raw.githubusercontent.com/rustmailer/bichon/main/web/src/assets/logo.svg
+
+  booklore-app/BookLore:
+    latest_version:
+      type: github
+      url: booklore-app/BookLore
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}booklore
+      json: version
+      regex: ^v([0-9.]+)$
+    dashboard:
+      icon: https://raw.githubusercontent.com/booklore-app/BookLore/develop/assets/logo.svg
+      web_url: https://github.com/booklore-app/BookLore/releases/tag/v{{ version }}
+
+  caddyserver/caddy:
+    latest_version:
+      type: github
+      url: caddyserver/caddy
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}caddy
+      json: version
+      regex: ^([0-9.]+)$
+    dashboard:
+      icon: https://avatars.githubusercontent.com/u/12955528?s=48&v=4
+      web_url: https://github.com/booklore-app/caddy/releases/tag/v{{ version }}
+
+  firefly-iii/firefly-iii:
+    latest_version:
+      type: github
+      url: firefly-iii/firefly-iii
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}firefly
+      json: version
+      regex: version-([0-9.]+)
+    dashboard:
+      icon: https://raw.githubusercontent.com/firefly-iii/firefly-iii/main/public/images/logo.png
+      web_url: https://github.com/firefly-iii/firefly-iii/releases/tag/v{{ version }}
+
+  forgejo/forgejo:
+    latest_version:
+      type: web
+      url: https://codeberg.org/api/v1/repos/forgejo/forgejo/releases
+      url_commands:
+        - type: regex
+          regex: \"tag_name\":\"v([0-9.]+)\"
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}forgejo
+      json: version
+    dashboard:
+      web_url: https://codeberg.org/forgejo/forgejo/releases/tag/v{{ version }}
+      icon: https://codeberg.org/repo-avatars/73144-c883a242dec5299fbc06bbe3ee71d8c6
+
+  CorentinTh/it-tools:
+    latest_version:
+      type: github
+      url: CorentinTh/it-tools
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+[0-9.]+[0-9.]+-\d.+)
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}it-tools
+      json: version
+    dashboard:
+      web_url: https://github.com/CorentinTh/it-tools/releases/tag/v{{ version }}
+      icon: https://github.com/CorentinTh/it-tools/raw/main/.github/logo-white.png
+
+  immich-app/immich:
+    latest_version:
+      type: github
+      url: immich-app/immich
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}immich_server
+      json: version
+      regex: ^v([0-9.]+)$
+    dashboard:
+      icon: https://raw.githubusercontent.com/immich-app/immich/main/design/immich-logo.svg
+      web_url: https://github.com/immich-app/immich/releases/tag/v{{ version }}
+
+  jellyfin/jellyfin:
+    latest_version:
+      type: github
+      url: jellyfin/jellyfin
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}jellyfin
+      json: version
+    dashboard:
+      web_url: https://github.com/jellyfin/jellyfin/releases/v{{ version }}
+      icon: https://avatars.githubusercontent.com/u/45698031?s=200&v=4
+
+  fccview/jotty:
+    latest_version:
+      type: github
+      url: fccview/jotty
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}jotty
+      json: version
+    dashboard:
+      web_url: https://github.com/fccview/jotty/releases/tag/{{ version }}
+      icon: https://avatars.githubusercontent.com/u/112867047
+
+  karakeep-app/karakeep:
+    latest_version:
+      type: github
+      url: karakeep-app/karakeep
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}karakeep
+      json: version
+    dashboard:
+      web_url: https://github.com/karakeep-app/karakeep/releases/tag/{{ version }}
+      icon: https://raw.githubusercontent.com/karakeep-app/karakeep/main/apps/web/public/icons/logo-icon.svg
+
+  mealie-recipes/mealie:
+    latest_version:
+      type: github
+      url: mealie-recipes/mealie
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}mealie
+      json: version
+      regex: ^v([0-9.]+)$
+    dashboard:
+      web_url: https://github.com/mealie-recipes/mealie/releases/v{{ version }}
+      icon: https://avatars.githubusercontent.com/u/92342333?s=48&v=4
+
+  miniflux/v2:
+    latest_version:
+      type: github
+      url: miniflux/v2
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}miniflux
+      json: version
+    dashboard:
+      web_url: https://github.com/miniflux/v2/releases/tag/{{ version }}
+      icon: https://raw.githubusercontent.com/miniflux/v2/main/internal/ui/static/bin/sprite.svg
+
+  papra-hq/papra:
+    latest_version:
+      type: github
+      url: papra-hq/papra
+      url_commands:
+        - type: regex
+          regex: \@papra/docker\@([0-9.]+)$
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}papra
+      json: version
+      regex: ^([0-9.]+)-rootless$
+    dashboard:
+      web_url: https://github.com/papra-hq/papra/releases/tag/{{ version }}
+      icon: https://raw.githubusercontent.com/papra-hq/papra/main/apps/docs/public/favicon.svg
+
+  transmission/transmission:
+    latest_version:
+      type: github
+      url: transmission/transmission
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}transmission
+      json: version
+    dashboard:
+      web_url: https://github.com/transmission/transmission/releases/tag/{{ version }}
+      icon: https://avatars.githubusercontent.com/u/223312
