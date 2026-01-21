@@ -14,7 +14,7 @@ settings:
 defaults:
   service:
     options:
-      interval: 24h              # How often to query for new releases
+      interval: 12h              # How often to query for new releases
 
 service:
 
@@ -238,7 +238,7 @@ service:
       json: version
       regex: ^([0-9.]+)-rootless$
     dashboard:
-      web_url: https://github.com/papra-hq/papra/releases/tag/{{ version }}
+      web_url: https://github.com/papra-hq/papra/releases/tag/@papra/docker@{{ version }}
       icon: https://raw.githubusercontent.com/papra-hq/papra/main/apps/docs/public/favicon.svg
 
   transmission/transmission:
