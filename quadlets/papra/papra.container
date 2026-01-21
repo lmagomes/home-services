@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=papra
 Pod=papra.pod
-Image=ghcr.io/papra-hq/papra:25.12.0-rootless
+Image=ghcr.io/papra-hq/papra:26.0.0-rootless
 EnvironmentFile=./%n.d/env
 Secret=papra-auth-provider-customs,type=env,target=AUTH_PROVIDERS_CUSTOMS
 Secret=papra-auth-secret,type=env,target=AUTH_SECRET

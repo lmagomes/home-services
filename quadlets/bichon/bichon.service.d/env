@@ -1,2 +1,4 @@
 BICHON_LOG_LEVEL=info
 BICHON_ROOT_DIR=/data
+BICHON_INDEX_DIR=/data/envelope
+BICHON_DATA_DIR=/data/eml

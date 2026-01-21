@@ -5,8 +5,10 @@ After=network.target
 [Container]
 ContainerName=bichon
 Pod=bichon.pod
-Image=docker.io/rustmailer/bichon:0.3.1
-Volume=bichon-data.volume:/data:Z
+Image=docker.io/rustmailer/bichon:0.3.3
+Volume=bichon-root-dir.volume:/data:Z
+Volume=bichon-data-index.volume:/data/envelope:Z
+Volume=bichon-data-mail.volume:/data/eml:Z
 EnvironmentFile=./%n.d/env
 Secret=bichon-cors-origins,type=env,target=BICHON_CORS_ORIGINS
 
