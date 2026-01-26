@@ -4,7 +4,7 @@ Description=Bentopdf container managed by Podman
 [Container]
 ContainerName=bentopdf
 Pod=bentopdf.pod
-Image=ghcr.io/alam00000/bentopdf-simple:v1.15.4
+Image=ghcr.io/alam00000/bentopdf-simple:v1.16.1
 
 [Service]
 Restart=on-failure
