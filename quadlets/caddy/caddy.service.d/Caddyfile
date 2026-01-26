@@ -108,6 +108,11 @@ transmission.{env.DOMAIN} {
 	import cloudflare
 }
 
+uptime-kuma.{env.DOMAIN} {
+	reverse_proxy uptime-kuma.pod:3001
+	import cloudflare
+}
+
 version-api.{env.DOMAIN} {
 	reverse_proxy version-api.pod:8080
 	import cloudflare

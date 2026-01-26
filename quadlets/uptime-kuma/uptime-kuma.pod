@@ -1,0 +1,7 @@
+[Unit]
+Description=Uptime-kuma container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=uptime-kuma.pod
+Network=services.network

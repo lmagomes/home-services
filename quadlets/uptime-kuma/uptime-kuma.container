@@ -1,0 +1,18 @@
+[Unit]
+Description=Uptime-kuma container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=uptime-kuma
+Pod=uptime-kuma.pod
+Image=ghcr.io/louislam/uptime-kuma:2.0.2
+Volume=uptime-kuma-data.volume:/app/data:Z
+Volume=/run/user/%U/podman/podman.sock:/run/podman/podman.sock
+SecurityLabelDisable=true
+User=0
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
