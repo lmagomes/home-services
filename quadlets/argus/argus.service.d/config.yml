@@ -251,3 +251,14 @@ service:
     dashboard:
       web_url: https://github.com/transmission/transmission/releases/tag/{{ version }}
       icon: https://avatars.githubusercontent.com/u/223312
+
+  louislam/uptime-kuma:
+    latest_version:
+      type: github
+      url: louislam/uptime-kuma
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}uptime-kuma
+      json: version
+    dashboard:
+      web_url: https://github.com/louislam/uptime-kuma/releases/tag/{{ version }}
+      icon: https://raw.githubusercontent.com/louislam/uptime-kuma/master/public/icon.svg
