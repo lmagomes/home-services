@@ -14,6 +14,7 @@ Secret=karakeep-oauth-wellknown-url,type=env,target=OAUTH_WELLKNOWN_URL
 Secret=karakeep-oauth-client-id,type=env,target=OAUTH_CLIENT_ID
 Secret=karakeep-oauth-client-secret,type=env,target=OAUTH_CLIENT_SECRET
 Secret=karakeep-allowed-internal-hostname,type=env,target=CRAWLER_ALLOWED_INTERNAL_HOSTNAMES
+Secret=ollama-base-url,type=env,target=OLLAMA_BASE_URL
 EnvironmentFile=./%n.d/env
 
 [Service]

@@ -11,3 +11,17 @@ OAUTH_ALLOW_DANGEROUS_EMAIL_ACCOUNT_LINKING=true
 DISABLE_PASSWORD_AUTH=true
 # Optional but highly recommended:
 DISABLE_SIGNUPS=true
+
+# OLLAMA
+# OLLAMA_BASE_URL=http://ollama.domain.example:11434
+
+# Make sure to pull the models in ollama first. Example models:
+INFERENCE_TEXT_MODEL=gemma3
+INFERENCE_IMAGE_MODEL=llava
+
+# If the model you're using doesn't support structured output, you also need:
+# INFERENCE_OUTPUT_SCHEMA=plain
+
+INFERENCE_JOB_TIMEOUT_SEC=1920
+INFERENCE_FETCH_TIMEOUT_SEC=1920
+INFERENCE_CONTEXT_LENGTH=1024

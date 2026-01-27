@@ -1,0 +1,7 @@
+[Unit]
+Description=Ollama container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=ollama.pod
+Network=services.network

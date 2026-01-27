@@ -241,6 +241,21 @@ service:
       icon: https://raw.githubusercontent.com/miniflux/v2/main/internal/ui/static/bin/sprite.svg
       icon_link_to: https://miniflux.${BASE_DOMAIN_NAME}/
 
+  ollama/ollama:
+    latest_version:
+      type: github
+      url: ollama/ollama
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}ollama
+      json: version
+    dashboard:
+      web_url: https://github.com/ollama/ollama/releases/tag/v{{ version }}
+      icon: https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/docs/ollama-logo.svg
+      icon_link_to: https://ollama.${BASE_DOMAIN_NAME}/
+  
   papra-hq/papra:
     latest_version:
       type: github

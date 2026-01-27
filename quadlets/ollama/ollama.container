@@ -1,0 +1,15 @@
+[Unit]
+Description=Ollama container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=ollama
+Pod=ollama.pod
+Image=docker.io/ollama/ollama:0.15.2
+Volume=ollama-data.volume:/root/.ollama:Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

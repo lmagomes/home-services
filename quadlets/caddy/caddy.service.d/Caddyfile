@@ -98,6 +98,11 @@ miniflux.{env.DOMAIN} {
 	import cloudflare
 }
 
+ollama.{env.DOMAIN} {
+	reverse_proxy ollama.pod:11434
+	import cloudflare
+}
+
 papra.{env.DOMAIN} {
 	reverse_proxy papra.pod:1221
 	import cloudflare
