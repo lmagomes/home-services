@@ -28,6 +28,7 @@ service:
     dashboard:
       web_url: https://github.com/release-argus/Argus/blob/master/CHANGELOG.md
       icon: https://github.com/release-argus/Argus/raw/master/web/ui/react-app/public/favicon.svg
+      icon_link_to: https://argus.${BASE_DOMAIN_NAME}/
 
   advplyr/audiobookshelf:
     latest_version:
@@ -43,6 +44,7 @@ service:
     dashboard:
       icon: https://raw.githubusercontent.com/advplyr/audiobookshelf/master/client/static/icon.svg
       web_url: https://github.com/advplyr/audiobookshelf/releases/tag/v{{ version }}
+      icon_link_to: https://audiobookshelf.${BASE_DOMAIN_NAME}/
 
   goauthentik/authentik:
     latest_version:
@@ -57,6 +59,7 @@ service:
     dashboard:
       web_url: https://goauthentik.io/docs/releases/{{ version | split:"." | slice:":-1" | join:"."  }}
       icon: https://raw.githubusercontent.com/goauthentik/authentik/master/web/icons/icon.png
+      icon_link_to: https://authentik.${BASE_DOMAIN_NAME}/
 
   alam00000/bentopdf:
     latest_version:
@@ -69,6 +72,7 @@ service:
     dashboard:
       icon: https://raw.githubusercontent.com/alam00000/bentopdf/main/public/images/favicon.svg
       web_url: https://github.com/alam00000/bentopdf/releases/tag/v{{ version }}
+      icon_link_to: https://bentopdf.${BASE_DOMAIN_NAME}/
 
   rustmailer/bichon:
     latest_version:
@@ -81,6 +85,7 @@ service:
     dashboard:
       web_url: https://github.com/rustmailer/bichon/releases/tag/{{ version }}
       icon: https://raw.githubusercontent.com/rustmailer/bichon/main/web/src/assets/logo.svg
+      icon_link_to: https://bichon.${BASE_DOMAIN_NAME}/
 
   booklore-app/BookLore:
     latest_version:
@@ -96,6 +101,7 @@ service:
     dashboard:
       icon: https://raw.githubusercontent.com/booklore-app/BookLore/develop/assets/logo.svg
       web_url: https://github.com/booklore-app/BookLore/releases/tag/v{{ version }}
+      icon_link_to: https://booklore.${BASE_DOMAIN_NAME}/
 
   caddyserver/caddy:
     latest_version:
@@ -123,6 +129,7 @@ service:
     dashboard:
       icon: https://raw.githubusercontent.com/firefly-iii/firefly-iii/main/public/images/logo.png
       web_url: https://github.com/firefly-iii/firefly-iii/releases/tag/v{{ version }}
+      icon_link_to: https://firefly.${BASE_DOMAIN_NAME}/
 
   forgejo/forgejo:
     latest_version:
@@ -137,6 +144,7 @@ service:
     dashboard:
       web_url: https://codeberg.org/forgejo/forgejo/releases/tag/v{{ version }}
       icon: https://codeberg.org/repo-avatars/73144-c883a242dec5299fbc06bbe3ee71d8c6
+      icon_link_to: https://forgejo.${BASE_DOMAIN_NAME}/
 
   CorentinTh/it-tools:
     latest_version:
@@ -151,6 +159,7 @@ service:
     dashboard:
       web_url: https://github.com/CorentinTh/it-tools/releases/tag/v{{ version }}
       icon: https://github.com/CorentinTh/it-tools/raw/main/.github/logo-white.png
+      icon_link_to: https://it-tools.${BASE_DOMAIN_NAME}/
 
   immich-app/immich:
     latest_version:
@@ -163,6 +172,7 @@ service:
     dashboard:
       icon: https://raw.githubusercontent.com/immich-app/immich/main/design/immich-logo.svg
       web_url: https://github.com/immich-app/immich/releases/tag/v{{ version }}
+      icon_link_to: https://immich.${BASE_DOMAIN_NAME}/
 
   jellyfin/jellyfin:
     latest_version:
@@ -177,6 +187,7 @@ service:
     dashboard:
       web_url: https://github.com/jellyfin/jellyfin/releases/v{{ version }}
       icon: https://avatars.githubusercontent.com/u/45698031?s=200&v=4
+      icon_link_to: https://jellyfin.${BASE_DOMAIN_NAME}/
 
   fccview/jotty:
     latest_version:
@@ -188,6 +199,7 @@ service:
     dashboard:
       web_url: https://github.com/fccview/jotty/releases/tag/{{ version }}
       icon: https://avatars.githubusercontent.com/u/112867047
+      icon_link_to: https://jotty.${BASE_DOMAIN_NAME}/
 
   karakeep-app/karakeep:
     latest_version:
@@ -199,6 +211,7 @@ service:
     dashboard:
       web_url: https://github.com/karakeep-app/karakeep/releases/tag/{{ version }}
       icon: https://raw.githubusercontent.com/karakeep-app/karakeep/main/apps/web/public/icons/logo-icon.svg
+      icon_link_to: https://karakeep.${BASE_DOMAIN_NAME}/
 
   mealie-recipes/mealie:
     latest_version:
@@ -214,6 +227,7 @@ service:
     dashboard:
       web_url: https://github.com/mealie-recipes/mealie/releases/v{{ version }}
       icon: https://avatars.githubusercontent.com/u/92342333?s=48&v=4
+      icon_link_to: https://mealie.${BASE_DOMAIN_NAME}/
 
   miniflux/v2:
     latest_version:
@@ -225,6 +239,7 @@ service:
     dashboard:
       web_url: https://github.com/miniflux/v2/releases/tag/{{ version }}
       icon: https://raw.githubusercontent.com/miniflux/v2/main/internal/ui/static/bin/sprite.svg
+      icon_link_to: https://miniflux.${BASE_DOMAIN_NAME}/
 
   papra-hq/papra:
     latest_version:
@@ -240,6 +255,7 @@ service:
     dashboard:
       web_url: https://github.com/papra-hq/papra/releases/tag/@papra/docker@{{ version }}
       icon: https://raw.githubusercontent.com/papra-hq/papra/main/apps/docs/public/favicon.svg
+      icon_link_to: https://papra.${BASE_DOMAIN_NAME}/
 
   transmission/transmission:
     latest_version:
@@ -251,6 +267,7 @@ service:
     dashboard:
       web_url: https://github.com/transmission/transmission/releases/tag/{{ version }}
       icon: https://avatars.githubusercontent.com/u/223312
+      icon_link_to: https://transmission.${BASE_DOMAIN_NAME}/
 
   louislam/uptime-kuma:
     latest_version:
@@ -262,3 +279,4 @@ service:
     dashboard:
       web_url: https://github.com/louislam/uptime-kuma/releases/tag/{{ version }}
       icon: https://raw.githubusercontent.com/louislam/uptime-kuma/master/public/icon.svg
+      icon_link_to: https://uptime-kuma.${BASE_DOMAIN_NAME}/
