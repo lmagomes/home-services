@@ -1,0 +1,7 @@
+[Unit]
+Description=Backup service
+
+[Service]
+Type=oneshot
+# %Y is the directory where the original file is (not the symlink)
+ExecStart=/usr/bin/just --justfile %Y/../justfile backup
