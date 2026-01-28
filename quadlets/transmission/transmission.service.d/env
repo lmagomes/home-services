@@ -1,5 +1,6 @@
 PUID=1000
 PGID=1000
 TZ=Europe/Lisbon
-USER=user
-PASS=password
+# USER=user
+# PASS=password
+TRANSMISSION_WEB_HOME=/webui/flood-for-transmission/
