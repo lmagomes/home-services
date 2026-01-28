@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=argus
 Pod=argus.pod
-Image=ghcr.io/release-argus/argus:0.29.2
+Image=ghcr.io/release-argus/argus:0.29.3
 Volume=argus-data.volume:/app/data/:Z
 Volume=./%n.d/config.yml:/app/config.yml:ro,Z
 EnvironmentFile=./%n.d/env
