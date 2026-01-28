@@ -103,6 +103,11 @@ ollama.{env.DOMAIN} {
 	import cloudflare
 }
 
+open-webui.{env.DOMAIN} {
+	reverse_proxy ollama.pod:8080
+	import cloudflare
+}
+
 papra.{env.DOMAIN} {
 	reverse_proxy papra.pod:1221
 	import cloudflare

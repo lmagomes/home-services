@@ -255,6 +255,22 @@ service:
       web_url: https://github.com/ollama/ollama/releases/tag/v{{ version }}
       icon: https://raw.githubusercontent.com/ollama/ollama/refs/heads/main/docs/ollama-logo.svg
       icon_link_to: https://ollama.${BASE_DOMAIN_NAME}/
+
+  ollama/open-webui:
+    latest_version:
+      type: github
+      url: open-webui/open-webui
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}open-webui
+      json: version
+      regex: ^v([0-9.]+)$
+    dashboard:
+      web_url: https://github.com/open-webui/open-webui/releases/tag/v{{ version }}
+      icon: https://raw.githubusercontent.com/open-webui/open-webui/refs/heads/main/static/static/favicon.svg
+      icon_link_to: https://open-webui.${BASE_DOMAIN_NAME}/
   
   papra-hq/papra:
     latest_version:

@@ -1,0 +1,13 @@
+TZ=Europe/Lisbon
+OLLAMA_BASE_URL=http://ollama:11434
+# OAUTH_CLIENT_ID=<client_id>
+# OAUTH_CLIENT_SECRET=<client_secret>
+OAUTH_PROVIDER_NAME=authentik
+# OPENID_PROVIDER_URL=https://authentik.company/application/o/<application_slug>/.well-known/openid-configuration
+# OPENID_REDIRECT_URI=https://openwebui.company/oauth/oidc/callback
+# WEBUI_URL=https://openwebui.company
+# Allows auto-creation of new users using OAuth. Must be paired with ENABLE_LOGIN_FORM=false.
+ENABLE_OAUTH_SIGNUP=true
+# Disables user/password login form. Required when ENABLE_OAUTH_SIGNUP=true.
+ENABLE_LOGIN_FORM=false
+OAUTH_MERGE_ACCOUNTS_BY_EMAIL=true
