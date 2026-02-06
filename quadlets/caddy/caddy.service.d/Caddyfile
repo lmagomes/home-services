@@ -15,6 +15,20 @@
 		output stdout
 		format console
 	}
+
+	servers {
+		listener_wrappers {
+		layer4 {
+			# Check traffic for ssh and route it to forgejo:2222 if it matches
+			@ssh ssh
+			route @ssh {
+			proxy forgejo.pod:2222
+			}
+			route
+		}
+		tls
+		}
+  }
 }
 
 # Home services (part of podman deployment)

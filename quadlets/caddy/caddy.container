@@ -4,7 +4,7 @@ Description=Caddy container managed by Podman
 [Container]
 ContainerName=caddy
 Pod=caddy.pod
-Image=localhost/caddy-cloudflare:2.10.2
+Image=localhost/caddy-cloudflare-l4:2.10.2-alpine
 PodmanArgs=--secret cloudflare-token,type=env,target=CF_API_TOKEN
 PodmanArgs=--secret domain-secret,type=env,target=DOMAIN
 Volume=caddy-data.volume:/data:Z
