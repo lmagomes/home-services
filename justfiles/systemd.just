@@ -80,31 +80,42 @@ update-version service container version:
 # update quadlet container versions and create a PR
 update-quadlet-pr quadlet *pairs:
     #!/usr/bin/env fish
+    set -l all_pairs {{ pairs }}
 
-    if test (count $pairs) -eq 0
+    # Check inputs
+    if test (count $all_pairs) -eq 0
         echo "Usage: just update-quadlet-pr <quadlet> <container1> <version1> [<container2> <version2> ...]"
         exit 1
     end
 
-    if test (math (count $pairs) % 2) -ne 0
+    if test (math (count $all_pairs) % 2) -ne 0
         echo "Error: pairs must be container version pairs."
         exit 1
     end
 
-    if test -n (git status --porcelain)
-        echo "Error: working tree has uncommitted changes. Commit or stash first."
+    # Check for uncommitted changes, since otherwise we might accidentally commit unrelated changes
+    if not git diff --cached --quiet
+        echo "Error: working tree has uncommitted changes. Commit them first."
         exit 1
     end
 
+    # Create branch name based on updated containers
+    set updated_containers
+    for i in (seq 1 2 (count $all_pairs))
+        set container $all_pairs[$i]
+        set updated_containers $updated_containers $container
+    end
+
     set date (date +%Y%m%d)
-    set branch "updates/{{ quadlet }}-$date"
+    set branch "updates/{{ quadlet }}-$date-"(string join "-" $updated_containers)
     git checkout -b $branch
 
+    # do the updates
     set updates
-    set touched
-    for i in (seq 1 2 (count $pairs))
-        set container $pairs[$i]
-        set version $pairs[(math $i + 1)]
+    for i in (seq 1 2 (count $all_pairs))
+        set container $all_pairs[$i]
+        set updated_version $all_pairs[(math $i + 1)]
+        echo ">> $updated_version"
         set container_file "quadlets/{{ quadlet }}/$container.container"
 
         if not test -f $container_file
@@ -112,16 +123,16 @@ update-quadlet-pr quadlet *pairs:
             exit 1
         end
 
-        sed -i "s|^\(Image=.*:\).*|\1$version|" $container_file
-        set updates $updates "$container=$version"
-        set touched $touched $container_file
+        sed -i "s|^\(Image=.*:\).*|\1$updated_version|" $container_file
+        set updates $updates "$container=$updated_version"
+        git add $container_file
     end
 
-    git add $touched
+    # commit and push changes to git, and then create a PR
     set title "Update {{ quadlet }}: "(string join ", " $updates)
     git commit -m "$title"
     git push -u origin $branch
 
-    fj pr create --base main --head $branch --title "$title" --description "Updates: "(string join ", " $updates)
+    fj pr create --autofill
 
     echo "✅ Created PR for $branch"
