@@ -3,17 +3,16 @@
 # create podman secrets from encrypted secrets file
 create-secrets:
     #!/usr/bin/env fish
-
     sops decrypt .secrets/secrets.yaml | yq .secrets | while read -l secret
     set -l parts (string split ": " -- $secret)
     set -l name $parts[1]
     set -l value (string join ": " $parts[2..-1])
 
     if podman secret exists $name
-        echo "Secret $name already exists, skipping..."
+        echo "🔒 Secret $name already exists, skipping..."
         continue
     else
-        echo "Creating secret $name..."
+        echo "✅ Creating secret $name..."
     end
 
     # remove the leading and trailing single quotes if they exist
@@ -54,10 +53,10 @@ start-all:
     just list-pod-services | while read -l service_name
         # check if service is already running
         if systemctl --user is-active --quiet $service_name
-            echo "$service_name is already running. Skipping..."
+            echo "✅ $service_name is already running. Skipping..."
             continue
         else
-            echo "$service_name is not running. Starting..."
+            echo "🔄 $service_name is not running. Starting..."
             systemctl --user start $service_name
         end
     end
@@ -66,7 +65,7 @@ start-all:
 restart-all:
     #!/usr/bin/env fish
     just list-pod-services | while read -l service_name
-        echo "Restarting $service_name..."
+        echo "🔄 Restarting $service_name..."
         systemctl --user restart $service_name
     end
 
@@ -74,6 +73,6 @@ restart-all:
 stop-all:
     #!/usr/bin/env fish
     just list-pod-services | while read -l service_name
-        echo "Stopping $service_name..."
+        echo "🔄 Stopping $service_name..."
         systemctl --user stop $service_name
     end
