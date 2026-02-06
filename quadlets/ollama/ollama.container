@@ -7,6 +7,8 @@ ContainerName=ollama
 Pod=ollama.pod
 Image=docker.io/ollama/ollama:0.15.2
 Volume=ollama-data.volume:/root/.ollama:Z
+# AddDevice=/dev/dri
+EnvironmentFile=./%n.d/env
 
 [Service]
 Restart=always
