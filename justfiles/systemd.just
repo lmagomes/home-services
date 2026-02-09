@@ -143,8 +143,8 @@ merge-quadlet-pr pr_number:
     #!/usr/bin/env fish
     fj pr merge {{ pr_number }}
 
-    # push the merged changes to the remote repository
-    git push
+    # pull the merged changes from the remote repository
+    git pull
 
     echo "✅ Merged PR #$pr_number into main"
 
