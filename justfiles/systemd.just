@@ -135,4 +135,73 @@ update-quadlet-pr quadlet *pairs:
 
     fj pr create --autofill
 
+    git checkout main
+
     echo "✅ Created PR for $branch"
+
+merge-quadlet-pr pr_number:
+    #!/usr/bin/env fish
+    fj pr merge {{ pr_number }}
+
+    # push the merged changes to the remote repository
+    git push
+
+    echo "✅ Merged PR #$pr_number into main"
+
+# pull new podman images and restart affected services
+update-podman-images:
+    #!/usr/bin/env fish
+    set root_dirs
+
+    for container_file in (find quadlets/ -name "*.container")
+        set image_name (grep "Image=" $container_file | cut -d'=' -f2)
+
+        # If this is not :latest (or default latest), keep the original behavior.
+        if not string match -qr ':latest$' $image_name; and string match -q '*:*' $image_name
+            if podman image exists $image_name
+                echo "Image $image_name already exists, skipping pull."
+                continue
+            else
+                echo "Pulling image $image_name."
+                podman pull $image_name
+                set -a root_dirs (dirname $container_file)
+                continue
+            end
+        end
+
+        echo "Checking image $image_name for updates..."
+
+        # Get current digest if image exists
+        set old_digest ""
+        if podman image exists $image_name
+            set old_digest (podman image inspect $image_name --format '{{ "{{.Digest}}" }}' 2>/dev/null)
+        end
+
+        # Pull the image
+        podman pull $image_name
+
+        # Get new digest
+        set new_digest (podman image inspect $image_name --format '{{ "{{.Digest}}" }}' 2>/dev/null)
+
+        # Check if digest changed (or image was new)
+        if test "$old_digest" != "$new_digest"
+            echo "✅ Image $image_name was updated."
+            set -a root_dirs (dirname $container_file)
+        else
+            echo "Image $image_name is already up to date."
+        end
+    end
+
+    # check if root_dirs list is not empty
+    if test (count $root_dirs) -ne 0
+        # reload systemd user daemon to recognize any new/updated services
+        systemctl --user daemon-reload
+
+        # go through each root dir and get the .pod file
+        for dir in $root_dirs
+            set service_name (find $dir -name "*.pod" -exec basename {} \; | sed 's/\.pod/-pod.service/')
+
+            echo "Restarting service $service_name to create container with new image."
+            systemctl --user restart $service_name
+        end
+    end
