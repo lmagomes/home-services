@@ -22,6 +22,7 @@ service:
     latest_version:
       type: github
       url: release-argus/argus
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}argus
       json: version
@@ -37,6 +38,7 @@ service:
       url_commands:
         - type: regex
           regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       method: GET
       url: ${BASE_VERSION_API_URL}audiobookshelf
@@ -53,6 +55,7 @@ service:
       url_commands:
         - type: regex
           regex: version\/([0-9.]+[0-9]+(?:-rc[0-9])?)
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}authentik
       json: version
@@ -65,6 +68,7 @@ service:
     latest_version:
       type: github
       url: alam00000/bentopdf
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}bentopdf
       json: version
@@ -78,6 +82,7 @@ service:
     latest_version:
       type: github
       url: rustmailer/bichon
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}bichon
       json: version
@@ -91,6 +96,7 @@ service:
     latest_version:
       type: github
       url: booklore-app/BookLore
+      access_token: ${GITHUB_ACCESS_TOKEN}
       url_commands:
         - type: regex
           regex: v([0-9.]+)$
@@ -107,6 +113,7 @@ service:
     latest_version:
       type: github
       url: caddyserver/caddy
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}caddy
       json: version
@@ -122,6 +129,7 @@ service:
       url_commands:
         - type: regex
           regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}firefly
       json: version
@@ -153,6 +161,7 @@ service:
       url_commands:
         - type: regex
           regex: v([0-9.]+[0-9.]+[0-9.]+-\d.+)
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}it-tools
       json: version
@@ -165,6 +174,7 @@ service:
     latest_version:
       type: github
       url: immich-app/immich
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}immich_server
       json: version
@@ -181,6 +191,7 @@ service:
       url_commands:
         - type: regex
           regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}jellyfin
       json: version
@@ -193,6 +204,7 @@ service:
     latest_version:
       type: github
       url: fccview/jotty
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}jotty
       json: version
@@ -205,6 +217,7 @@ service:
     latest_version:
       type: github
       url: karakeep-app/karakeep
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}karakeep
       json: version
@@ -220,6 +233,7 @@ service:
       url_commands:
         - type: regex
           regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}mealie
       json: version
@@ -233,6 +247,7 @@ service:
     latest_version:
       type: github
       url: miniflux/v2
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}miniflux
       json: version
@@ -245,6 +260,7 @@ service:
     latest_version:
       type: github
       url: ZeroTricks/lumo-tamer
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}lumo-tamer
       json: version
@@ -259,6 +275,7 @@ service:
       url_commands:
         - type: regex
           regex: b([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}llamacpp
       json: version
@@ -275,6 +292,7 @@ service:
       url_commands:
         - type: regex
           regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}llm-open-webui
       json: version
@@ -291,6 +309,7 @@ service:
       url_commands:
         - type: regex
           regex: \@papra/docker\@([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}papra
       json: version
@@ -304,6 +323,7 @@ service:
     latest_version:
       type: github
       url: transmission/transmission
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}transmission
       json: version
@@ -316,6 +336,7 @@ service:
     latest_version:
       type: github
       url: louislam/uptime-kuma
+      access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}uptime-kuma
       json: version
