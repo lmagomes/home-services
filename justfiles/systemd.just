@@ -56,27 +56,6 @@ symlink-timers:
         end
     end
 
-# update container version in quadlet and restart service
-update-version service container version:
-    #!/usr/bin/env fish
-
-    # update the file
-    set container_file "quadlets/{{ service }}/{{ container }}.container"
-    sed -i "s|^\(Image=.*:\).*|\1{{ version }}|" $container_file
-
-    # pull the new image and restart the service
-    set image_path (sed -n 's/^Image=//p' $container_file)
-    podman image pull $image_path
-    systemctl --user daemon-reload
-    systemctl --user restart {{ service }}-pod.service
-
-    # commit and push changes to git
-    git add $container_file
-    git commit -m "Update {{ container }} to version {{ version }} in {{ service }}"
-    git push
-
-    echo "✅ Updated {{ container }} in {{ service }} to version {{ version }} (Image: $image_path)"
-
 # update quadlet container versions and create a PR
 update-quadlet-pr quadlet *pairs:
     #!/usr/bin/env fish
