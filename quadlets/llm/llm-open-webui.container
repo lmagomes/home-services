@@ -3,10 +3,10 @@ Description=open-webui container managed by Podman
 After=network.target
 
 [Container]
-ContainerName=open-webui
-Pod=ollama.pod
+ContainerName=llm-open-webui
+Pod=llm.pod
 Image=ghcr.io/open-webui/open-webui:v0.7.2
-Volume=open-webui-data.volume:/app/backend/data:Z
+Volume=llm-open-webui-data.volume:/app/backend/data:Z
 EnvironmentFile=./%n.d/env
 Secret=open-webui-client-id,type=env,target=OAUTH_CLIENT_ID
 Secret=open-webui-client-secret,type=env,target=OAUTH_CLIENT_SECRET

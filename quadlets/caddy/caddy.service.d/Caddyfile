@@ -112,13 +112,13 @@ miniflux.{env.DOMAIN} {
 	import cloudflare
 }
 
-ollama.{env.DOMAIN} {
-	reverse_proxy ollama.pod:11434
+open-webui.{env.DOMAIN} {
+	reverse_proxy llm.pod:8080
 	import cloudflare
 }
 
-open-webui.{env.DOMAIN} {
-	reverse_proxy ollama.pod:8080
+llamacpp.{env.DOMAIN} {
+	reverse_proxy llm.pod:10000
 	import cloudflare
 }
 

@@ -1,0 +1,20 @@
+[Unit]
+Description=lumo tamer container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=lumo-tamer-browser
+Pod=llm.pod
+Image=localhost/lumo-tamer-chromium:latest
+Volume=lumo-tamer-browser-data.volume:/config:Z
+EnvironmentFile=./%n.d/env
+ShmSize=2g
+# SecurityOpt=seccomp=unconfined
+# Interactive=true
+# TTY=true
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -30,7 +30,8 @@ backup-volumes:
     #!/usr/bin/env fish
     set BACKUP_FOLDER "$HOME/podman_volume_backup"
     # List of pods to skip (add pod names here, e.g., "ollama.pod")
-    set SKIP_PODS "ollama.pod" "transmission.pod"
+    set SKIP_PODS "bentopdf.pod" "it-tools" "mssql" "transmission.pod" "version-api"
+    set SKIP_VOLUMES "systemd-llm-llamacpp-models"
 
     just list-pod-services | while read -l service_name
         set pod_name (echo $service_name | sed 's/-pod.service/\.pod/')
@@ -50,6 +51,13 @@ backup-volumes:
         systemctl --user stop $service_name
         for volume_name in $volume_list
             if test -n "$volume_name"
+
+                # Check if this volume should be skipped
+                if contains $volume_name $SKIP_VOLUMES
+                    echo "🔄 Skipping backup for: $volume_name"
+                    continue
+                end
+
                 set volume_name_backup (string replace ":" "_" $volume_name)
                 # Create a backup using podman
                 set backup_file "$BACKUP_FOLDER/$volume_name_backup.tar"

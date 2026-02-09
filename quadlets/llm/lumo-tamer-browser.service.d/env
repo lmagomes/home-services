@@ -1,0 +1,5 @@
+PUID=1000
+PGID=1000
+TZ=Etc/UTC
+# we use port=9221 here, socat in the image will forward 9222 to it
+CHROME_CLI=https://lumo.proton.me --remote-debugging-address=0.0.0.0 --remote-debugging-port=9221 --remote-debugging-allowed-origins=* --disable-dev-shm-usage

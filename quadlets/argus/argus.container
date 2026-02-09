@@ -11,6 +11,7 @@ Volume=./%n.d/config.yml:/app/config.yml:ro,Z
 EnvironmentFile=./%n.d/env
 Secret=argus-base-version-api-url,type=env,target=BASE_VERSION_API_URL
 Secret=domain-secret,type=env,target=BASE_DOMAIN_NAME
+Secret=github-token,type=env,target=GITHUB_ACCESS_TOKEN
 
 HealthCmd=/healthcheck http://localhost:8080/api/v1/healthcheck
 HealthInterval=1m

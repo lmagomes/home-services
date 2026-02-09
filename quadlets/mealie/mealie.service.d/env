@@ -13,3 +13,9 @@ OIDC_ADMIN_GROUP=mealie-admins
 OIDC_AUTO_REDIRECT=true
 # Optional: By setting this value to true, a session will be extended as if "Remember Me" was checked.
 OIDC_REMEMBER_ME=true
+
+# open ai
+OPENAI_BASE_URL=http://llm.pod:3003/v1
+OPENAI_API_KEY=FdAy0awlSiqrxi4CuBYv2fKysLLswCM6hJ5R6VtwZVHiJKiqfeX3o2zCvERwTxiU
+OPENAI_ENABLE_IMAGE_SERVICES=false
+OPENAI_WORKERS=1

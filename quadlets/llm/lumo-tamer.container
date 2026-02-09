@@ -1,0 +1,20 @@
+[Unit]
+Description=lumo tamer container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=lumo-tamer
+Pod=llm.pod
+Image=localhost/lumo-tamer:0.2.0
+Volume=lumo-tamer-sessions.volume:/app/sessions:Z
+Volume=./%n.d/config.yaml:/app/config.yaml:ro,Z
+EnvironmentFile=./%n.d/env
+Secret=lumo-tamer-vault-key,target=/run/secrets/lumo-vault-key,mode=0600
+# Exec=sleep 10m
+# Exec=tamer-server
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
