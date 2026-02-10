@@ -72,7 +72,7 @@ service:
     deployed_version:
       url: ${BASE_VERSION_API_URL}bentopdf
       json: version
-      regex: ^v([0-9.]+)$
+      regex: ^([0-9.]+)$
     dashboard:
       icon: https://raw.githubusercontent.com/alam00000/bentopdf/main/public/images/favicon.svg
       web_url: https://github.com/alam00000/bentopdf/releases/tag/v{{ version }}
