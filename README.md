@@ -209,6 +209,18 @@ just clean-symlinks
 
 ### Backup & Restore
 
+#### initialize
+
+The backup repositories can be initialized with something like (adjust for your own needs):
+
+```bash
+restic init --password-command 'just get-restic-password' --repo /mnt/nas/backup/podman-volumes/
+restic init --password-command 'just get-restic-password' --repo /mnt/nas/backup/audiobooks/
+restic init --password-command 'just get-restic-password' --repo /mnt/nas/backup/books/
+```
+
+These all use the same password, but the `just get-restic-password` could be adjusted to have a different password per backup repository.
+
 ```bash
 # Run full backup (volumes + restic backup)
 just backup
