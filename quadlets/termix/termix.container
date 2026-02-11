@@ -1,0 +1,17 @@
+[Unit]
+Description=termix container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=termix
+Pod=termix.pod
+Image=ghcr.io/lukegus/termix:release-1.11.0
+Volume=termix-data.volume:/app/data:Z
+EnvironmentFile=./%n.d/env
+# Network=host
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

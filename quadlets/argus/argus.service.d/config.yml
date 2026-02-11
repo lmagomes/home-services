@@ -318,6 +318,23 @@ service:
       web_url: https://github.com/papra-hq/papra/releases/tag/@papra/docker@{{ version }}
       icon: https://raw.githubusercontent.com/papra-hq/papra/main/apps/docs/public/favicon.svg
       icon_link_to: https://papra.${BASE_DOMAIN_NAME}/
+  
+  Termix/Termix:
+    latest_version:
+      type: github
+      url: Termix-SSH/Termix
+      url_commands:
+        - type: regex
+          regex: release-([0-9.]+)-tag$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}termix
+      json: version
+      regex: ^release-([0-9.]+)$
+    dashboard:
+      web_url: https://github.com/Termix-SSH/Termix/releases/tag/release-{{ version }}-tag
+      icon: https://avatars.githubusercontent.com/u/236961563?s=48&v=4
+      icon_link_to: https://Termix.${BASE_DOMAIN_NAME}/
 
   transmission/transmission:
     latest_version:

@@ -1,0 +1,9 @@
+[Unit]
+Description=termix container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=termix.pod
+Network=services.network
+# Network=podman
+# AddHost=host.containers.internal:host-gateway

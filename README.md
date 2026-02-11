@@ -127,6 +127,10 @@ npm run auth
 
 You can then remove the `Exec` part of the container.
 
+### termix
+
+I have tailscale installed on the host server, so these network options work for me. You may need to adjust the podman network options to suite your needs.
+
 ### 3. Reload systemd
 
 After creating symlinks, reload the systemd daemon:
