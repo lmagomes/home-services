@@ -260,10 +260,14 @@ service:
     latest_version:
       type: github
       url: ZeroTricks/lumo-tamer
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       url: ${BASE_VERSION_API_URL}lumo-tamer
       json: version
+      regex: ^v([0-9.]+)$
     dashboard:
       web_url: https://github.com/ZeroTricks/lumo-tamer/releases/tag/v{{ version }}
       icon: https://lumo.proton.me/assets/static/favicon.c3c7c9e00e0d5ffdc91f.svg
