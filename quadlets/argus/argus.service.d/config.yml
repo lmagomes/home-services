@@ -265,7 +265,7 @@ service:
       url: ${BASE_VERSION_API_URL}lumo-tamer
       json: version
     dashboard:
-      web_url: https://github.com/ZeroTricks/lumo-tamer/releases/tag/{{ version }}
+      web_url: https://github.com/ZeroTricks/lumo-tamer/releases/tag/v{{ version }}
       icon: https://lumo.proton.me/assets/static/favicon.c3c7c9e00e0d5ffdc91f.svg
 
   llm/llamacpp:
