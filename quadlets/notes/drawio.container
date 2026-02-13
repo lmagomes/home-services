@@ -1,0 +1,14 @@
+[Unit]
+Description=draw.io container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=drawio
+Pod=notes.pod
+Image=docker.io/jgraph/drawio:29.3.6
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

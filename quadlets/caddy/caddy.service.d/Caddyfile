@@ -93,7 +93,12 @@ jellyfin.{env.DOMAIN} {
 }
 
 jotty.{env.DOMAIN} {
-	reverse_proxy jotty.pod:3000
+	reverse_proxy notes.pod:3000
+	import cloudflare
+}
+
+drawio.{env.DOMAIN} {
+	reverse_proxy notes.pod:8080
 	import cloudflare
 }
 

@@ -200,7 +200,7 @@ service:
       icon: https://avatars.githubusercontent.com/u/45698031?s=200&v=4
       icon_link_to: https://jellyfin.${BASE_DOMAIN_NAME}/
 
-  fccview/jotty:
+  notes/jotty:
     latest_version:
       type: github
       url: fccview/jotty
@@ -212,6 +212,22 @@ service:
       web_url: https://github.com/fccview/jotty/releases/tag/{{ version }}
       icon: https://avatars.githubusercontent.com/u/112867047
       icon_link_to: https://jotty.${BASE_DOMAIN_NAME}/
+
+  notes/drawio:
+    latest_version:
+      type: github
+      url: jgraph/drawio
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}drawio
+      json: version
+    dashboard:
+      web_url: https://github.com/jgraph/drawio/releases/tag/v{{ version }}
+      icon: https://raw.githubusercontent.com/jgraph/drawio/refs/heads/dev/src/main/webapp/images/drawio.svg
+      icon_link_to: https://drawio.${BASE_DOMAIN_NAME}/
 
   karakeep-app/karakeep:
     latest_version:
