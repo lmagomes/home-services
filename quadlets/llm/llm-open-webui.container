@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=llm-open-webui
 Pod=llm.pod
-Image=ghcr.io/open-webui/open-webui:v0.7.2
+Image=ghcr.io/open-webui/open-webui:v0.8.0
 Volume=llm-open-webui-data.volume:/app/backend/data:Z
 EnvironmentFile=./%n.d/env
 Secret=open-webui-client-id,type=env,target=OAUTH_CLIENT_ID
