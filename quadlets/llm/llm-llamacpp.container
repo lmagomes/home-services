@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=llamacpp
 Pod=llm.pod
-Image=ghcr.io/ggml-org/llama.cpp:server-vulkan-b8006
+Image=ghcr.io/ggml-org/llama.cpp:server-vulkan-b8022
 Volume=llm-llamacpp-models.volume:/models:Z
 AddDevice=/dev/dri
 EnvironmentFile=./%n.d/env
