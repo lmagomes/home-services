@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=lumo-tamer
 Pod=llm.pod
-Image=localhost/lumo-tamer:v0.3.0
+Image=localhost/lumo-tamer:0.4.0
 Volume=lumo-tamer-sessions.volume:/app/sessions:Z
 Volume=./%n.d/config.yaml:/app/config.yaml:ro,Z
 EnvironmentFile=./%n.d/env
