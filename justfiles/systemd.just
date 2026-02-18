@@ -25,6 +25,12 @@ symlink-quadlets:
     for dir in ./quadlets/*/
         # go through each item in the quadlet directory
         for item in "$dir"*
+            # skip disabled files
+            if string match -q '*.disabled' $item
+                echo "⏭️  skipping disabled file: $item"
+                continue
+            end
+
             set full_path "$(readlink -f "$dir")/$(basename "$item")"
             set systemd_path "{{ systemd-container-dir }}/$(basename "$item")"
 
