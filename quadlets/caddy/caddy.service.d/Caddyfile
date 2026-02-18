@@ -31,12 +31,74 @@
   }
 }
 
-# Home services (part of podman deployment)
+# Home servers
 
-argus.{env.DOMAIN} {
-	reverse_proxy argus.pod:8080
+mila.{env.DOMAIN} {
+	reverse_proxy mila:9090
 	import cloudflare
 }
+
+# Home services (part of podman deployment)
+
+# Monitor services
+
+argus.{env.DOMAIN} {
+	reverse_proxy monitor.pod:9090
+	import cloudflare
+}
+
+dozzle.{env.DOMAIN} {
+	reverse_proxy monitor.pod:8080
+	import cloudflare
+}
+
+uptime-kuma.{env.DOMAIN} {
+	reverse_proxy monitor.pod:3001
+	import cloudflare
+}
+
+version-api.{env.DOMAIN} {
+	reverse_proxy monitor.pod:8081
+	import cloudflare
+}
+
+# Notes services
+
+jotty.{env.DOMAIN} {
+	reverse_proxy notes.pod:3000
+	import cloudflare
+}
+
+drawio.{env.DOMAIN} {
+	reverse_proxy notes.pod:8080
+	import cloudflare
+}
+
+# Misc tools
+
+bentopdf.{env.DOMAIN} {
+	reverse_proxy tools.pod:8080
+	import cloudflare
+}
+
+it-tools.{env.DOMAIN} {
+	reverse_proxy tools.pod:80
+	import cloudflare
+}
+
+# LLM Services
+
+open-webui.{env.DOMAIN} {
+	reverse_proxy llm.pod:8080
+	import cloudflare
+}
+
+llamacpp.{env.DOMAIN} {
+	reverse_proxy llm.pod:10000
+	import cloudflare
+}
+
+# Single services
 
 audiobookshelf.{env.DOMAIN} {
 	reverse_proxy audiobookshelf.pod:80
@@ -57,18 +119,8 @@ bichon.{env.DOMAIN} {
 	import cloudflare
 }
 
-bentopdf.{env.DOMAIN} {
-	reverse_proxy bentopdf.pod:8080
-	import cloudflare
-}
-
 booklore.{env.DOMAIN} {
 	reverse_proxy booklore.pod:6060
-	import cloudflare
-}
-
-dozzle.{env.DOMAIN} {
-	reverse_proxy dozzle.pod:8080
 	import cloudflare
 }
 
@@ -87,23 +139,8 @@ immich.{env.DOMAIN} {
 	import cloudflare
 }
 
-it-tools.{env.DOMAIN} {
-	reverse_proxy it-tools.pod:80
-	import cloudflare
-}
-
 jellyfin.{env.DOMAIN} {
 	reverse_proxy jellyfin.pod:8096
-	import cloudflare
-}
-
-jotty.{env.DOMAIN} {
-	reverse_proxy notes.pod:3000
-	import cloudflare
-}
-
-drawio.{env.DOMAIN} {
-	reverse_proxy notes.pod:8080
 	import cloudflare
 }
 
@@ -122,16 +159,6 @@ miniflux.{env.DOMAIN} {
 	import cloudflare
 }
 
-open-webui.{env.DOMAIN} {
-	reverse_proxy llm.pod:8080
-	import cloudflare
-}
-
-llamacpp.{env.DOMAIN} {
-	reverse_proxy llm.pod:10000
-	import cloudflare
-}
-
 papra.{env.DOMAIN} {
 	reverse_proxy papra.pod:1221
 	import cloudflare
@@ -144,22 +171,5 @@ termix.{env.DOMAIN} {
 
 transmission.{env.DOMAIN} {
 	reverse_proxy transmission.pod:9091
-	import cloudflare
-}
-
-uptime-kuma.{env.DOMAIN} {
-	reverse_proxy uptime-kuma.pod:3001
-	import cloudflare
-}
-
-version-api.{env.DOMAIN} {
-	reverse_proxy version-api.pod:8080
-	import cloudflare
-}
-
-# Home servers
-
-mila.{env.DOMAIN} {
-	reverse_proxy mila:9090
 	import cloudflare
 }

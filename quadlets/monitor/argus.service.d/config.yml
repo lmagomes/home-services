@@ -7,7 +7,7 @@ settings:
     database_file: data/argus.db # SQLite DB file used to track the state of services
   web:
     listen_host: 0.0.0.0  # IP address to listen on
-    listen_port: 8080     # Port to listen on
+    listen_port: 9090     # Port to listen on
     route_prefix: /       # Web route prefix, e.g. /demo means http://IP:PORT/demo to access
     disabled_routes: []   # API Routes to disable (see below)
 
@@ -18,7 +18,7 @@ defaults:
 
 service:
 
-  release-argus/argus:
+  monitor/argus:
     latest_version:
       type: github
       url: release-argus/argus
@@ -31,98 +31,7 @@ service:
       icon: https://github.com/release-argus/Argus/raw/master/web/ui/react-app/public/favicon.svg
       icon_link_to: https://argus.${BASE_DOMAIN_NAME}/
 
-  advplyr/audiobookshelf:
-    latest_version:
-      type: github
-      url: advplyr/audiobookshelf
-      url_commands:
-        - type: regex
-          regex: v([0-9.]+)$
-      access_token: ${GITHUB_ACCESS_TOKEN}
-    deployed_version:
-      method: GET
-      url: ${BASE_VERSION_API_URL}audiobookshelf
-      json: version
-    dashboard:
-      icon: https://raw.githubusercontent.com/advplyr/audiobookshelf/master/client/static/icon.svg
-      web_url: https://github.com/advplyr/audiobookshelf/releases/tag/v{{ version }}
-      icon_link_to: https://audiobookshelf.${BASE_DOMAIN_NAME}/
-
-  goauthentik/authentik:
-    latest_version:
-      type: github
-      url: goauthentik/authentik
-      url_commands:
-        - type: regex
-          regex: version\/([0-9.]+[0-9]+(?:-rc[0-9])?)
-      access_token: ${GITHUB_ACCESS_TOKEN}
-    deployed_version:
-      url: ${BASE_VERSION_API_URL}authentik
-      json: version
-    dashboard:
-      web_url: https://goauthentik.io/docs/releases/{{ version | split:"." | slice:":-1" | join:"."  }}
-      icon: https://raw.githubusercontent.com/goauthentik/authentik/master/web/icons/icon.png
-      icon_link_to: https://authentik.${BASE_DOMAIN_NAME}/
-
-  alam00000/bentopdf:
-    latest_version:
-      type: github
-      url: alam00000/bentopdf
-      access_token: ${GITHUB_ACCESS_TOKEN}
-    deployed_version:
-      url: ${BASE_VERSION_API_URL}bentopdf
-      json: version
-      regex: ^([0-9.]+)$
-    dashboard:
-      icon: https://raw.githubusercontent.com/alam00000/bentopdf/main/public/images/favicon.svg
-      web_url: https://github.com/alam00000/bentopdf/releases/tag/v{{ version }}
-      icon_link_to: https://bentopdf.${BASE_DOMAIN_NAME}/
-
-  rustmailer/bichon:
-    latest_version:
-      type: github
-      url: rustmailer/bichon
-      access_token: ${GITHUB_ACCESS_TOKEN}
-    deployed_version:
-      url: ${BASE_VERSION_API_URL}bichon
-      json: version
-      regex: ^([0-9.]+)$
-    dashboard:
-      web_url: https://github.com/rustmailer/bichon/releases/tag/{{ version }}
-      icon: https://raw.githubusercontent.com/rustmailer/bichon/main/web/src/assets/logo.svg
-      icon_link_to: https://bichon.${BASE_DOMAIN_NAME}/
-
-  booklore-app/BookLore:
-    latest_version:
-      type: github
-      url: booklore-app/BookLore
-      access_token: ${GITHUB_ACCESS_TOKEN}
-      url_commands:
-        - type: regex
-          regex: v([0-9.]+)$
-    deployed_version:
-      url: ${BASE_VERSION_API_URL}booklore
-      json: version
-      regex: ^v([0-9.]+)$
-    dashboard:
-      icon: https://raw.githubusercontent.com/booklore-app/BookLore/develop/assets/logo.svg
-      web_url: https://github.com/booklore-app/BookLore/releases/tag/v{{ version }}
-      icon_link_to: https://booklore.${BASE_DOMAIN_NAME}/
-
-  caddyserver/caddy:
-    latest_version:
-      type: github
-      url: caddyserver/caddy
-      access_token: ${GITHUB_ACCESS_TOKEN}
-    deployed_version:
-      url: ${BASE_VERSION_API_URL}caddy
-      json: version
-      regex: ^([0-9.]+)$
-    dashboard:
-      icon: https://avatars.githubusercontent.com/u/12955528?s=48&v=4
-      web_url: https://github.com/caddyserver/caddy/releases/tag/v{{ version }}
-
-  dozzle/dozzle:
+  monitor/dozzle:
     latest_version:
       type: github
       url: amir20/dozzle
@@ -139,7 +48,127 @@ service:
       web_url: https://github.com/amir20/dozzle/releases/tag/v{{ version }}
       icon_link_to: https://dozzle.${BASE_DOMAIN_NAME}/
 
-  firefly-iii/firefly-iii:
+  monitor/uptime-kuma:
+    latest_version:
+      type: github
+      url: louislam/uptime-kuma
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}uptime-kuma
+      json: version
+    dashboard:
+      web_url: https://github.com/louislam/uptime-kuma/releases/tag/{{ version }}
+      icon: https://raw.githubusercontent.com/louislam/uptime-kuma/master/public/icon.svg
+      icon_link_to: https://uptime-kuma.${BASE_DOMAIN_NAME}/
+
+  tools/it-tools:
+    latest_version:
+      type: github
+      url: CorentinTh/it-tools
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+[0-9.]+[0-9.]+-\d.+)
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}it-tools
+      json: version
+    dashboard:
+      web_url: https://github.com/CorentinTh/it-tools/releases/tag/v{{ version }}
+      icon: https://github.com/CorentinTh/it-tools/raw/main/.github/logo-white.png
+      icon_link_to: https://it-tools.${BASE_DOMAIN_NAME}/
+
+  tools/bentopdf:
+    latest_version:
+      type: github
+      url: alam00000/bentopdf
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}bentopdf
+      json: version
+      regex: ^([0-9.]+)$
+    dashboard:
+      icon: https://raw.githubusercontent.com/alam00000/bentopdf/main/public/images/favicon.svg
+      web_url: https://github.com/alam00000/bentopdf/releases/tag/v{{ version }}
+      icon_link_to: https://bentopdf.${BASE_DOMAIN_NAME}/
+
+  services/audiobookshelf:
+    latest_version:
+      type: github
+      url: advplyr/audiobookshelf
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      method: GET
+      url: ${BASE_VERSION_API_URL}audiobookshelf
+      json: version
+    dashboard:
+      icon: https://raw.githubusercontent.com/advplyr/audiobookshelf/master/client/static/icon.svg
+      web_url: https://github.com/advplyr/audiobookshelf/releases/tag/v{{ version }}
+      icon_link_to: https://audiobookshelf.${BASE_DOMAIN_NAME}/
+
+  services/authentik:
+    latest_version:
+      type: github
+      url: goauthentik/authentik
+      url_commands:
+        - type: regex
+          regex: version\/([0-9.]+[0-9]+(?:-rc[0-9])?)
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}authentik
+      json: version
+    dashboard:
+      web_url: https://goauthentik.io/docs/releases/{{ version | split:"." | slice:":-1" | join:"."  }}
+      icon: https://raw.githubusercontent.com/goauthentik/authentik/master/web/icons/icon.png
+      icon_link_to: https://authentik.${BASE_DOMAIN_NAME}/
+
+  services/bichon:
+    latest_version:
+      type: github
+      url: rustmailer/bichon
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}bichon
+      json: version
+      regex: ^([0-9.]+)$
+    dashboard:
+      web_url: https://github.com/rustmailer/bichon/releases/tag/{{ version }}
+      icon: https://raw.githubusercontent.com/rustmailer/bichon/main/web/src/assets/logo.svg
+      icon_link_to: https://bichon.${BASE_DOMAIN_NAME}/
+
+  services/bookLore:
+    latest_version:
+      type: github
+      url: booklore-app/BookLore
+      access_token: ${GITHUB_ACCESS_TOKEN}
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}booklore
+      json: version
+      regex: ^v([0-9.]+)$
+    dashboard:
+      icon: https://raw.githubusercontent.com/booklore-app/BookLore/develop/assets/logo.svg
+      web_url: https://github.com/booklore-app/BookLore/releases/tag/v{{ version }}
+      icon_link_to: https://booklore.${BASE_DOMAIN_NAME}/
+
+  services/caddy:
+    latest_version:
+      type: github
+      url: caddyserver/caddy
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}caddy
+      json: version
+      regex: ^([0-9.]+)$
+    dashboard:
+      icon: https://avatars.githubusercontent.com/u/12955528?s=48&v=4
+      web_url: https://github.com/caddyserver/caddy/releases/tag/v{{ version }}
+
+  services/firefly-iii:
     latest_version:
       type: github
       url: firefly-iii/firefly-iii
@@ -156,7 +185,7 @@ service:
       web_url: https://github.com/firefly-iii/firefly-iii/releases/tag/v{{ version }}
       icon_link_to: https://firefly.${BASE_DOMAIN_NAME}/
 
-  forgejo/forgejo:
+  services/forgejo:
     latest_version:
       type: web
       url: https://codeberg.org/api/v1/repos/forgejo/forgejo/releases
@@ -171,23 +200,7 @@ service:
       icon: https://codeberg.org/repo-avatars/73144-c883a242dec5299fbc06bbe3ee71d8c6
       icon_link_to: https://forgejo.${BASE_DOMAIN_NAME}/
 
-  CorentinTh/it-tools:
-    latest_version:
-      type: github
-      url: CorentinTh/it-tools
-      url_commands:
-        - type: regex
-          regex: v([0-9.]+[0-9.]+[0-9.]+-\d.+)
-      access_token: ${GITHUB_ACCESS_TOKEN}
-    deployed_version:
-      url: ${BASE_VERSION_API_URL}it-tools
-      json: version
-    dashboard:
-      web_url: https://github.com/CorentinTh/it-tools/releases/tag/v{{ version }}
-      icon: https://github.com/CorentinTh/it-tools/raw/main/.github/logo-white.png
-      icon_link_to: https://it-tools.${BASE_DOMAIN_NAME}/
-
-  immich-app/immich:
+  services/immich:
     latest_version:
       type: github
       url: immich-app/immich
@@ -201,7 +214,7 @@ service:
       web_url: https://github.com/immich-app/immich/releases/tag/v{{ version }}
       icon_link_to: https://immich.${BASE_DOMAIN_NAME}/
 
-  jellyfin/jellyfin:
+  services/jellyfin:
     latest_version:
       type: github
       url: jellyfin/jellyfin
@@ -246,7 +259,7 @@ service:
       icon: https://raw.githubusercontent.com/jgraph/drawio/refs/heads/dev/src/main/webapp/images/drawio.svg
       icon_link_to: https://drawio.${BASE_DOMAIN_NAME}/
 
-  karakeep-app/karakeep:
+  services/karakeep:
     latest_version:
       type: github
       url: karakeep-app/karakeep
@@ -259,7 +272,7 @@ service:
       icon: https://raw.githubusercontent.com/karakeep-app/karakeep/main/apps/web/public/icons/logo-icon.svg
       icon_link_to: https://karakeep.${BASE_DOMAIN_NAME}/
 
-  mealie-recipes/mealie:
+  services/mealie:
     latest_version:
       type: github
       url: mealie-recipes/mealie
@@ -276,7 +289,7 @@ service:
       icon: https://avatars.githubusercontent.com/u/92342333?s=48&v=4
       icon_link_to: https://mealie.${BASE_DOMAIN_NAME}/
 
-  miniflux/v2:
+  services/miniflux:
     latest_version:
       type: github
       url: miniflux/v2
@@ -339,7 +352,7 @@ service:
       icon: https://raw.githubusercontent.com/open-webui/open-webui/refs/heads/main/static/static/favicon.svg
       icon_link_to: https://open-webui.${BASE_DOMAIN_NAME}/
   
-  papra-hq/papra:
+  services/papra:
     latest_version:
       type: github
       url: papra-hq/papra
@@ -356,7 +369,7 @@ service:
       icon: https://raw.githubusercontent.com/papra-hq/papra/main/apps/docs/public/favicon.svg
       icon_link_to: https://papra.${BASE_DOMAIN_NAME}/
   
-  Termix/Termix:
+  services/termix:
     latest_version:
       type: github
       url: Termix-SSH/Termix
@@ -371,9 +384,9 @@ service:
     dashboard:
       web_url: https://github.com/Termix-SSH/Termix/releases/tag/release-{{ version }}-tag
       icon: https://avatars.githubusercontent.com/u/236961563?s=48&v=4
-      icon_link_to: https://Termix.${BASE_DOMAIN_NAME}/
+      icon_link_to: https://termix.${BASE_DOMAIN_NAME}/
 
-  transmission/transmission:
+  services/transmission:
     latest_version:
       type: github
       url: transmission/transmission
@@ -385,16 +398,3 @@ service:
       web_url: https://github.com/transmission/transmission/releases/tag/{{ version }}
       icon: https://avatars.githubusercontent.com/u/223312
       icon_link_to: https://transmission.${BASE_DOMAIN_NAME}/
-
-  louislam/uptime-kuma:
-    latest_version:
-      type: github
-      url: louislam/uptime-kuma
-      access_token: ${GITHUB_ACCESS_TOKEN}
-    deployed_version:
-      url: ${BASE_VERSION_API_URL}uptime-kuma
-      json: version
-    dashboard:
-      web_url: https://github.com/louislam/uptime-kuma/releases/tag/{{ version }}
-      icon: https://raw.githubusercontent.com/louislam/uptime-kuma/master/public/icon.svg
-      icon_link_to: https://uptime-kuma.${BASE_DOMAIN_NAME}/

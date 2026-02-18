@@ -1,7 +1,0 @@
-[Unit]
-Description=dozzle container managed by Podman
-After=network-online.target
-
-[Pod]
-PodName=dozzle.pod
-Network=services.network

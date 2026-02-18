@@ -1,0 +1,7 @@
+[Unit]
+Description=Monitoring containers managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=monitor.pod
+Network=services.network

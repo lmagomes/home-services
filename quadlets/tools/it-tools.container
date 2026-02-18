@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 ContainerName=it-tools
-Pod=it-tools.pod
+Pod=tools.pod
 Image=docker.io/corentinth/it-tools:2024.10.22-7ca5933
 AutoUpdate=registry
 
