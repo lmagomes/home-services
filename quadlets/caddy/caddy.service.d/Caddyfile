@@ -89,12 +89,17 @@ it-tools.{env.DOMAIN} {
 # LLM Services
 
 open-webui.{env.DOMAIN} {
-	reverse_proxy llm.pod:8080
+	reverse_proxy llm.pod:9999
 	import cloudflare
 }
 
 llamacpp.{env.DOMAIN} {
 	reverse_proxy llm.pod:10000
+	import cloudflare
+}
+
+localai.{env.DOMAIN} {
+	reverse_proxy llm.pod:8080
 	import cloudflare
 }
 

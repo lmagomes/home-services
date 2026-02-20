@@ -127,6 +127,10 @@ npm run auth
 
 You can then remove the `Exec` part of the container.
 
+### llama.cpp and localai models
+
+llama.cpp and localai share the same models directory. localai can download the models and these can also be used by llama.cpp. It may require that files be moved from `llama-cpp/models/` to the root directory, and the companion `.yaml` file edited to change the path.
+
 ### termix
 
 I have tailscale installed on the host server, so these network options work for me. You may need to adjust the podman network options to suite your needs.

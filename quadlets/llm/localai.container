@@ -1,0 +1,17 @@
+[Unit]
+Description=local.ai container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=localai
+Pod=llm.pod
+Image=docker.io/localai/localai:v3.11.0-gpu-intel
+Volume=llamacpp-models.volume:/models:z
+AddDevice=/dev/dri
+EnvironmentFile=./%n.d/env
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

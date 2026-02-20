@@ -31,7 +31,7 @@ backup-volumes:
     set BACKUP_FOLDER "$HOME/podman_volume_backup"
     # List of pods to skip (add pod names here, e.g., "ollama.pod")
     set SKIP_PODS "bentopdf.pod" "it-tools" "mssql" "transmission.pod" "version-api"
-    set SKIP_VOLUMES "systemd-llm-llamacpp-models"
+    set SKIP_VOLUMES "systemd-llamacpp-models" "systemd-ollama-data" "systemd-localai-models"
 
     just list-pod-services | while read -l service_name
         set pod_name (echo $service_name | sed 's/-pod.service/\.pod/')

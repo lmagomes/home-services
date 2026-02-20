@@ -335,6 +335,23 @@ service:
       icon: https://raw.githubusercontent.com/ggml-org/llama.cpp/refs/heads/master/media/llama1-icon.svg
       icon_link_to: https://llamacpp.${BASE_DOMAIN_NAME}/
 
+  llm/localai:
+    latest_version:
+      type: github
+      url: mudler/LocalAI
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: ${BASE_VERSION_API_URL}localai
+      json: version
+      regex: ^v([0-9.]+)-gpu-intel$
+    dashboard:
+      web_url: https://github.com/mudler/LocalAI/releases/tag/v{{ version }}
+      icon: https://raw.githubusercontent.com/mudler/LocalAI/refs/heads/master/docs/static/favicon.svg
+      icon_link_to: https://localai.${BASE_DOMAIN_NAME}/
+
   llm/open-webui:
     latest_version:
       type: github
@@ -344,7 +361,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}llm-open-webui
+      url: ${BASE_VERSION_API_URL}open-webui
       json: version
       regex: ^v([0-9.]+)$
     dashboard:

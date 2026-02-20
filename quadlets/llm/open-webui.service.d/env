@@ -1,4 +1,5 @@
 TZ=Europe/Lisbon
+PORT=9999
 ENABLE_OPENAI_API=true
 OPENAI_API_BASE_URLS=http://lumo-tamer:3003/v1;http://llamacpp:10000/v1
 OPENAI_API_KEYS=FdAy0awlSiqrxi4CuBYv2fKysLLswCM6hJ5R6VtwZVHiJKiqfeX3o2zCvERwTxiU;llamacpp-dummy-key
