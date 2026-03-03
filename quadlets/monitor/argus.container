@@ -12,8 +12,9 @@ EnvironmentFile=./%n.d/env
 Secret=argus-base-version-api-url,type=env,target=BASE_VERSION_API_URL
 Secret=domain-secret,type=env,target=BASE_DOMAIN_NAME
 Secret=github-token,type=env,target=GITHUB_ACCESS_TOKEN
+Secret=argus-update-webhook-secret,type=env,target=UPDATE_WEBHOOK_SECRET
 
-HealthCmd=/healthcheck http://localhost:8080/api/v1/healthcheck
+HealthCmd=/healthcheck http://localhost:9090/api/v1/healthcheck
 HealthInterval=1m
 HealthRetries=3
 HealthStartPeriod=10s

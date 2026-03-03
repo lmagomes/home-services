@@ -1,0 +1,19 @@
+[Unit]
+Description=Update webhook receiver for Argus auto-PR creation
+After=network.target
+
+[Container]
+ContainerName=update-webhook
+Pod=monitor.pod
+Image=localhost/update-webhook:latest
+EnvironmentFile=./%n.d/env
+Volume=./%n.d/config.yml:/app/config.yml:ro,Z
+Secret=forgejo-api-token,type=env,target=FORGEJO_TOKEN
+Secret=forgejo-url,type=env,target=FORGEJO_URL
+Secret=argus-update-webhook-secret,type=env,target=WEBHOOK_SECRET
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

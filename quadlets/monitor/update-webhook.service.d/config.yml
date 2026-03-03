@@ -1,0 +1,138 @@
+repo_owner: lgomes
+repo_name: home-services
+base_branch: main
+
+services:
+  monitor/argus:
+    containers:
+      - file: quadlets/monitor/argus.container
+        tag_template: "{{.Version}}"
+
+  monitor/dozzle:
+    containers:
+      - file: quadlets/monitor/dozzle.container
+        tag_template: "v{{.Version}}"
+
+  monitor/uptime-kuma:
+    containers:
+      - file: quadlets/monitor/uptime-kuma.container
+        tag_template: "{{.Version}}"
+
+  tools/it-tools:
+    containers:
+      - file: quadlets/tools/it-tools.container
+        tag_template: "{{.Version}}"
+
+  tools/bentopdf:
+    containers:
+      - file: quadlets/tools/bentopdf.container
+        tag_template: "{{.Version}}"
+
+  services/audiobookshelf:
+    containers:
+      - file: quadlets/audiobookshelf/audiobookshelf.container
+        tag_template: "{{.Version}}"
+
+  services/authentik:
+    containers:
+      - file: quadlets/authentik/authentik.container
+        tag_template: "{{.Version}}"
+      - file: quadlets/authentik/authentik-worker.container
+        tag_template: "{{.Version}}"
+
+  services/bichon:
+    containers:
+      - file: quadlets/bichon/bichon.container
+        tag_template: "{{.Version}}"
+
+  services/bookLore:
+    containers:
+      - file: quadlets/booklore/booklore.container
+        tag_template: "v{{.Version}}"
+
+  services/caddy:
+    containers:
+      - file: quadlets/caddy/caddy.container
+        tag_template: "{{.Version}}"
+
+  services/firefly-iii:
+    containers:
+      - file: quadlets/firefly/firefly.container
+        tag_template: "version-{{.Version}}"
+
+  services/forgejo:
+    containers:
+      - file: quadlets/forgejo/forgejo.container
+        tag_template: "{{.Version}}"
+
+  services/immich:
+    containers:
+      - file: quadlets/immich/immich-server.container
+        tag_template: "v{{.Version}}"
+      - file: quadlets/immich/immich-machine-learning.container
+        tag_template: "v{{.Version}}"
+
+  services/jellyfin:
+    containers:
+      - file: quadlets/jellyfin/jellyfin.container
+        tag_template: "{{.Version}}"
+
+  notes/jotty:
+    containers:
+      - file: quadlets/notes/jotty.container
+        tag_template: "{{.Version}}"
+
+  notes/drawio:
+    containers:
+      - file: quadlets/notes/drawio.container
+        tag_template: "{{.Version}}"
+
+  services/karakeep:
+    containers:
+      - file: quadlets/karakeep/karakeep.container
+        tag_template: "{{.Version}}"
+
+  services/mealie:
+    containers:
+      - file: quadlets/mealie/mealie.container
+        tag_template: "v{{.Version}}"
+
+  services/miniflux:
+    containers:
+      - file: quadlets/miniflux/miniflux.container
+        tag_template: "{{.Version}}"
+
+  llm/lumo-tamer:
+    containers:
+      - file: quadlets/llm/lumo-tamer.container
+        tag_template: "v{{.Version}}"
+
+  llm/llamacpp:
+    containers:
+      - file: quadlets/llm/llamacpp.container
+        tag_template: "server-vulkan-b{{.Version}}"
+
+  llm/localai:
+    containers:
+      - file: quadlets/llm/localai.container
+        tag_template: "v{{.Version}}-gpu-intel"
+
+  llm/open-webui:
+    containers:
+      - file: quadlets/llm/open-webui.container
+        tag_template: "v{{.Version}}"
+
+  services/papra:
+    containers:
+      - file: quadlets/papra/papra.container
+        tag_template: "{{.Version}}-rootless"
+
+  services/termix:
+    containers:
+      - file: quadlets/termix/termix.container
+        tag_template: "release-{{.Version}}"
+
+  services/transmission:
+    containers:
+      - file: quadlets/transmission/transmission.container
+        tag_template: "{{.Version}}"
