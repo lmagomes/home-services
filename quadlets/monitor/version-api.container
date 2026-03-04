@@ -5,6 +5,7 @@ After=network.target
 [Container]
 ContainerName=version-api
 Pod=monitor.pod
+EnvironmentFile=./%n.d/env
 Image=ghcr.io/lmagomes/version-api:0.2.0
 Volume=/run/user/%U/podman/podman.sock:/run/podman/podman.sock
 SecurityLabelDisable=true
