@@ -81,3 +81,7 @@ backup-with-restic:
 
     restic --password-command 'just get-restic-password' -r {{ remote-audiobooks-backup-dir }} backup {{ audiobooks-dir }}
     restic --password-command 'just get-restic-password' -r {{ remote-audiobooks-backup-dir }} {{ restic-forget }}
+
+    # rclone copy {{ backup-dir }} proton:backup/podman-volumes/
+    # rclone copy {{ books-dir }} proton:backup/books/
+    # rclone copy {{ audiobooks-dir }} proton:backup/audiobooks/
