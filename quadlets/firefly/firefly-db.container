@@ -5,11 +5,10 @@ After=network.target
 [Container]
 ContainerName=firefly-db
 Pod=firefly.pod
-Image=docker.io/postgres:18.1
+Image=lscr.io/linuxserver/mariadb:11.4.8
 EnvironmentFile=./%n.d/env
-NoNewPrivileges=true
-Secret=firefly-db-password,type=env,target=POSTGRES_PASSWORD
-Volume=firefly-db-data.volume:/var/lib/postgresql:Z
+Secret=firefly-db-password,type=env,target=MYSQL_PASSWORD
+Volume=firefly-db-data.volume:/var/lib/mysql:Z
 
 [Service]
 Restart=always

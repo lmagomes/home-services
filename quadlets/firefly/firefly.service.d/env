@@ -83,9 +83,9 @@ PAPERTRAIL_PORT=
 # Use "pgsql" for PostgreSQL
 # Use "mysql" for MySQL and MariaDB.
 # Use "sqlite" for SQLite.
-DB_CONNECTION=pgsql
+DB_CONNECTION=mysql
 DB_HOST=firefly-db
-DB_PORT=5432
+DB_PORT=3306
 DB_DATABASE=firefly
 DB_USERNAME=firefly
 # DB_PASSWORD=secret_firefly_password
