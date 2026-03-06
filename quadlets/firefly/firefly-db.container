@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=firefly-db
 Pod=firefly.pod
-Image=lscr.io/linuxserver/mariadb:11.4.8
+Image=docker.io/mariadb:lts
 EnvironmentFile=./%n.d/env
 Secret=firefly-db-password,type=env,target=MYSQL_PASSWORD
 Volume=firefly-db-data.volume:/var/lib/mysql:Z
