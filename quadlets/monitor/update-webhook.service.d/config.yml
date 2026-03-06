@@ -53,7 +53,7 @@ services:
   services/caddy:
     containers:
       - file: quadlets/caddy/caddy.container
-        tag_template: "{{.Version}}"
+        tag_template: "{{.Version}}-alpine"
 
   services/firefly-iii:
     containers:
