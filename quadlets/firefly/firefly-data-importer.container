@@ -1,0 +1,15 @@
+[Unit]
+Description=Firefly Data Importer container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=firefly-data-importer
+Pod=firefly.pod
+Image=docker.io/fireflyiii/data-importer:version-2.2.0
+EnvironmentFile=./%n.d/env
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
