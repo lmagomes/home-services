@@ -498,6 +498,11 @@ service:
         - type: regex
           regex: b([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
+      require:
+        docker:
+          type: ghcr
+          image: ggml-org/llama.cpp
+          tag: server-vulkan-b{{ version | split:"." | first }}
     deployed_version:
       url: ${BASE_VERSION_API_URL}llamacpp
       json: version
@@ -508,10 +513,10 @@ service:
           - key: X-Service
             value: 'llm/llamacpp'
           - key: X-Version
-            value: '{{ version }}'
+            value: '{{ version | split:"." | first }}'
     dashboard:
       auto_approve: true
-      web_url: https://github.com/ggml-org/llama.cpp/releases/tag/b{{ version }}
+      web_url: https://github.com/ggml-org/llama.cpp/releases/tag/b{{ version | split:"." | first }}
       icon: https://raw.githubusercontent.com/ggml-org/llama.cpp/refs/heads/master/media/llama1-icon.svg
       icon_link_to: https://llamacpp.${BASE_DOMAIN_NAME}/
 
