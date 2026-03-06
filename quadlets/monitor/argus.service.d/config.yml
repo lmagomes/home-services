@@ -247,7 +247,7 @@ service:
     deployed_version:
       url: ${BASE_VERSION_API_URL}caddy
       json: version
-      regex: ^([0-9.]+)$
+      regex: ^([0-9.]+)-alpine$
     webhook:
       update-pr:
         headers:
@@ -491,32 +491,37 @@ service:
       icon: https://lumo.proton.me/assets/static/favicon.c3c7c9e00e0d5ffdc91f.svg
 
   llm/llamacpp:
+    semantic_versioning: false
     latest_version:
       type: github
       url: ggml-org/llama.cpp
       url_commands:
         - type: regex
           regex: b([0-9.]+)$
+          index: 0
       access_token: ${GITHUB_ACCESS_TOKEN}
       require:
         docker:
           type: ghcr
           image: ggml-org/llama.cpp
-          tag: server-vulkan-b{{ version | split:"." | first }}
+          tag: server-vulkan-b{{ version }}
     deployed_version:
       url: ${BASE_VERSION_API_URL}llamacpp
       json: version
-      regex: ^server-vulkan-b([0-9.]+)$
+      regex: ^server-vulkan-b([0-9.]+)
+      url_commands:
+        - type: regex
+          regex: ^([0-9]+)
     webhook:
       update-pr:
         headers:
           - key: X-Service
             value: 'llm/llamacpp'
           - key: X-Version
-            value: '{{ version | split:"." | first }}'
+            value: '{{ version }}'
     dashboard:
       auto_approve: true
-      web_url: https://github.com/ggml-org/llama.cpp/releases/tag/b{{ version | split:"." | first }}
+      web_url: https://github.com/ggml-org/llama.cpp/releases/tag/b{{ version }}
       icon: https://raw.githubusercontent.com/ggml-org/llama.cpp/refs/heads/master/media/llama1-icon.svg
       icon_link_to: https://llamacpp.${BASE_DOMAIN_NAME}/
 
