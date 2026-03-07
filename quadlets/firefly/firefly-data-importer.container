@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 ContainerName=firefly-data-importer
-Pod=firefly.pod
+Pod=firefly-data-importer.pod
 Image=docker.io/fireflyiii/data-importer:version-2.2.0
 Secret=firefly-data-importer-api-token,type=env,target=FIREFLY_III_ACCESS_TOKEN
 Secret=firefly-app-url,type=env,target=VANITY_URL

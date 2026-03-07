@@ -134,6 +134,11 @@ firefly.{env.DOMAIN} {
 	import cloudflare
 }
 
+firefly-data-importer.{env.DOMAIN} {
+	reverse_proxy firefly-data-importer.pod:8080
+	import cloudflare
+}
+
 forgejo.{env.DOMAIN} {
 	reverse_proxy forgejo.pod:3000
 	import cloudflare

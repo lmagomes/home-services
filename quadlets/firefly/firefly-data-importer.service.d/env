@@ -10,7 +10,7 @@
 #
 # This variable can be set from a file if you append it with _FILE
 #
-FIREFLY_III_URL=http://firefly:8080
+FIREFLY_III_URL=http://firefly-pod:8080
 
 #
 # Imagine Firefly III can be reached at "http://172.16.0.2:8082" (internal Docker network or something).

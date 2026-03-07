@@ -1,0 +1,7 @@
+[Unit]
+Description=Firefly Data Importer pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=firefly-data-importer.pod
+Network=services.network
