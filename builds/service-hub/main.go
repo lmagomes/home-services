@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
@@ -10,7 +11,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"regexp"
 	"strings"
@@ -50,10 +53,11 @@ type forgejoClient struct {
 
 func main() {
 	configPath := envOrDefault("CONFIG_PATH", "/app/config.yml")
-	listenAddr := envOrDefault("LISTEN_ADDR", ":8080")
-	forgejoURL := mustEnv("FORGEJO_URL")
-	forgejoToken := mustEnv("FORGEJO_TOKEN")
-	webhookSecret := os.Getenv("WEBHOOK_SECRET") // optional
+	listenAddr := envOrDefault("LISTEN_ADDR", ":8888")
+	forgejoURL := os.Getenv("FORGEJO_URL")
+	forgejoToken := os.Getenv("FORGEJO_TOKEN")
+	webhookSecret := os.Getenv("WEBHOOK_SECRET")    // optional
+	podmanSocket := envOrDefault("PODMAN_SOCKET", "/run/user/1000/podman/podman.sock")
 
 	cfg, err := loadConfig(configPath)
 	if err != nil {
@@ -69,13 +73,106 @@ func main() {
 	}
 
 	http.HandleFunc("/webhook", handleWebhook(cfg, fc, webhookSecret))
+	http.HandleFunc("/version/", handleVersion(podmanSocket))
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		fmt.Fprintln(w, "ok")
 	})
 
-	log.Printf("update-webhook listening on %s", listenAddr)
+	log.Printf("service-hub listening on %s", listenAddr)
 	log.Fatal(http.ListenAndServe(listenAddr, nil))
+}
+
+// handleVersion returns an HTTP handler that queries the podman socket
+// for a container's image tag. Matches GET /version/{container_name}.
+func handleVersion(socketPath string) http.HandlerFunc {
+	podmanClient := &http.Client{
+		Timeout: 10 * time.Second,
+		Transport: &http.Transport{
+			DialContext: func(_ context.Context, _, _ string) (net.Conn, error) {
+				return net.Dial("unix", socketPath)
+			},
+		},
+	}
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		containerName := strings.TrimPrefix(r.URL.Path, "/version/")
+		if containerName == "" {
+			http.Error(w, "container name required", http.StatusBadRequest)
+			return
+		}
+
+		version, err := getContainerVersion(podmanClient, containerName)
+		if err != nil {
+			if strings.Contains(err.Error(), "404") {
+				http.Error(w, fmt.Sprintf("Container '%s' not found", containerName), http.StatusNotFound)
+				return
+			}
+			log.Printf("ERROR inspecting container %s: %v", containerName, err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{
+			"service": containerName,
+			"version": version,
+		})
+	}
+}
+
+// getContainerVersion queries the podman REST API to get a container's image tag.
+func getContainerVersion(client *http.Client, containerName string) (string, error) {
+	apiURL := fmt.Sprintf("http://podman/v4.0.0/libpod/containers/%s/json", url.PathEscape(containerName))
+
+	resp, err := client.Get(apiURL)
+	if err != nil {
+		return "", fmt.Errorf("podman API request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusNotFound {
+		return "", fmt.Errorf("404: container not found")
+	}
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return "", fmt.Errorf("podman API returned %d: %s", resp.StatusCode, string(body))
+	}
+
+	var result struct {
+		ImageName string `json:"ImageName"`
+		Image     string `json:"Image"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return "", fmt.Errorf("decode response: %w", err)
+	}
+
+	// Extract version from image tag (e.g. "docker.io/dozzle/dozzle:v8.12.6" → "v8.12.6")
+	if result.ImageName != "" {
+		parts := strings.Split(result.ImageName, ":")
+		if len(parts) > 1 {
+			return parts[len(parts)-1], nil
+		}
+	}
+
+	// Fallback to short image ID
+	if result.Image != "" {
+		id := result.Image
+		if strings.Contains(id, ":") {
+			id = strings.Split(id, ":")[1]
+		}
+		if len(id) > 12 {
+			id = id[:12]
+		}
+		return id, nil
+	}
+
+	return "unknown", nil
 }
 
 // handleWebhook returns an HTTP handler that processes Argus webhook calls.

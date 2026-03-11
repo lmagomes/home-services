@@ -1,6 +1,7 @@
 [Unit]
 Description=Argus container managed by Podman
 After=network.target
+Requires=service-hub.container
 
 [Container]
 ContainerName=argus

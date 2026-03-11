@@ -3,11 +3,11 @@ build-all:
     just build-transmission
     just build-caddy
     just build-lumo-tamer
-    just build-update-webhook
+    just build-service-hub
 
-# create a container image for update-webhook
-build-update-webhook:
-    podman build -t update-webhook:latest builds/update-webhook/
+# create a container image for service-hub
+build-service-hub:
+    podman build -t service-hub:latest builds/service-hub/
 
 # create a container image for transmission
 build-transmission:

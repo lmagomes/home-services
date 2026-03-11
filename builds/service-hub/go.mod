@@ -1,4 +1,4 @@
-module update-webhook
+module service-hub
 
 go 1.24.0
 

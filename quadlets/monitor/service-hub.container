@@ -1,16 +1,19 @@
 [Unit]
-Description=Update webhook receiver for Argus auto-PR creation
+Description=Service hub for webhooks and version API
 After=network.target
 
 [Container]
-ContainerName=update-webhook
+ContainerName=service-hub
 Pod=monitor.pod
-Image=localhost/update-webhook:latest
+Image=localhost/service-hub:latest
 EnvironmentFile=./%n.d/env
 Volume=./%n.d/config.yml:/app/config.yml:ro,Z
+Volume=/run/user/%U/podman/podman.sock:/run/user/1000/podman/podman.sock
 Secret=forgejo-api-token,type=env,target=FORGEJO_TOKEN
 Secret=forgejo-url,type=env,target=FORGEJO_URL
 Secret=argus-update-webhook-secret,type=env,target=WEBHOOK_SECRET
+SecurityLabelDisable=true
+User=0
 
 [Service]
 Restart=always

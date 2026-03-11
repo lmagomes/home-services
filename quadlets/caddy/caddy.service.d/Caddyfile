@@ -57,11 +57,6 @@ uptime-kuma.{env.DOMAIN} {
 	import cloudflare
 }
 
-version-api.{env.DOMAIN} {
-	reverse_proxy monitor.pod:8085
-	import cloudflare
-}
-
 # Notes services
 
 jotty.{env.DOMAIN} {

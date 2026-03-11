@@ -19,7 +19,7 @@ defaults:
 webhook:
   update-pr:
     type: github
-    url: http://update-webhook:8081/webhook
+    url: http://service-hub:8081/webhook
     secret: ${UPDATE_WEBHOOK_SECRET}
     desired_status_code: 200
     max_tries: 3
@@ -36,7 +36,7 @@ service:
       url: release-argus/argus
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}argus
+      url: http://service-hub:8081/version/argus
       json: version
     webhook:
       update-pr:
@@ -60,7 +60,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}dozzle
+      url: http://service-hub:8081/version/dozzle
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -82,7 +82,7 @@ service:
       url: louislam/uptime-kuma
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}uptime-kuma
+      url: http://service-hub:8081/version/uptime-kuma
       json: version
     webhook:
       update-pr:
@@ -106,7 +106,7 @@ service:
           regex: v([0-9.]+[0-9.]+[0-9.]+-\d.+)
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}it-tools
+      url: http://service-hub:8081/version/it-tools
       json: version
     webhook:
       update-pr:
@@ -127,7 +127,7 @@ service:
       url: alam00000/bentopdf
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}bentopdf
+      url: http://service-hub:8081/version/bentopdf
       json: version
       regex: ^([0-9.]+)$
     webhook:
@@ -153,7 +153,7 @@ service:
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       method: GET
-      url: ${BASE_VERSION_API_URL}audiobookshelf
+      url: http://service-hub:8081/version/audiobookshelf
       json: version
     webhook:
       update-pr:
@@ -177,7 +177,7 @@ service:
           regex: version\/([0-9.]+[0-9]+(?:-rc[0-9])?)
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}authentik
+      url: http://service-hub:8081/version/authentik
       json: version
     webhook:
       update-pr:
@@ -198,7 +198,7 @@ service:
       url: rustmailer/bichon
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}bichon
+      url: http://service-hub:8081/version/bichon
       json: version
       regex: ^([0-9.]+)$
     webhook:
@@ -223,7 +223,7 @@ service:
         - type: regex
           regex: v([0-9.]+)$
     deployed_version:
-      url: ${BASE_VERSION_API_URL}booklore
+      url: http://service-hub:8081/version/booklore
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -245,7 +245,7 @@ service:
       url: caddyserver/caddy
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}caddy
+      url: http://service-hub:8081/version/caddy
       json: version
       regex: ^([0-9.]+)-alpine$
     webhook:
@@ -269,7 +269,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}firefly
+      url: http://service-hub:8081/version/firefly
       json: version
       regex: version-([0-9.]+)
     webhook:
@@ -293,7 +293,7 @@ service:
         - type: regex
           regex: \"tag_name\":\"v([0-9.]+)\"
     deployed_version:
-      url: ${BASE_VERSION_API_URL}forgejo
+      url: http://service-hub:8081/version/forgejo
       json: version
     webhook:
       update-pr:
@@ -314,7 +314,7 @@ service:
       url: immich-app/immich
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}immich_server
+      url: http://service-hub:8081/version/immich_server
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -339,7 +339,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}jellyfin
+      url: http://service-hub:8081/version/jellyfin
       json: version
     webhook:
       update-pr:
@@ -360,7 +360,7 @@ service:
       url: fccview/jotty
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}jotty
+      url: http://service-hub:8081/version/jotty
       json: version
     webhook:
       update-pr:
@@ -384,7 +384,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}drawio
+      url: http://service-hub:8081/version/drawio
       json: version
     webhook:
       update-pr:
@@ -405,7 +405,7 @@ service:
       url: karakeep-app/karakeep
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}karakeep
+      url: http://service-hub:8081/version/karakeep
       json: version
     webhook:
       update-pr:
@@ -429,7 +429,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}mealie
+      url: http://service-hub:8081/version/mealie
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -451,7 +451,7 @@ service:
       url: miniflux/v2
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}miniflux
+      url: http://service-hub:8081/version/miniflux
       json: version
     webhook:
       update-pr:
@@ -475,7 +475,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}lumo-tamer
+      url: http://service-hub:8081/version/lumo-tamer
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -507,7 +507,7 @@ service:
       #     image: ggml-org/llama.cpp
       #     tag: server-vulkan-b{{ version }}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}llamacpp
+      url: http://service-hub:8081/version/llamacpp
       json: version
       regex: ^server-vulkan-b([0-9.]+)
       url_commands:
@@ -535,7 +535,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}localai
+      url: http://service-hub:8081/version/localai
       json: version
       regex: ^v([0-9.]+)-gpu-intel$
     webhook:
@@ -560,7 +560,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}open-webui
+      url: http://service-hub:8081/version/open-webui
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -585,7 +585,7 @@ service:
           regex: \@papra/docker\@([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}papra
+      url: http://service-hub:8081/version/papra
       json: version
       regex: ^([0-9.]+)-rootless$
     webhook:
@@ -610,7 +610,7 @@ service:
           regex: release-([0-9.]+)-tag$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}termix
+      url: http://service-hub:8081/version/termix
       json: version
       regex: ^release-([0-9.]+)$
     webhook:
@@ -632,7 +632,7 @@ service:
       url: transmission/transmission
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: ${BASE_VERSION_API_URL}transmission
+      url: http://service-hub:8081/version/transmission
       json: version
     webhook:
       update-pr:
