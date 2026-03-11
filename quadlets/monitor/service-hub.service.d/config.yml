@@ -3,6 +3,11 @@ repo_name: home-services
 base_branch: main
 
 services:
+  backup/proton-drive-sync:
+    containers:
+      - file: quadlets/backup/proton-drive-sync.container
+        tag_template: "v{{.Version}}"
+
   monitor/argus:
     containers:
       - file: quadlets/monitor/argus.container

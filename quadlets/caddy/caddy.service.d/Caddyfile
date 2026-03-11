@@ -169,6 +169,11 @@ papra.{env.DOMAIN} {
 	import cloudflare
 }
 
+proton-drive-sync.{env.DOMAIN} {
+	reverse_proxy backup.pod:4242
+	import cloudflare
+}
+
 termix.{env.DOMAIN} {
 	reverse_proxy termix.pod:8080
 	import cloudflare

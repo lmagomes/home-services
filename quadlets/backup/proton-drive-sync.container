@@ -1,0 +1,25 @@
+[Unit]
+Description=proton drive sync container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=proton-drive-sync
+Pod=backup.pod
+Image=localhost/proton-drive-sync:v0.2.4
+EnvironmentFile=./%n.d/env
+
+# Overrides for debugging: keep the container alive
+# Entrypoint=sleep
+# Exec=infinity
+
+Volume=proton-drive-sync-config.volume:/config/proton-drive-sync
+Volume=proton-drive-sync-state.volume:/state/proton-drive-sync
+Volume=/mnt/nas/backup/podman-volumes:/data/podman-volumes-backup:Z
+Secret=proton-drive-sync-keyring-password,type=env,target=KEYRING_PASSWORD
+
+[Service]
+Restart=always
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

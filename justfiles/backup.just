@@ -73,6 +73,9 @@ backup-volumes:
 backup-with-restic:
     #!/usr/bin/env fish
 
+    # temporarily stop proton drive sync, since it seems to pick up temporary restic files
+    systemctl --user stop backup-pod.service
+
     restic --password-command 'just get-restic-password' -r {{ remote-podman-backup-dir }} backup {{ backup-dir }}
     restic --password-command 'just get-restic-password' -r {{ remote-podman-backup-dir }} {{ restic-forget }}
 
@@ -82,6 +85,4 @@ backup-with-restic:
     restic --password-command 'just get-restic-password' -r {{ remote-audiobooks-backup-dir }} backup {{ audiobooks-dir }}
     restic --password-command 'just get-restic-password' -r {{ remote-audiobooks-backup-dir }} {{ restic-forget }}
 
-    # rclone copy {{ backup-dir }} proton:backup/podman-volumes/
-    # rclone copy {{ books-dir }} proton:backup/books/
-    # rclone copy {{ audiobooks-dir }} proton:backup/audiobooks/
+    systemctl --user start backup-pod.service

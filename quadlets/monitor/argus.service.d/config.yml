@@ -97,6 +97,31 @@ service:
       icon: https://raw.githubusercontent.com/louislam/uptime-kuma/master/public/icon.svg
       icon_link_to: https://uptime-kuma.${BASE_DOMAIN_NAME}/
 
+  backup/proton-drive-sync:
+    latest_version:
+      type: github
+      url: DamianB-BitFlipper/proton-drive-sync
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: http://service-hub:8081/version/proton-drive-sync
+      json: version
+      regex: ^v([0-9.]+)$
+    webhook:
+      update-pr:
+        headers:
+          - key: X-Service
+            value: 'backup/proton-drive-sync'
+          - key: X-Version
+            value: '{{ version }}'
+    dashboard:
+      auto_approve: true
+      icon: https://raw.githubusercontent.com/DamianB-BitFlipper/proton-drive-sync/refs/heads/main/src/dashboard/assets/icon.svg
+      web_url: https://github.com/DamianB-BitFlipper/proton-drive-sync/releases/tag/v{{ version }}
+      icon_link_to: https://proton-drive-sync.${BASE_DOMAIN_NAME}/
+
   tools/it-tools:
     latest_version:
       type: github

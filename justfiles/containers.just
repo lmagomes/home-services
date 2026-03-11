@@ -34,7 +34,7 @@ build-lumo-tamer:
 
     # Get the latest release version
     echo "Fetching latest release version..."
-    set latest_version (curl -s https://api.github.com/repos/ZeroTricks/lumo-tamer/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+    set latest_version (curl -s https://api.github.com/repos/ZeroTricks/lumo-tamer/releases/latest | jq -r '.tag_name')
     echo "Latest version: $latest_version"
 
     # Change to the cloned repository
@@ -53,3 +53,30 @@ build-lumo-tamer:
     rm -rf $temp_dir
 
     echo "Done! Built localhost/lumo-tamer:$latest_version and localhost/lumo-tamer-chromium:latest"
+
+build-proton-drive-sync:
+    #!/usr/bin/env fish
+    # Create temporary directory
+    set temp_dir (mktemp -d)
+    echo "Cloning repository into $temp_dir..."
+
+    # Clone the repository
+    git clone https://github.com/DamianB-BitFlipper/proton-drive-sync.git $temp_dir/proton-drive-sync
+
+    # Get the latest release version
+    echo "Fetching latest release version..."
+    set latest_version (curl -s https://api.github.com/repos/DamianB-BitFlipper/proton-drive-sync/releases/latest | jq -r '.tag_name')
+    echo "Latest version: $latest_version"
+
+    # Change to the cloned repository
+    cd $temp_dir/proton-drive-sync
+
+    # Build the main container with version tag
+    echo "Building proton-drive-sync:$latest_version..."
+    podman build -f docker/Dockerfile -t localhost/proton-drive-sync:$latest_version .
+
+    # Clean up
+    echo "Cleaning up temporary directory..."
+    rm -rf $temp_dir
+
+    echo "Done! Built localhost/proton-drive-sync:$latest_version"

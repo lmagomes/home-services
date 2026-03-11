@@ -1,0 +1,7 @@
+[Unit]
+Description=backup tools pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=backup.pod
+Network=services.network
