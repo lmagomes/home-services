@@ -81,6 +81,16 @@ it-tools.{env.DOMAIN} {
 	import cloudflare
 }
 
+jsonlint.{env.DOMAIN} {
+	reverse_proxy tools.pod:3000
+	import cloudflare
+}
+
+json-path-finder.{env.DOMAIN} {
+	reverse_proxy tools.pod:3030
+	import cloudflare
+}
+
 # LLM Services
 
 open-webui.{env.DOMAIN} {

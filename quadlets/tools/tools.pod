@@ -5,3 +5,4 @@ After=network-online.target
 [Pod]
 PodName=tools.pod
 Network=services.network
+PublishPort=3030:3030

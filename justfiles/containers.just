@@ -4,6 +4,8 @@ build-all:
     just build-caddy
     just build-lumo-tamer
     just build-service-hub
+    just build-jsonlint
+    just build-json-path-finder
 
 # create a container image for service-hub
 build-service-hub:
@@ -80,3 +82,17 @@ build-proton-drive-sync:
     rm -rf $temp_dir
 
     echo "Done! Built localhost/proton-drive-sync:$latest_version"
+
+# create a container image for jsonlint
+build-jsonlint:
+    #!/usr/bin/env fish
+    set base_url (sops decrypt .secrets/secrets.yaml | yq '.secrets.jsonlint-app-url')
+    echo "Building jsonlint with NEXT_PUBLIC_BASE_URL=$base_url..."
+    podman build --build-arg NEXT_PUBLIC_BASE_URL=$base_url -t localhost/jsonlint:latest builds/jsonlint/
+    echo "Done! Built localhost/jsonlint:latest"
+
+# create a container image for json-path-finder
+build-json-path-finder:
+    echo "Building json-path-finder..."
+    podman build -t localhost/json-path-finder:latest builds/json-path-finder/
+    echo "Done! Built localhost/json-path-finder:latest"
