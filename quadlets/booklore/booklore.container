@@ -6,7 +6,7 @@ After=network.target
 [Container]
 ContainerName=booklore
 Pod=booklore.pod
-Image=ghcr.io/booklore-app/booklore:v2.2.0
+Image=ghcr.io/booklore-app/booklore:v2.2.1
 Volume=booklore-data.volume:/app/data:Z
 Mount=type=bind,source=/mnt/nas/media/books,destination=/books,relabel=private,idmap
 Mount=type=bind,source=/mnt/nas/media/bookdrop,destination=/bookdrop,relabel=private,idmap
