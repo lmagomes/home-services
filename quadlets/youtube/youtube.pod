@@ -1,0 +1,8 @@
+[Unit]
+Description=youtube container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=youtube.pod
+Network=services.network
+PublishPort=3333:3000

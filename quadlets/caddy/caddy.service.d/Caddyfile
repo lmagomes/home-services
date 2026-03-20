@@ -175,18 +175,18 @@ miniflux.{env.DOMAIN} {
 }
 
 paperless.{env.DOMAIN} {
-        reverse_proxy paperless.pod:8001
-        import cloudflare
+	reverse_proxy paperless.pod:8001
+	import cloudflare
 }
 
 paperless-ai.{env.DOMAIN} {
-        reverse_proxy paperless.pod:3000
-        import cloudflare
+	reverse_proxy paperless.pod:3000
+	import cloudflare
 }
 
 paperless-gpt.{env.DOMAIN} {
-        reverse_proxy paperless.pod:8080
-        import cloudflare
+	reverse_proxy paperless.pod:8080
+	import cloudflare
 }
 
 proton-drive-sync.{env.DOMAIN} {
@@ -201,5 +201,20 @@ termix.{env.DOMAIN} {
 
 transmission.{env.DOMAIN} {
 	reverse_proxy transmission.pod:9091
+	import cloudflare
+}
+
+invidious.{env.DOMAIN} {
+	reverse_proxy youtube.pod:3001
+	import cloudflare
+}
+
+invidious-companion.{env.DOMAIN} {
+	reverse_proxy youtube.pod:8282
+	import cloudflare
+}
+
+youtube.{env.DOMAIN} {
+	reverse_proxy youtube.pod:3000
 	import cloudflare
 }
