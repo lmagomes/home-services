@@ -40,7 +40,8 @@ auth:
     binaryPath: "./dist/proton-auth"
     # Headers to help avoid CAPTCHA - see docs/authentication.md
     appVersion: "macos-drive@1.0.0-alpha.1+rclone"
-    userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
+      (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 # Test/development configuration
 test:
@@ -118,7 +119,6 @@ server:
     # Set to "" to disable prefixing.
     prefix: "user:"
 
-
   instructions:
 
     # Template for assembling instructions.
@@ -153,7 +153,6 @@ server:
       - pattern: "(?<=(?:(?:native|custom|internal|external)\\s)?)(?=tool)"
         replacement: "custom "
 
-
     # Fallback instructions when no system/developer message is provided in the request
     fallback: |
       Always answer in plain text. Don't use tables, quote blocks, lists, etc. Be concise.
@@ -179,9 +178,6 @@ server:
     # The actual tool call JSON is appended at runtime.
     forToolBounce: |
       You tried to call a custom tool using your built-in tool system, but custom tools must be called by outputting JSON text within a code block. Please output the tool call as JSON, like this:
-
-
-
 
 # CLI Configuration
 cli:
@@ -210,9 +206,9 @@ cli:
     # Maps language tag -> [command, ...args]. Code is appended as last arg.
     # Override to restrict or extend
     executors:
-      bash: ["bash", "-c"]
-      python: ["python", "-c"]
-      sh: ["sh", "-c"]
+      bash: [ "bash", "-c" ]
+      python: [ "python", "-c" ]
+      sh: [ "sh", "-c" ]
       # zsh: ["zsh", "-c"]
       # powershell: ["powershell", "-Command"]
       # ps1: ["powershell", "-Command"]
