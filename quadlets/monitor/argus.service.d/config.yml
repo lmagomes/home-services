@@ -601,31 +601,6 @@ service:
       icon: https://raw.githubusercontent.com/open-webui/open-webui/refs/heads/main/static/static/favicon.svg
       icon_link_to: https://open-webui.${BASE_DOMAIN_NAME}/
   
-  services/papra:
-    latest_version:
-      type: github
-      url: papra-hq/papra
-      url_commands:
-        - type: regex
-          regex: \@papra/docker\@([0-9.]+)$
-      access_token: ${GITHUB_ACCESS_TOKEN}
-    deployed_version:
-      url: http://service-hub:8081/version/papra
-      json: version
-      regex: ^([0-9.]+)-rootless$
-    webhook:
-      update-pr:
-        headers:
-          - key: X-Service
-            value: 'services/papra'
-          - key: X-Version
-            value: '{{ version }}'
-    dashboard:
-      auto_approve: true
-      web_url: https://github.com/papra-hq/papra/releases/tag/@papra/docker@{{ version }}
-      icon: https://raw.githubusercontent.com/papra-hq/papra/main/apps/docs/public/favicon.svg
-      icon_link_to: https://papra.${BASE_DOMAIN_NAME}/
-  
   services/termix:
     latest_version:
       type: github
@@ -671,3 +646,99 @@ service:
       web_url: https://github.com/transmission/transmission/releases/tag/{{ version }}
       icon: https://avatars.githubusercontent.com/u/223312
       icon_link_to: https://transmission.${BASE_DOMAIN_NAME}/
+
+  paperless/paperless-ngx:
+    latest_version:
+      type: github
+      url: paperless-ngx/paperless-ngx
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: http://service-hub:8081/version/paperless
+      json: version
+      regex: ^v?([0-9.]+)$
+    webhook:
+      update-pr:
+        headers:
+          - key: X-Service
+            value: 'paperless/paperless-ngx'
+          - key: X-Version
+            value: '{{ version }}'
+    dashboard:
+      auto_approve: true
+      web_url: https://github.com/paperless-ngx/paperless-ngx/releases/tag/v{{ version }}
+      icon: https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/refs/heads/dev/resources/logo/web/svg/square.svg
+      icon_link_to: https://paperless.${BASE_DOMAIN_NAME}/
+
+  paperless/paperless-ai:
+    latest_version:
+      type: github
+      url: clusterzx/paperless-ai
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: http://service-hub:8081/version/paperless-ai
+      json: version
+      regex: ^v?([0-9.]+)$
+    webhook:
+      update-pr:
+        headers:
+          - key: X-Service
+            value: 'paperless/paperless-ai'
+          - key: X-Version
+            value: '{{ version }}'
+    dashboard:
+      auto_approve: true
+      web_url: https://github.com/clusterzx/paperless-ai/releases/tag/{{ version }}
+      icon: https://avatars.githubusercontent.com/u/32274973?s=48&v=4
+      icon_link_to: https://paperless-ai.${BASE_DOMAIN_NAME}/
+
+  paperless/paperless-gpt:
+    latest_version:
+      type: github
+      url: icereed/paperless-gpt
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: http://service-hub:8081/version/paperless-gpt
+      json: version
+      regex: ^v([0-9.]+)$
+    webhook:
+      update-pr:
+        headers:
+          - key: X-Service
+            value: 'paperless/paperless-gpt'
+          - key: X-Version
+            value: '{{ version }}'
+    dashboard:
+      auto_approve: true
+      web_url: https://github.com/icereed/paperless-gpt/releases/tag/v{{ version }}
+      icon: https://raw.githubusercontent.com/icereed/paperless-gpt/refs/heads/main/web-app/src/assets/logo.svg
+      icon_link_to: https://paperless-gpt.${BASE_DOMAIN_NAME}/
+
+  paperless/gotenberg:
+    latest_version:
+      type: github
+      url: gotenberg/gotenberg
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: http://service-hub:8081/version/paperless-gotenberg
+      json: version
+      regex: ^v?([0-9.]+)$
+    webhook:
+      update-pr:
+        headers:
+          - key: X-Service
+            value: 'paperless/gotenberg'
+          - key: X-Version
+            value: '{{ version }}'
+    dashboard:
+      auto_approve: true
+      web_url: https://github.com/gotenberg/gotenberg/releases/tag/v{{ version }}
+      icon: https://avatars.githubusercontent.com/u/66820499?s=48&v=4

@@ -1,0 +1,17 @@
+[Unit]
+Description=Paperless GPT container managed by Podman
+After=network.target paperless.service
+
+[Container]
+Pod=paperless.pod
+ContainerName=paperless-gpt
+Image=docker.io/icereed/paperless-gpt:v0.25.1
+EnvironmentFile=./%n.d/env
+Secret=paperless-api-token,type=env,target=PAPERLESS_API_TOKEN
+Volume=paperless-gpt-prompts.volume:/app/prompts:Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

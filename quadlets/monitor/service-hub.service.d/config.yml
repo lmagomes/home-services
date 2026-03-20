@@ -141,3 +141,24 @@ services:
     containers:
       - file: quadlets/transmission/transmission.container
         tag_template: "{{.Version}}"
+
+  paperless/paperless-ngx:
+    containers:
+      - file: quadlets/paperless/paperless.container
+        tag_template: "{{.Version}}"
+
+  paperless/paperless-ai:
+    containers:
+      - file: quadlets/paperless/paperless-ai.container
+        tag_template: "{{.Version}}"
+
+  paperless/paperless-gpt:
+    containers:
+      - file: quadlets/paperless/paperless-gpt.container
+        tag_template: "v{{.Version}}"
+
+  paperless/gotenberg:
+    containers:
+      - file: quadlets/paperless/paperless-gotenberg.container
+        tag_template: "{{.Version}}"
+

@@ -1,0 +1,18 @@
+[Unit]
+Description=Paperless Postgres container managed by Podman
+After=network.target
+
+[Container]
+Pod=paperless.pod
+Image=docker.io/postgres:18.1
+ContainerName=paperless-postgres
+EnvironmentFile=./%n.d/env
+Secret=paperless-db-password,type=env,target=POSTGRES_PASSWORD
+Volume=paperless-postgres-data.volume:/var/lib/postgresql:Z
+ShmSize=128mb
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

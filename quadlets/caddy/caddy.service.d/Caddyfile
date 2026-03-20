@@ -174,9 +174,19 @@ miniflux.{env.DOMAIN} {
 	import cloudflare
 }
 
-papra.{env.DOMAIN} {
-	reverse_proxy papra.pod:1221
-	import cloudflare
+paperless.{env.DOMAIN} {
+        reverse_proxy paperless.pod:8001
+        import cloudflare
+}
+
+paperless-ai.{env.DOMAIN} {
+        reverse_proxy paperless.pod:3000
+        import cloudflare
+}
+
+paperless-gpt.{env.DOMAIN} {
+        reverse_proxy paperless.pod:8080
+        import cloudflare
 }
 
 proton-drive-sync.{env.DOMAIN} {

@@ -1,0 +1,15 @@
+[Unit]
+Description=Paperless Tika container managed by Podman
+After=network.target
+
+[Container]
+Pod=paperless.pod
+ContainerName=paperless-tika
+Image=docker.io/apache/tika:3.2.3.0
+EnvironmentFile=./%n.d/env
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

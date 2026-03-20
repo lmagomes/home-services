@@ -10,7 +10,6 @@ Image=ghcr.io/release-argus/argus:0.29.3
 Volume=argus-data.volume:/app/data/:Z
 Volume=./%n.d/config.yml:/app/config.yml:ro,Z
 EnvironmentFile=./%n.d/env
-Secret=argus-base-version-api-url,type=env,target=BASE_VERSION_API_URL
 Secret=domain-secret,type=env,target=BASE_DOMAIN_NAME
 Secret=github-token,type=env,target=GITHUB_ACCESS_TOKEN
 Secret=argus-update-webhook-secret,type=env,target=UPDATE_WEBHOOK_SECRET

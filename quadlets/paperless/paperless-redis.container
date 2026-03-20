@@ -1,0 +1,22 @@
+[Unit]
+Description=Paperless redis container managed by Podman
+After=network.target
+
+[Container]
+Pod=paperless.pod
+ContainerName=paperless-redis
+Image=docker.io/valkey/valkey:9.0.1
+HealthCmd="/usr/local/bin/redis-cli ping || exit 1"
+HealthStartPeriod=30s
+HealthInterval=10s
+HealthTimeout=5s
+HealthRetries=5
+Notify=healthy
+Volume=paperless-redis-data.volume:/data:Z
+EnvironmentFile=./%n.d/env
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

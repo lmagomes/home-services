@@ -1,0 +1,7 @@
+[Unit]
+Description=Paperless container managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=paperless.pod
+Network=services.network

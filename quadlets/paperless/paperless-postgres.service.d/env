@@ -1,0 +1,5 @@
+TZ=Europe/Lisbon
+POSTGRES_DB=paperless
+POSTGRES_USER=paperless
+#POSTGRES_PASSWORD=paperless
+POSTGRES_INITDB_ARGS=--data-checksums
