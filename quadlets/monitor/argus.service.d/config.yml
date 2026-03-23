@@ -168,30 +168,30 @@ service:
       web_url: https://github.com/alam00000/bentopdf/releases/tag/v{{ version }}
       icon_link_to: https://bentopdf.${BASE_DOMAIN_NAME}/
 
-  services/audiobookshelf:
+  services/grimmory:
     latest_version:
       type: github
-      url: advplyr/audiobookshelf
+      url: grimmory-tools/grimmory
       url_commands:
         - type: regex
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       method: GET
-      url: http://service-hub:8081/version/audiobookshelf
+      url: http://service-hub:8081/version/grimmory
       json: version
     webhook:
       update-pr:
         headers:
           - key: X-Service
-            value: 'services/audiobookshelf'
+            value: 'services/grimmory'
           - key: X-Version
             value: '{{ version }}'
     dashboard:
       auto_approve: true
-      icon: https://raw.githubusercontent.com/advplyr/audiobookshelf/master/client/static/icon.svg
-      web_url: https://github.com/advplyr/audiobookshelf/releases/tag/v{{ version }}
-      icon_link_to: https://audiobookshelf.${BASE_DOMAIN_NAME}/
+      icon: https://raw.githubusercontent.com/grimmory-tools/grimmory/refs/heads/develop/assets/logo.svg
+      web_url: https://github.com/grimmory-tools/grimmory/releases/tag/v{{ version }}
+      icon_link_to: https://grimmory.${BASE_DOMAIN_NAME}/
 
   services/authentik:
     latest_version:

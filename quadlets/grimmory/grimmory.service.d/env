@@ -1,0 +1,11 @@
+# grimmory Application Settings
+USER_ID=1000
+GROUP_ID=1000
+TZ=Europe/Lisbon
+SWAGGER_ENABLED=false
+grimmory_PORT=6060
+
+# Database Connection (grimmory)
+DATABASE_URL=jdbc:mariadb://grimmory-mariadb:3306/grimmory
+DATABASE_USERNAME=grimmory
+# DB_PASSWORD=ChangeMe_grimmoryApp_2025!

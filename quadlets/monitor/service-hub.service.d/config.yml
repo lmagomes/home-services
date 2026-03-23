@@ -50,9 +50,9 @@ services:
       - file: quadlets/bichon/bichon.container
         tag_template: "{{.Version}}"
 
-  services/bookLore:
+  services/grimmory:
     containers:
-      - file: quadlets/booklore/booklore.container
+      - file: quadlets/grimmory/grimmory.container
         tag_template: "v{{.Version}}"
 
   services/caddy:

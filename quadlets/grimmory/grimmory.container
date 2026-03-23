@@ -1,17 +1,17 @@
 [Unit]
-Description=booklore Web container managed by Podman
-Requires=booklore-mariadb.container
+Description=grimmory Web container managed by Podman
+Requires=grimmory-mariadb.container
 After=network.target
 
 [Container]
-ContainerName=booklore
-Pod=booklore.pod
-Image=ghcr.io/booklore-app/booklore:v2.2.1
-Volume=booklore-data.volume:/app/data:Z
+ContainerName=grimmory
+Pod=grimmory.pod
+Image=ghcr.io/grimmory-tools/grimmory:v2.3.0
+Volume=grimmory-data.volume:/app/data:Z
 Mount=type=bind,source=/mnt/nas/media/books,destination=/books,relabel=private,idmap
 Mount=type=bind,source=/mnt/nas/media/bookdrop,destination=/bookdrop,relabel=private,idmap
 EnvironmentFile=./%n.d/env
-Secret=booklore-database-password,type=env,target=DATABASE_PASSWORD
+Secret=grimmory-database-password,type=env,target=DATABASE_PASSWORD
 
 HealthCmd=wget -q -O - http://localhost:6060/api/v1/healthcheck
 HealthInterval=1m

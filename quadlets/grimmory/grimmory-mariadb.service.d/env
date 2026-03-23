@@ -2,6 +2,6 @@
 PUID=0
 PGID=0
 # MYSQL_ROOT_PASSWORD=ChangeMe_MariaDBRoot_2025!
-MYSQL_DATABASE=booklore
-MYSQL_USER=booklore
+MYSQL_DATABASE=grimmory
+MYSQL_USER=grimmory
 TZ=Europe/Lisbon

@@ -129,8 +129,8 @@ bichon.{env.DOMAIN} {
 	import cloudflare
 }
 
-booklore.{env.DOMAIN} {
-	reverse_proxy booklore.pod:6060
+grimmory.{env.DOMAIN} {
+	reverse_proxy grimmory.pod:6060
 	import cloudflare
 }
 
