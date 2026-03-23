@@ -168,6 +168,55 @@ service:
       web_url: https://github.com/alam00000/bentopdf/releases/tag/v{{ version }}
       icon_link_to: https://bentopdf.${BASE_DOMAIN_NAME}/
 
+  services/authentik:
+    latest_version:
+      type: github
+      url: goauthentik/authentik
+      url_commands:
+        - type: regex
+          regex: version\/([0-9.]+[0-9]+(?:-rc[0-9])?)
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: http://service-hub:8081/version/authentik
+      json: version
+    webhook:
+      update-pr:
+        headers:
+          - key: X-Service
+            value: 'services/authentik'
+          - key: X-Version
+            value: '{{ version }}'
+    dashboard:
+      auto_approve: true
+      web_url: https://goauthentik.io/docs/releases/{{ version | split:"." | slice:":-1" | join:"."  }}
+      icon: https://raw.githubusercontent.com/goauthentik/authentik/master/web/icons/icon.png
+      icon_link_to: https://authentik.${BASE_DOMAIN_NAME}/
+
+  services/audiobookshelf:
+    latest_version:
+      type: github
+      url: advplyr/audiobookshelf
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      method: GET
+      url: http://service-hub:8081/version/audiobookshelf
+      json: version
+    webhook:
+      update-pr:
+        headers:
+          - key: X-Service
+            value: 'services/audiobookshelf'
+          - key: X-Version
+            value: '{{ version }}'
+    dashboard:
+      auto_approve: true
+      icon: https://raw.githubusercontent.com/advplyr/audiobookshelf/master/client/static/icon.svg
+      web_url: https://github.com/advplyr/audiobookshelf/releases/tag/v{{ version }}
+      icon_link_to: https://audiobookshelf.${BASE_DOMAIN_NAME}/
+
   services/grimmory:
     latest_version:
       type: github
@@ -193,30 +242,6 @@ service:
       web_url: https://github.com/grimmory-tools/grimmory/releases/tag/v{{ version }}
       icon_link_to: https://grimmory.${BASE_DOMAIN_NAME}/
 
-  services/authentik:
-    latest_version:
-      type: github
-      url: goauthentik/authentik
-      url_commands:
-        - type: regex
-          regex: version\/([0-9.]+[0-9]+(?:-rc[0-9])?)
-      access_token: ${GITHUB_ACCESS_TOKEN}
-    deployed_version:
-      url: http://service-hub:8081/version/authentik
-      json: version
-    webhook:
-      update-pr:
-        headers:
-          - key: X-Service
-            value: 'services/authentik'
-          - key: X-Version
-            value: '{{ version }}'
-    dashboard:
-      auto_approve: true
-      web_url: https://goauthentik.io/docs/releases/{{ version | split:"." | slice:":-1" | join:"."  }}
-      icon: https://raw.githubusercontent.com/goauthentik/authentik/master/web/icons/icon.png
-      icon_link_to: https://authentik.${BASE_DOMAIN_NAME}/
-
   services/bichon:
     latest_version:
       type: github
@@ -238,31 +263,6 @@ service:
       web_url: https://github.com/rustmailer/bichon/releases/tag/{{ version }}
       icon: https://raw.githubusercontent.com/rustmailer/bichon/main/web/src/assets/logo.svg
       icon_link_to: https://bichon.${BASE_DOMAIN_NAME}/
-
-  services/bookLore:
-    latest_version:
-      type: github
-      url: booklore-app/BookLore
-      access_token: ${GITHUB_ACCESS_TOKEN}
-      url_commands:
-        - type: regex
-          regex: v([0-9.]+)$
-    deployed_version:
-      url: http://service-hub:8081/version/booklore
-      json: version
-      regex: ^v([0-9.]+)$
-    webhook:
-      update-pr:
-        headers:
-          - key: X-Service
-            value: 'services/bookLore'
-          - key: X-Version
-            value: '{{ version }}'
-    dashboard:
-      auto_approve: true
-      icon: https://raw.githubusercontent.com/booklore-app/BookLore/develop/assets/logo.svg
-      web_url: https://github.com/booklore-app/BookLore/releases/tag/v{{ version }}
-      icon_link_to: https://booklore.${BASE_DOMAIN_NAME}/
 
   services/caddy:
     latest_version:
