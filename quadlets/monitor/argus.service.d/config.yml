@@ -229,6 +229,7 @@ service:
       method: GET
       url: http://service-hub:8081/version/grimmory
       json: version
+      regex: ^v([0-9.]+)$
     webhook:
       update-pr:
         headers:
