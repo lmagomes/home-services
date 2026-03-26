@@ -1,0 +1,17 @@
+[Unit]
+Description=Dawarich Redis container managed by Podman
+After=network.target
+
+[Container]
+Pod=dawarich.pod
+Image=docker.io/redis:7.4-alpine
+ContainerName=dawarich-redis
+Exec=redis-server --save 900 1 --save 300 10 --appendonly no
+Volume=dawarich-shared.volume:/data:Z
+HealthCmd=redis-cli --raw incr ping
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

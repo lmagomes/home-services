@@ -1,0 +1,7 @@
+[Unit]
+Description=Dawarich pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=dawarich.pod
+Network=services.network

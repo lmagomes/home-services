@@ -107,6 +107,13 @@ services:
       - file: quadlets/miniflux/miniflux.container
         tag_template: "{{.Version}}"
 
+  services/dawarich:
+    containers:
+      - file: quadlets/dawarich/dawarich-app.container
+        tag_template: "{{.Version}}"
+      - file: quadlets/dawarich/dawarich-sidekiq.container
+        tag_template: "{{.Version}}"
+
   llm/lumo-tamer:
     containers:
       - file: quadlets/llm/lumo-tamer.container

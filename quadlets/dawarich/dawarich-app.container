@@ -1,0 +1,28 @@
+[Unit]
+Description=Dawarich App container managed by Podman
+After=network.target dawarich-db.service dawarich-redis.service
+
+[Container]
+Pod=dawarich.pod
+Image=docker.io/freikin/dawarich:1.4.0
+ContainerName=dawarich-app
+EnvironmentFile=./%n.d/env
+Secret=dawarich-db-password,type=env,target=DATABASE_PASSWORD
+Secret=dawarich-secret-key-base,type=env,target=SECRET_KEY_BASE
+Secret=dawarich-oidc-client-id,type=env,target=OIDC_CLIENT_ID
+Secret=dawarich-oidc-client-secret,type=env,target=OIDC_CLIENT_SECRET
+Secret=dawarich-oidc-issuer,type=env,target=OIDC_ISSUER
+Secret=dawarich-oidc-redirect-uri,type=env,target=OIDC_REDIRECT_URI
+Volume=dawarich-public.volume:/var/app/public:Z
+Volume=dawarich-watched.volume:/var/app/tmp/imports/watched:Z
+Volume=dawarich-storage.volume:/var/app/storage:Z
+Volume=dawarich-db-data.volume:/dawarich_db_data:Z
+Entrypoint=web-entrypoint.sh
+Exec=bin/rails server -p 3000 -b ::
+HealthCmd=wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '"status"\s*:\s*"ok"'
+
+[Service]
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

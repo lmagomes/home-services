@@ -488,9 +488,33 @@ service:
             value: '{{ version }}'
     dashboard:
       auto_approve: true
-      web_url: https://github.com/miniflux/v2/releases/tag/{{ version }}
       icon: https://raw.githubusercontent.com/miniflux/v2/main/internal/ui/static/bin/sprite.svg
+      web_url: https://github.com/miniflux/v2/releases/tag/{{ version }}
       icon_link_to: https://miniflux.${BASE_DOMAIN_NAME}/
+
+  services/dawarich:
+    latest_version:
+      type: github
+      url: Freika/dawarich
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: http://service-hub:8081/version/dawarich
+      json: version
+    webhook:
+      update-pr:
+        headers:
+          - key: X-Service
+            value: 'services/dawarich'
+          - key: X-Version
+            value: '{{ version }}'
+    dashboard:
+      auto_approve: true
+      web_url: https://github.com/Freika/dawarich/releases/tag/v{{ version }}
+      icon: https://raw.githubusercontent.com/Freika/dawarich/master/public/apple-touch-icon.png
+      icon_link_to: https://dawarich.${BASE_DOMAIN_NAME}/
 
   llm/lumo-tamer:
     latest_version:

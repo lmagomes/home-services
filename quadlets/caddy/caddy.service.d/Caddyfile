@@ -129,6 +129,11 @@ bichon.{env.DOMAIN} {
 	import cloudflare
 }
 
+dawarich.{env.DOMAIN} {
+	reverse_proxy dawarich.pod:3000
+	import cloudflare
+}
+
 grimmory.{env.DOMAIN} {
 	reverse_proxy grimmory.pod:6060
 	import cloudflare

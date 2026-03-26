@@ -1,0 +1,3 @@
+POSTGRES_USER=postgres
+POSTGRES_DB=dawarich
+#POSTGRES_PASSWORD is set via Secret in the .container file

@@ -1,0 +1,23 @@
+[Unit]
+Description=Dawarich Sidekiq container managed by Podman
+After=network.target dawarich-db.service dawarich-redis.service dawarich-app.service
+
+[Container]
+Pod=dawarich.pod
+Image=docker.io/freikin/dawarich:1.4.0
+ContainerName=dawarich-sidekiq
+EnvironmentFile=./%n.d/env
+Secret=dawarich-db-password,type=env,target=DATABASE_PASSWORD
+Secret=dawarich-secret-key-base,type=env,target=SECRET_KEY_BASE
+Volume=dawarich-public.volume:/var/app/public:Z
+Volume=dawarich-watched.volume:/var/app/tmp/imports/watched:Z
+Volume=dawarich-storage.volume:/var/app/storage:Z
+Entrypoint=sidekiq-entrypoint.sh
+Exec=sidekiq
+HealthCmd=pgrep -f sidekiq
+
+[Service]
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

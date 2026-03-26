@@ -1,0 +1,20 @@
+[Unit]
+Description=Dawarich Postgres container managed by Podman
+After=network.target
+
+[Container]
+Pod=dawarich.pod
+Image=docker.io/postgis/postgis:17-3.5-alpine
+ContainerName=dawarich-db
+EnvironmentFile=./%n.d/env
+Secret=dawarich-db-password,type=env,target=POSTGRES_PASSWORD
+Volume=dawarich-db-data.volume:/var/lib/postgresql/data:Z
+Volume=dawarich-shared.volume:/var/shared:Z
+ShmSize=1G
+HealthCmd=pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-dawarich}
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
