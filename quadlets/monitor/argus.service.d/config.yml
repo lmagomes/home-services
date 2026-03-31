@@ -513,7 +513,7 @@ service:
     dashboard:
       auto_approve: true
       web_url: https://github.com/Freika/dawarich/releases/tag/v{{ version }}
-      icon: https://raw.githubusercontent.com/Freika/dawarich/master/public/apple-touch-icon.png
+      icon: https://dawarich.app/img/logo.svg
       icon_link_to: https://dawarich.${BASE_DOMAIN_NAME}/
 
   llm/lumo-tamer:
