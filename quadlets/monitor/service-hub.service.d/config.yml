@@ -169,3 +169,8 @@ services:
       - file: quadlets/paperless/paperless-gotenberg.container
         tag_template: "{{.Version}}"
 
+  services/guacamole:
+    containers:
+      - file: quadlets/termix/termix-guacd.container
+        tag_template: "{{.Version}}"
+

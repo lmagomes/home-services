@@ -651,6 +651,30 @@ service:
       icon: https://avatars.githubusercontent.com/u/236961563?s=48&v=4
       icon_link_to: https://termix.${BASE_DOMAIN_NAME}/
 
+  services/guacamole:
+    latest_version:
+      type: github
+      url: apache/guacamole-server
+      url_commands:
+        - type: regex
+          regex: ^([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: http://service-hub:8081/version/guacamole
+      json: version
+      regex: ^([0-9.]+)$
+    webhook:
+      update-pr:
+        headers:
+          - key: X-Service
+            value: 'services/guacamole'
+          - key: X-Version
+            value: '{{ version }}'
+    dashboard:
+      auto_approve: true
+      web_url: https://guacamole.apache.org/releases/{{ version }}/
+      icon: https://guacamole.apache.org/images/logos/guac-tricolor-logo.svg
+
   services/transmission:
     latest_version:
       type: github

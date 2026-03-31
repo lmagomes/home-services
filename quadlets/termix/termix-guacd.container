@@ -1,0 +1,14 @@
+[Unit]
+Description=termix guacd container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=termix-guacd
+Pod=termix.pod
+Image=docker.io/guacamole/guacd:1.6.0
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
