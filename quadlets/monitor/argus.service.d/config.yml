@@ -496,12 +496,9 @@ service:
     latest_version:
       type: github
       url: Freika/dawarich
-      url_commands:
-        - type: regex
-          regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/dawarich
+      url: http://service-hub:8081/version/dawarich-app
       json: version
     webhook:
       update-pr:
@@ -512,7 +509,7 @@ service:
             value: '{{ version }}'
     dashboard:
       auto_approve: true
-      web_url: https://github.com/Freika/dawarich/releases/tag/v{{ version }}
+      web_url: https://github.com/Freika/dawarich/releases/tag/{{ version }}
       icon: https://dawarich.app/img/logo.svg
       icon_link_to: https://dawarich.${BASE_DOMAIN_NAME}/
 
@@ -660,7 +657,7 @@ service:
           regex: ^([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/guacamole
+      url: http://service-hub:8081/version/termix-guacd
       json: version
       regex: ^([0-9.]+)$
     webhook:
