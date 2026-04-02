@@ -98,6 +98,8 @@ Key rules:
 - Attach named volumes with `:Z` for SELinux relabeling.
 - Group related directives together: Secrets together, Volumes together.
 - Place `HealthCmd`, `HealthInterval`, `HealthRetries`, etc. at the end of the `[Container]` section.
+- For **s6-overlay / LSIO images** (those using `PUID`/`PGID`): set `PUID=0` and `PGID=0`. Do **not** use `UserNS=keep-id` — it breaks `s6-applyuidgid`. Rootless Podman already maps container root (UID 0) to the host user (UID 1000), so files are written with correct host ownership.
+- Do **not** use `idmap` on bind mounts in rootless Podman — `mount_setattr` requires `CAP_SYS_ADMIN` and will fail with `OCI permission denied`.
 
 ### Volume files (`.volume`)
 
