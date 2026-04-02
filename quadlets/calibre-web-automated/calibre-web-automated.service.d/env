@@ -1,0 +1,6 @@
+PUID=0
+PGID=0
+TZ=UTC
+#HARDCOVER_TOKEN is set via Secret in the .container file
+NETWORK_SHARE_MODE=false
+CWA_PORT_OVERRIDE=8083

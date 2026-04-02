@@ -1,0 +1,10 @@
+[Unit]
+Description=calibre-web-automated pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=calibre-web-automated.pod
+Network=services.network
+
+[Install]
+WantedBy=default.target

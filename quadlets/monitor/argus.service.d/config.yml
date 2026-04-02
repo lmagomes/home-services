@@ -693,6 +693,31 @@ service:
       icon: https://avatars.githubusercontent.com/u/223312
       icon_link_to: https://transmission.${BASE_DOMAIN_NAME}/
 
+  services/calibre-web-automated:
+    latest_version:
+      type: github
+      url: crocodilestick/Calibre-Web-Automated
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: http://service-hub:8081/version/calibre-web-automated
+      json: version
+      regex: ^v?([0-9.]+)$
+    webhook:
+      update-pr:
+        headers:
+          - key: X-Service
+            value: 'services/calibre-web-automated'
+          - key: X-Version
+            value: '{{ version }}'
+    dashboard:
+      auto_approve: true
+      web_url: https://github.com/crocodilestick/Calibre-Web-Automated/releases/tag/v{{ version }}
+      icon: https://raw.githubusercontent.com/crocodilestick/Calibre-Web-Automated/a7f5aa45cab19e191f8870617fc77d6fb0d62680/cps/static/icon.svg
+      icon_link_to: https://calibre-web-automated.${BASE_DOMAIN_NAME}/
+
   paperless/paperless-ngx:
     latest_version:
       type: github

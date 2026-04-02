@@ -149,6 +149,11 @@ services:
       - file: quadlets/transmission/transmission.container
         tag_template: "{{.Version}}"
 
+  services/calibre-web-automated:
+    containers:
+      - file: quadlets/calibre-web-automated/calibre-web-automated.container
+        tag_template: "v{{.Version}}"
+
   paperless/paperless-ngx:
     containers:
       - file: quadlets/paperless/paperless.container
@@ -173,4 +178,3 @@ services:
     containers:
       - file: quadlets/termix/termix-guacd.container
         tag_template: "{{.Version}}"
-

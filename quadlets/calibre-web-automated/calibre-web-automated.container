@@ -1,0 +1,20 @@
+[Unit]
+Description=calibre-web-automated container managed by Podman
+After=network.target
+
+[Container]
+Pod=calibre-web-automated.pod
+ContainerName=calibre-web-automated
+Image=docker.io/crocodilestick/calibre-web-automated:latest
+EnvironmentFile=./%n.d/env
+Secret=calibre-web-automated-hardcover-token,type=env,target=HARDCOVER_TOKEN
+Volume=calibre-web-automated-config.volume:/config:Z
+Volume=calibre-web-automated-plugins.volume:/config/.config/calibre/plugins:Z
+Mount=type=bind,source=/mnt/nas/media/bookdrop,destination=/cwa-book-ingest,relabel=private
+Mount=type=bind,source=/mnt/nas/media/books,destination=/calibre-library,ro=false,relabel=private
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
