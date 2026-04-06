@@ -6,7 +6,7 @@ Requires=service-hub.container
 [Container]
 ContainerName=argus
 Pod=monitor.pod
-Image=ghcr.io/release-argus/argus:0.29.3
+Image=ghcr.io/release-argus/argus:0.29.4
 Volume=argus-data.volume:/app/data/:Z
 Volume=./%n.d/config.yml:/app/config.yml:ro,Z
 EnvironmentFile=./%n.d/env
