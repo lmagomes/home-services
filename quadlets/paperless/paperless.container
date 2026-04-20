@@ -5,7 +5,7 @@ After=network.target paperless-postgres.service paperless-redis.service gotenber
 [Container]
 Pod=paperless.pod
 ContainerName=paperless-ngx
-Image=ghcr.io/paperless-ngx/paperless-ngx:2.20.13
+Image=ghcr.io/paperless-ngx/paperless-ngx:2.20.14
 EnvironmentFile=./%n.d/env
 Secret=paperless-db-password,type=env,target=PAPERLESS_DBPASS
 

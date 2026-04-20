@@ -5,7 +5,7 @@ After=network.target
 [Container]
 Pod=paperless.pod
 ContainerName=paperless-gotenberg
-Image=docker.io/gotenberg/gotenberg:8.30.1
+Image=docker.io/gotenberg/gotenberg:8.31.0
 EnvironmentFile=./%n.d/env
 Exec=gotenberg --api-port=3001 --chromium-disable-javascript=true --chromium-allow-list=file:///tmp/.*
 
