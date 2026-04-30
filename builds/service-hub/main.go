@@ -246,6 +246,7 @@ func processUpdate(fc *forgejoClient, baseBranch, serviceID, version string, svc
 
 	// 2. Update each container file
 	containerUpdates := []string{}
+	anyChanged := false
 	for _, c := range svc.Containers {
 		tag, err := renderTag(c.TagTemplate, version)
 		if err != nil {
@@ -253,14 +254,27 @@ func processUpdate(fc *forgejoClient, baseBranch, serviceID, version string, svc
 		}
 
 		log.Printf("updating %s → image tag %s", c.File, tag)
-		if err := fc.updateContainerFile(c.File, branch, tag); err != nil {
+		changed, err := fc.updateContainerFile(c.File, branch, tag)
+		if err != nil {
 			return fmt.Errorf("update file %s: %w", c.File, err)
+		}
+		if changed {
+			anyChanged = true
 		}
 
 		// Extract container name from path for PR title
 		parts := strings.Split(c.File, "/")
 		containerName := strings.TrimSuffix(parts[len(parts)-1], ".container")
 		containerUpdates = append(containerUpdates, fmt.Sprintf("%s=%s", containerName, tag))
+	}
+
+	// If no files were changed, delete the branch and skip PR creation
+	if !anyChanged {
+		log.Printf("no files changed for %s %s, skipping PR creation", serviceID, version)
+		if err := fc.deleteBranch(branch); err != nil {
+			log.Printf("failed to delete unused branch %s: %v", branch, err)
+		}
+		return nil
 	}
 
 	// 3. Create PR
@@ -278,27 +292,28 @@ func processUpdate(fc *forgejoClient, baseBranch, serviceID, version string, svc
 }
 
 // updateContainerFile fetches a file from Forgejo, replaces the Image= tag, and updates it.
-func (fc *forgejoClient) updateContainerFile(filePath, branch, newTag string) error {
+// Returns (changed, error). changed is false if the file was already at the target tag.
+func (fc *forgejoClient) updateContainerFile(filePath, branch, newTag string) (bool, error) {
 	// GET current file content
 	content, sha, err := fc.getFileContent(filePath, branch)
 	if err != nil {
-		return fmt.Errorf("get file: %w", err)
+		return false, fmt.Errorf("get file: %w", err)
 	}
 
 	// Replace the Image= line tag
 	re := regexp.MustCompile(`(?m)^(Image=.*:)(.+)$`)
 	if !re.MatchString(content) {
-		return fmt.Errorf("no Image= line found in %s", filePath)
+		return false, fmt.Errorf("no Image= line found in %s", filePath)
 	}
 	updated := re.ReplaceAllString(content, "${1}"+newTag)
 
 	if updated == content {
 		log.Printf("no change needed for %s (already at %s)", filePath, newTag)
-		return nil
+		return false, nil
 	}
 
 	// PUT updated file
-	return fc.updateFile(filePath, branch, updated, sha,
+	return true, fc.updateFile(filePath, branch, updated, sha,
 		fmt.Sprintf("update %s image tag to %s", filePath, newTag))
 }
 
@@ -306,12 +321,19 @@ func (fc *forgejoClient) updateContainerFile(filePath, branch, newTag string) er
 
 func (fc *forgejoClient) createBranch(name, from string) error {
 	payload := map[string]string{
-		"new_branch_name":  name,
-		"old_branch_name":  from,
+		"new_branch_name": name,
+		"old_branch_name": from,
 	}
 	_, err := fc.apiCall("POST",
 		fmt.Sprintf("/api/v1/repos/%s/%s/branches", fc.owner, fc.repo),
 		payload)
+	return err
+}
+
+func (fc *forgejoClient) deleteBranch(name string) error {
+	_, err := fc.apiCall("DELETE",
+		fmt.Sprintf("/api/v1/repos/%s/%s/branches/%s", fc.owner, fc.repo, url.PathEscape(name)),
+		nil)
 	return err
 }
 
