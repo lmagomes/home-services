@@ -217,32 +217,6 @@ service:
       web_url: https://github.com/advplyr/audiobookshelf/releases/tag/v{{ version }}
       icon_link_to: https://audiobookshelf.${BASE_DOMAIN_NAME}/
 
-  services/grimmory:
-    latest_version:
-      type: github
-      url: grimmory-tools/grimmory
-      url_commands:
-        - type: regex
-          regex: v([0-9.]+)$
-      access_token: ${GITHUB_ACCESS_TOKEN}
-    deployed_version:
-      method: GET
-      url: http://service-hub:8081/version/grimmory
-      json: version
-      regex: ^v([0-9.]+)$
-    webhook:
-      update-pr:
-        headers:
-          - key: X-Service
-            value: 'services/grimmory'
-          - key: X-Version
-            value: '{{ version }}'
-    dashboard:
-      auto_approve: true
-      icon: https://raw.githubusercontent.com/grimmory-tools/grimmory/refs/heads/develop/assets/logo.svg
-      web_url: https://github.com/grimmory-tools/grimmory/releases/tag/v{{ version }}
-      icon_link_to: https://grimmory.${BASE_DOMAIN_NAME}/
-
   services/bichon:
     latest_version:
       type: github

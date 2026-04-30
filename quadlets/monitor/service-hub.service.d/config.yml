@@ -50,11 +50,6 @@ services:
       - file: quadlets/bichon/bichon.container
         tag_template: "{{.Version}}"
 
-  services/grimmory:
-    containers:
-      - file: quadlets/grimmory/grimmory.container
-        tag_template: "v{{.Version}}"
-
   services/caddy:
     containers:
       - file: quadlets/caddy/caddy.container

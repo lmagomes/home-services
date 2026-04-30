@@ -1,7 +1,0 @@
-[Unit]
-Description=grimmory container managed by Podman
-After=network-online.target
-
-[Pod]
-PodName=grimmory.pod
-Network=services.network
