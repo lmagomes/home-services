@@ -92,6 +92,11 @@ services:
       - file: quadlets/karakeep/karakeep.container
         tag_template: "{{.Version}}"
 
+  karakeep/meilisearch:
+    containers:
+      - file: quadlets/karakeep/meilisearch.container
+        tag_template: "v{{.Version}}"
+
   services/mealie:
     containers:
       - file: quadlets/mealie/mealie.container
@@ -108,6 +113,11 @@ services:
         tag_template: "{{.Version}}"
       - file: quadlets/dawarich/dawarich-sidekiq.container
         tag_template: "{{.Version}}"
+
+  firefly/firefly-data-importer:
+    containers:
+      - file: quadlets/firefly/firefly-data-importer.container
+        tag_template: "version-{{.Version}}"
 
   llm/lumo-tamer:
     containers:
@@ -128,11 +138,6 @@ services:
     containers:
       - file: quadlets/llm/open-webui.container
         tag_template: "v{{.Version}}"
-
-  services/papra:
-    containers:
-      - file: quadlets/papra/papra.container
-        tag_template: "{{.Version}}-rootless"
 
   services/termix:
     containers:

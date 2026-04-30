@@ -285,6 +285,31 @@ service:
       web_url: https://github.com/firefly-iii/firefly-iii/releases/tag/v{{ version }}
       icon_link_to: https://firefly.${BASE_DOMAIN_NAME}/
 
+  firefly/firefly-data-importer:
+    latest_version:
+      type: github
+      url: firefly-iii/data-importer
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      method: GET
+      url: http://service-hub:8081/version/firefly-data-importer
+      json: version
+      regex: ^version-([0-9.]+)
+    webhook:
+      update-pr:
+        headers:
+          - key: X-Service
+            value: 'firefly/firefly-data-importer'
+          - key: X-Version
+            value: '{{ version }}'
+    dashboard:
+      auto_approve: true
+      web_url: https://github.com/firefly-iii/data-importer/releases/tag/v{{ version }}
+      icon: https://raw.githubusercontent.com/firefly-iii/firefly-iii/main/public/images/logo.png
+
   services/forgejo:
     latest_version:
       type: web
@@ -419,6 +444,30 @@ service:
       web_url: https://github.com/karakeep-app/karakeep/releases/tag/{{ version }}
       icon: https://raw.githubusercontent.com/karakeep-app/karakeep/main/apps/web/public/icons/logo-icon.svg
       icon_link_to: https://karakeep.${BASE_DOMAIN_NAME}/
+
+  karakeep/meilisearch:
+    latest_version:
+      type: github
+      url: meilisearch/meilisearch
+      url_commands:
+        - type: regex
+          regex: v([0-9.]+)$
+      access_token: ${GITHUB_ACCESS_TOKEN}
+    deployed_version:
+      url: http://service-hub:8081/version/meilisearch
+      json: version
+      regex: ^v([0-9.]+)$
+    webhook:
+      update-pr:
+        headers:
+          - key: X-Service
+            value: 'karakeep/meilisearch'
+          - key: X-Version
+            value: '{{ version }}'
+    dashboard:
+      auto_approve: true
+      web_url: https://github.com/meilisearch/meilisearch/releases/tag/v{{ version }}
+      icon: https://avatars.githubusercontent.com/u/108195128?s=48&v=4
 
   services/mealie:
     latest_version:
