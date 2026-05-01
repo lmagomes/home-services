@@ -1,0 +1,10 @@
+[Unit]
+Description=Forgejo Runner pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=forgejo-runner.pod
+Network=services.network
+
+[Install]
+WantedBy=default.target

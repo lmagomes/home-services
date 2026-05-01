@@ -1,11 +1,18 @@
-# Justfile for managing the Forgejo Runner binary and service
+# Justfile for managing the Forgejo Runner (host binary and container)
 
 forgejo-runner-binary := "/usr/local/bin/forgejo-runner"
 
-# update forgejo runner binary to the latest release
+# update the host forgejo runner binary to the latest release
+# (if using the containerized runner, use just update-podman-images instead)
 update-forgejo-runner:
     #!/usr/bin/env fish
     set arch (uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/')
+
+    # check if containerized runner is active instead
+    if systemctl --user is-active forgejo-runner-pod.service 2>/dev/null >/dev/null
+        echo "❗ Containerized runner is active. Use 'just update-podman-images' to update it instead."
+        exit 1
+    end
 
     echo "🔄 Fetching latest Forgejo Runner release..."
     set latest (curl -sS https://data.forgejo.org/api/v1/repos/forgejo/runner/releases/latest | jq -r .tag_name)
@@ -56,9 +63,56 @@ update-forgejo-runner:
 
     echo "✅ Forgejo Runner updated to $runner_ver (was $current_version)"
 
-# show forgejo runner status (version and service state)
+# register the containerized runner with the Forgejo instance
+# requires forgejo-runner-token to be set in .secrets/secrets.yaml
+forgejo-runner-register:
+    #!/usr/bin/env fish
+    set token (sops decrypt .secrets/secrets.yaml | yq '.secrets.forgejo-runner-token')
+    set instance_url (sops decrypt .secrets/secrets.yaml | yq '.secrets.forgejo-url')
+
+    if test -z "$token"
+        echo "❌ forgejo-runner-token is empty."
+        echo "   Get a registration token from Forgejo Admin → Actions → Runners → Create new runner"
+        echo "   Then add it: sops .secrets/secrets.yaml"
+        exit 1
+    end
+
+    if test -z "$instance_url"
+        echo "❌ forgejo-url is empty in secrets."
+        exit 1
+    end
+
+    echo "🔄 Registering runner with $instance_url..."
+    podman run --rm \
+        -v forgejo-runner-data.volume:/data:Z \
+        -v (pwd)/quadlets/forgejo-runner/forgejo-runner.service.d/config.yml:/data/config.yml:ro,Z \
+        data.forgejo.org/forgejo/runner:12 \
+        /bin/forgejo-runner register \
+            --config /data/config.yml \
+            --instance $instance_url \
+            --token $token \
+            --name mila \
+            --labels "host:docker://localhost/forgejo-runner-job:latest" \
+            --no-interactive
+
+    echo "✅ Runner registered. The .runner file is stored in forgejo-runner-data.volume"
+    echo "   Start the service: systemctl --user start forgejo-runner-pod.service"
+
+# show forgejo runner status (both host binary and containerized service)
 forgejo-runner-status:
+    #!/usr/bin/env fish
     echo "🔍 Forgejo Runner status:"
-    echo "   Binary: {{ forgejo-runner-binary }}"
-    {{ forgejo-runner-binary }} -v
-    systemctl --user status forgejo-runner.service --lines=0
+    echo ""
+    echo "   Host binary: {{ forgejo-runner-binary }}"
+    if test -x {{ forgejo-runner-binary }}
+        {{ forgejo-runner-binary }} -v
+    else
+        echo "   (not installed)"
+    end
+    echo ""
+    echo "   Containerized runner:"
+    set container_status (systemctl --user is-active forgejo-runner-pod.service 2>/dev/null; or echo "inactive")
+    echo "   Service state: $container_status"
+    if test "$container_status" = active
+        podman exec forgejo-runner /bin/forgejo-runner -v 2>/dev/null || echo "   (could not get version)"
+    end

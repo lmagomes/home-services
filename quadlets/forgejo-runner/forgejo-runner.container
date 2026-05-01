@@ -1,0 +1,19 @@
+[Unit]
+Description=Forgejo Runner container managed by Podman
+After=network-online.target
+
+[Container]
+Pod=forgejo-runner.pod
+ContainerName=forgejo-runner
+Image=data.forgejo.org/forgejo/runner:12
+EnvironmentFile=./%n.d/env
+Volume=forgejo-runner-data.volume:/data:Z
+Volume=./%n.d/config.yml:/data/config.yml:ro,Z
+Volume=/run/user/1000/podman/podman.sock:/run/user/1000/podman/podman.sock:Z
+Exec=/bin/forgejo-runner daemon --config /data/config.yml
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

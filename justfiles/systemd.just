@@ -79,12 +79,78 @@ symlink-quadlets:
             # check if a symlink already exists
             if [ -L $systemd_path ]
                 echo "🔗 symlink for '$full_path' already exists. Skipping..."
+            else if [ -e $systemd_path ]
+                echo "❗ real file at '$systemd_path' already exists. Skipping..."
             else
                 ln -s $full_path $systemd_path
                 echo "✅ created a symlink for '$full_path' at '$systemd_path'"
             end
         end
     end
+
+# remove symlinks that point into this repo's quadlets directory (real files are untouched)
+unsymlink-quadlets:
+    #!/usr/bin/env fish
+    set repo_quadlets (readlink -f ./quadlets)
+    find {{ systemd-container-dir }} -type l | while read -l symlink
+        set target (readlink -f $symlink)
+        if string match -q "$repo_quadlets/*" $target
+            echo "🗑️  Removing symlink: $(basename $symlink)"
+            rm $symlink
+        end
+    end
+    echo "✅ Repo symlinks removed."
+
+# copy all quadlet files to systemd directory, replacing symlinks with real copies
+copy-quadlets:
+    #!/usr/bin/env fish
+    set repo_quadlets (readlink -f ./quadlets)
+    mkdir -p {{ systemd-container-dir }}
+
+    # 1. remove symlinks that point into the repo (they will be replaced by real copies)
+    find {{ systemd-container-dir }} -type l | while read -l symlink
+        set target (readlink -f $symlink)
+        if string match -q "$repo_quadlets/*" $target
+            echo "🗑️  Replacing symlink: $(basename $symlink)"
+            rm $symlink
+        end
+    end
+
+    # 2. copy all quadlet files/dirs into systemd dir
+    for dir in ./quadlets/*/
+        for item in "$dir"*
+            if string match -q '*.disabled' $item
+                continue
+            end
+            set basename (basename $item)
+            set dest "{{ systemd-container-dir }}/$basename"
+            if test -d $item
+                cp -r $item $dest
+                echo "✅ Copied directory: $basename"
+            else
+                cp $item $dest
+                echo "✅ Copied file: $basename"
+            end
+        end
+    end
+
+    # 3. remove stale files in systemd dir not present in any quadlet dir
+    for item in {{ systemd-container-dir }}/*
+        set basename (basename $item)
+        set found 0
+        for dir in ./quadlets/*/
+            if test -e "$dir$basename"
+                set found 1
+                break
+            end
+        end
+        if test $found -eq 0
+            echo "🗑️  Removing stale file: $basename"
+            rm -rf $item
+        end
+    end
+
+    echo "✅ Quadlets copied to {{ systemd-container-dir }}"
 
 # create symlinks for timers in the systemd directory
 symlink-timers:
@@ -98,6 +164,8 @@ symlink-timers:
         # check if a symlink already exists
         if [ -L $systemd_path ]
             echo "🔗 symlink for '$full_path' already exists. Skipping..."
+        else if [ -e $systemd_path ]
+            echo "❗ real file at '$systemd_path' already exists. Skipping..."
         else
             ln -s $full_path $systemd_path
             echo "✅ created a symlink for '$full_path' at '$systemd_path'"

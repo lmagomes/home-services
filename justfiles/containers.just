@@ -6,6 +6,7 @@ build-all:
     just build-service-hub
     just build-jsonlint
     just build-json-path-finder
+    just build-forgejo-runner-job
 
 # create a container image for service-hub
 build-service-hub:
@@ -102,3 +103,9 @@ build-json-path-finder:
     echo "Building json-path-finder..."
     podman build -t localhost/json-path-finder:latest builds/json-path-finder/
     echo "Done! Built localhost/json-path-finder:latest"
+
+# create a container image for the forgejo runner job execution environment
+build-forgejo-runner-job:
+    echo "Building forgejo-runner-job..."
+    podman build -t localhost/forgejo-runner-job:latest builds/forgejo-runner-job/
+    echo "Done! Built localhost/forgejo-runner-job:latest"

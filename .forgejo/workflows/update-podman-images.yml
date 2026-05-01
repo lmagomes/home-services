@@ -9,9 +9,10 @@ jobs:
     if: forgejo.event.pull_request.merged == true && startsWith(forgejo.event.pull_request.head.ref, 'updates/')
     runs-on: host
     steps:
-      - name: Pull latest changes and update images
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Sync quadlets and update images
         run: |
-          cd ~/home-services
-          git checkout main
-          git pull origin main
+          just copy-quadlets
+          systemctl --user daemon-reload
           just update-podman-images
