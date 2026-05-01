@@ -190,21 +190,7 @@ WantedBy=default.target
 
 ## Migrations
 
-When quadlet naming conventions or structure change, create a migration script in `migrations/` so existing installations can migrate data without loss.
-
-### File format
-
-```
-migrations/YYYYMMDDHHMMSS-<description>.fish
-```
-
-- The 14-digit timestamp ensures ordering. Description uses kebab-case.
-- Scripts are written in **fish** (`#!/usr/bin/env fish`).
-- Scripts must be **idempotent** — safe to run multiple times. Check if old state exists before acting, and skip if new state already exists.
-- The state file `~/.config/containers/systemd/.quadlet-migrations` tracks which migrations have been applied (one ID per line). This file is **not** committed.
-- Run `just apply-migrations` to execute all pending migrations in order, then re-symlink quadlets and reload systemd.
-
-If the state file is lost, re-running is safe because each script checks actual state before making changes.
+When quadlet naming conventions or structure change, create a migration script in `migrations/`. Detailed conventions and workflow are in the `migrations` agent skill — load it with `/skill migrations` or by asking about migrations.
 
 ## Adding a New Service
 
