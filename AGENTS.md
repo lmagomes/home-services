@@ -203,3 +203,5 @@ When quadlet naming conventions or structure change, create a migration script i
 7. If the service needs reverse proxying, add an entry to `caddy.service.d/Caddyfile`.
 8. Run `just symlink-quadlets` and `systemctl --user daemon-reload`.
 9. Optionally add the service to Release Argus and Service-Hub for automated updates.
+
+Detailed conventions, templates, and common pitfalls are in the `add-service` agent skill — load it with `/skill add-service` or by asking about adding a new service.
