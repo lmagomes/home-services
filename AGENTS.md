@@ -144,6 +144,34 @@ WantedBy=default.target
 - Reference secrets in container files with: `Secret=<name>,type=env,target=<ENV_VAR>`.
 - Never commit plaintext secrets. The `.sops.yaml` at the repo root defines encryption rules.
 
+### Editing the secrets file
+
+**Never edit `.secrets/secrets.yaml` directly** — it is encrypted. The Edit tool and
+standard text editors will corrupt it. Instead, decrypt, modify, then re-encrypt:
+
+```bash
+# Decrypt to a temporary plaintext file
+sops decrypt .secrets/secrets.yaml > /tmp/secrets.yaml
+
+# Edit the plaintext YAML (Write tool, sed, yq, etc.)
+yq -i '.secrets."new-service-password" = "hunter2"' /tmp/secrets.yaml
+
+# Re-encrypt back to the secrets file
+sops -e /tmp/secrets.yaml > .secrets/secrets.yaml
+rm /tmp/secrets.yaml
+
+# Sync to Podman
+just sync-secrets
+```
+
+To add a secret entry with yq:
+```bash
+sops decrypt .secrets/secrets.yaml > /tmp/secrets.yaml
+yq -i '.secrets."<secret-name>" = "<value>"' /tmp/secrets.yaml
+sops -e /tmp/secrets.yaml > .secrets/secrets.yaml
+rm /tmp/secrets.yaml
+```
+
 ## Justfiles
 
 - The root `justfile` only contains imports and sets the shell to fish.
