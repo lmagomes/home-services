@@ -1,1 +1,5 @@
+[Unit]
+Description=Termix Data volume
+
 [Volume]
+VolumeName=termix-data

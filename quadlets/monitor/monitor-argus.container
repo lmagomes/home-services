@@ -7,7 +7,7 @@ Requires=monitor-service-hub.container
 ContainerName=monitor-argus
 Pod=monitor.pod
 Image=ghcr.io/release-argus/argus:0.29.4
-Volume=argus-data.volume:/app/data/:Z
+Volume=monitor-argus-data.volume:/app/data/:Z
 Volume=./%n.d/config.yml:/app/config.yml:ro,Z
 EnvironmentFile=./%n.d/env
 Secret=domain-secret,type=env,target=BASE_DOMAIN_NAME

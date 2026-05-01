@@ -1,1 +1,5 @@
+[Unit]
+Description=Forgejo Data volume
+
 [Volume]
+VolumeName=forgejo-data

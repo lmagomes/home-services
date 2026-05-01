@@ -1,1 +1,5 @@
+[Unit]
+Description=Dawarich Watched volume
+
 [Volume]
+VolumeName=dawarich-watched

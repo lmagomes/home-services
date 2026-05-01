@@ -1,0 +1,5 @@
+[Unit]
+Description=Llm Open Webui Data volume
+
+[Volume]
+VolumeName=llm-open-webui-data

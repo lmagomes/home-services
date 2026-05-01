@@ -1,1 +1,5 @@
+[Unit]
+Description=Bichon Data Mail volume
+
 [Volume]
+VolumeName=bichon-data-mail

@@ -1,1 +1,5 @@
+[Unit]
+Description=Transmission Watch Folder volume
+
 [Volume]
+VolumeName=transmission-watch-folder

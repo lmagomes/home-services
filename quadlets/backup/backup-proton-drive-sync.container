@@ -12,8 +12,8 @@ EnvironmentFile=./%n.d/env
 # Entrypoint=sleep
 # Exec=infinity
 
-Volume=proton-drive-sync-config.volume:/config/proton-drive-sync
-Volume=proton-drive-sync-state.volume:/state/proton-drive-sync
+Volume=backup-proton-drive-sync-config.volume:/config/proton-drive-sync
+Volume=backup-proton-drive-sync-state.volume:/state/proton-drive-sync
 Volume=/mnt/nas/backup/podman-volumes:/data/podman-volumes-backup:Z
 Secret=proton-drive-sync-keyring-password,type=env,target=KEYRING_PASSWORD
 

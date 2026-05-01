@@ -1,1 +1,5 @@
+[Unit]
+Description=Dawarich Shared volume
+
 [Volume]
+VolumeName=dawarich-shared

@@ -7,9 +7,9 @@ ContainerName=notes-jotty
 Pod=notes.pod
 Image=ghcr.io/fccview/jotty:1.22.0
 AutoUpdate=registry
-Volume=jotty-data.volume:/app/data:Z
-Volume=jotty-config.volume:/app/config:Z
-Volume=jotty-cache.volume:/app/.next/cache:Z
+Volume=notes-jotty-data.volume:/app/data:Z
+Volume=notes-jotty-config.volume:/app/config:Z
+Volume=notes-jotty-cache.volume:/app/.next/cache:Z
 EnvironmentFile=./%n.d/env
 Secret=jotty-oidc-issuer,type=env,target=OIDC_ISSUER
 Secret=jotty-oidc-client-id,type=env,target=OIDC_CLIENT_ID

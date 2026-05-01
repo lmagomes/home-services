@@ -1,1 +1,5 @@
+[Unit]
+Description=Caddy Data volume
+
 [Volume]
+VolumeName=caddy-data

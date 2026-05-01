@@ -1,1 +1,5 @@
+[Unit]
+Description=Calibre Web Automated Config volume
+
 [Volume]
+VolumeName=calibre-web-automated-config

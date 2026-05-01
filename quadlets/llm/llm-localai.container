@@ -6,9 +6,9 @@ After=network.target
 ContainerName=llm-localai
 Pod=llm.pod
 Image=docker.io/localai/localai:v4.1.3-gpu-intel
-Volume=llamacpp-models.volume:/models:z
-Volume=localai-backends.volume:/backends:Z
-Volume=localai-configuration.volume:/configuration:Z
+Volume=llm-llamacpp-models.volume:/models:z
+Volume=llm-localai-backends.volume:/backends:Z
+Volume=llm-localai-configuration.volume:/configuration:Z
 AddDevice=/dev/dri
 EnvironmentFile=./%n.d/env
 

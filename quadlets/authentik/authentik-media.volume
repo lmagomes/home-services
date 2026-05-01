@@ -1,1 +1,5 @@
+[Unit]
+Description=Authentik Media volume
+
 [Volume]
+VolumeName=authentik-media

@@ -1,1 +1,5 @@
+[Unit]
+Description=Paperless Postgres Data volume
+
 [Volume]
+VolumeName=paperless-postgres-data

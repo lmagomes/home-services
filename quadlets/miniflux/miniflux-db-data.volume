@@ -1,1 +1,5 @@
+[Unit]
+Description=Miniflux Db Data volume
+
 [Volume]
+VolumeName=miniflux-db-data
