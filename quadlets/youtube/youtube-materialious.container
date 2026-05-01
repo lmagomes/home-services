@@ -6,9 +6,9 @@ ContainerName=youtube-materialious
 Pod=youtube.pod
 Image=docker.io/wardpearce/materialious-full:latest
 EnvironmentFile=./%n.d/env
-Secret=materialious-cookie-secret,type=env,target=COOKIE_SECRET
-Secret=materialious-default-invidious-instance,type=env,target=PUBLIC_DEFAULT_INVIDIOUS_INSTANCE
-Secret=materialious-whitelist-base-domain,type=env,target=WHITELIST_BASE_DOMAIN
+Secret=youtube-materialious-cookie-secret,type=env,target=COOKIE_SECRET
+Secret=youtube-materialious-default-invidious-instance,type=env,target=PUBLIC_DEFAULT_INVIDIOUS_INSTANCE
+Secret=youtube-materialious-whitelist-base-domain,type=env,target=WHITELIST_BASE_DOMAIN
 Volume=youtube-materialious-data.volume:/materialious-data:Z
 
 [Install]

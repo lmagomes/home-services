@@ -11,8 +11,8 @@ Volume=monitor-argus-data.volume:/app/data/:Z
 Volume=./%n.d/config.yml:/app/config.yml:ro,Z
 EnvironmentFile=./%n.d/env
 Secret=domain-secret,type=env,target=BASE_DOMAIN_NAME
-Secret=github-token,type=env,target=GITHUB_ACCESS_TOKEN
-Secret=argus-update-webhook-secret,type=env,target=UPDATE_WEBHOOK_SECRET
+Secret=monitor-github-token,type=env,target=GITHUB_ACCESS_TOKEN
+Secret=monitor-argus-update-webhook-secret,type=env,target=UPDATE_WEBHOOK_SECRET
 
 HealthCmd=/healthcheck http://localhost:9090/api/v1/healthcheck
 HealthInterval=1m

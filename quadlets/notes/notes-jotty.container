@@ -11,10 +11,10 @@ Volume=notes-jotty-data.volume:/app/data:Z
 Volume=notes-jotty-config.volume:/app/config:Z
 Volume=notes-jotty-cache.volume:/app/.next/cache:Z
 EnvironmentFile=./%n.d/env
-Secret=jotty-oidc-issuer,type=env,target=OIDC_ISSUER
-Secret=jotty-oidc-client-id,type=env,target=OIDC_CLIENT_ID
-Secret=jotty-app-url,type=env,target=APP_URL
-Secret=jotty-oidc-client-secret,type=env,target=OIDC_CLIENT_SECRET
+Secret=notes-jotty-oidc-issuer,type=env,target=OIDC_ISSUER
+Secret=notes-jotty-oidc-client-id,type=env,target=OIDC_CLIENT_ID
+Secret=notes-jotty-app-url,type=env,target=APP_URL
+Secret=notes-jotty-oidc-client-secret,type=env,target=OIDC_CLIENT_SECRET
 
 [Service]
 Restart=always

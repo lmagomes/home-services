@@ -144,33 +144,10 @@ WantedBy=default.target
 - Reference secrets in container files with: `Secret=<name>,type=env,target=<ENV_VAR>`.
 - Never commit plaintext secrets. The `.sops.yaml` at the repo root defines encryption rules.
 
-### Editing the secrets file
-
-**Never edit `.secrets/secrets.yaml` directly** — it is encrypted. The Edit tool and
-standard text editors will corrupt it. Instead, decrypt, modify, then re-encrypt:
-
-```bash
-# Decrypt to a temporary plaintext file
-sops decrypt .secrets/secrets.yaml > /tmp/secrets.yaml
-
-# Edit the plaintext YAML (Write tool, sed, yq, etc.)
-yq -i '.secrets."new-service-password" = "hunter2"' /tmp/secrets.yaml
-
-# Re-encrypt back to the secrets file
-sops -e /tmp/secrets.yaml > .secrets/secrets.yaml
-rm /tmp/secrets.yaml
-
-# Sync to Podman
-just sync-secrets
-```
-
-To add a secret entry with yq:
-```bash
-sops decrypt .secrets/secrets.yaml > /tmp/secrets.yaml
-yq -i '.secrets."<secret-name>" = "<value>"' /tmp/secrets.yaml
-sops -e /tmp/secrets.yaml > .secrets/secrets.yaml
-rm /tmp/secrets.yaml
-```
+**Never read, write, decrypt, or edit `.secrets/secrets.yaml` or any temporary
+decrypted copy of it.** If a task requires a new secret or updating an existing one,
+tell the user the exact secret name needed (and which service/container it's for).
+The user will add it themselves.
 
 ## Justfiles
 
@@ -227,7 +204,7 @@ When quadlet naming conventions or structure change, create a migration script i
 3. Add `.container` files for each component, prefixed with the service name.
 4. Add `.volume` files for persistent data.
 5. Create `.service.d/env` files for each container that needs environment configuration.
-6. Add secrets to `.secrets/secrets.yaml` (encrypted with `sops`), then run `just sync-secrets`.
+6. Tell the user which secret names are needed (they will add them manually to `.secrets/secrets.yaml`), then run `just sync-secrets`.
 7. If the service needs reverse proxying, add an entry to `caddy.service.d/Caddyfile`.
 8. Run `just symlink-quadlets` and `systemctl --user daemon-reload`.
 9. Optionally add the service to Release Argus and Service-Hub for automated updates.
