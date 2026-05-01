@@ -103,13 +103,19 @@ Key rules:
 
 ### Volume files (`.volume`)
 
-Minimal — typically just the section header:
+Each volume file should include a `[Unit]` Description and an explicit `VolumeName` (without the `systemd-` prefix):
 
 ```ini
+[Unit]
+Description=<Name> volume
+
 [Volume]
+VolumeName=<service>-<purpose>
 ```
 
-Add options only when needed (e.g., `Device`, `Options`).
+- `VolumeName` must match the filename (without `.volume`).
+- Explicit `VolumeName` prevents the auto-generated `systemd-` prefix, keeping podman volume names clean.
+- Add `Device=` or `Options=` only when needed for external storage or special mount options.
 
 ### Network files (`.network`)
 
@@ -181,6 +187,24 @@ WantedBy=default.target
 - This creates a branch `updates/<quadlet>-<date>-<containers>`, commits the change, pushes, and opens a PR.
 - When the PR is merged, the Forgejo workflow pulls images and restarts affected services.
 - Release Argus monitors upstream releases and triggers Service-Hub webhooks to auto-create PRs.
+
+## Migrations
+
+When quadlet naming conventions or structure change, create a migration script in `migrations/` so existing installations can migrate data without loss.
+
+### File format
+
+```
+migrations/YYYYMMDDHHMMSS-<description>.fish
+```
+
+- The 14-digit timestamp ensures ordering. Description uses kebab-case.
+- Scripts are written in **fish** (`#!/usr/bin/env fish`).
+- Scripts must be **idempotent** — safe to run multiple times. Check if old state exists before acting, and skip if new state already exists.
+- The state file `~/.config/containers/systemd/.quadlet-migrations` tracks which migrations have been applied (one ID per line). This file is **not** committed.
+- Run `just apply-migrations` to execute all pending migrations in order, then re-symlink quadlets and reload systemd.
+
+If the state file is lost, re-running is safe because each script checks actual state before making changes.
 
 ## Adding a New Service
 
