@@ -2,7 +2,7 @@
 Description=Bentopdf container managed by Podman
 
 [Container]
-ContainerName=bentopdf
+ContainerName=tools-bentopdf
 Pod=tools.pod
 Image=ghcr.io/alam00000/bentopdf-simple:2.8.4
 

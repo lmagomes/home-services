@@ -2,7 +2,7 @@
 Description=Jsonlint container managed by Podman
 
 [Container]
-ContainerName=jsonlint
+ContainerName=tools-jsonlint
 Pod=tools.pod
 Image=localhost/jsonlint
 

@@ -2,7 +2,7 @@
 Description=Materialious
 
 [Container]
-ContainerName=materialious
+ContainerName=youtube-materialious
 Pod=youtube.pod
 Image=docker.io/wardpearce/materialious-full:latest
 EnvironmentFile=./%n.d/env

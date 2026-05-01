@@ -3,7 +3,7 @@ Description=Service hub for webhooks and version API
 After=network.target
 
 [Container]
-ContainerName=service-hub
+ContainerName=monitor-service-hub
 Pod=monitor.pod
 Image=localhost/service-hub:latest
 EnvironmentFile=./%n.d/env

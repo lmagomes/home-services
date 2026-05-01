@@ -3,7 +3,7 @@ Description=local.ai container managed by Podman
 After=network.target
 
 [Container]
-ContainerName=localai
+ContainerName=llm-localai
 Pod=llm.pod
 Image=docker.io/localai/localai:v4.1.3-gpu-intel
 Volume=llamacpp-models.volume:/models:z

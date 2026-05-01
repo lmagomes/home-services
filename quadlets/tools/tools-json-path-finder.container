@@ -2,7 +2,7 @@
 Description=json path finder container managed by Podman
 
 [Container]
-ContainerName=json-path-finder
+ContainerName=tools-json-path-finder
 Pod=tools.pod
 Image=localhost/json-path-finder
 

@@ -3,7 +3,7 @@ Description=Chrome container managed by Podman
 After=network.target
 
 [Container]
-ContainerName=chrome
+ContainerName=karakeep-chrome
 Pod=karakeep.pod
 Image=gcr.io/zenika-hub/alpine-chrome:124
 Exec=--no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-address=0.0.0.0 --remote-debugging-port=9222 --hide-scrollbars

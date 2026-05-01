@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 Pod=immich.pod
-ContainerName=immich_postgres
+ContainerName=immich-postgres
 Environment="POSTGRES_INITDB_ARGS=--data-checksums"
 EnvironmentFile=immich.service.d/env
 Secret=immich-db-password,type=env,target=POSTGRES_PASSWORD

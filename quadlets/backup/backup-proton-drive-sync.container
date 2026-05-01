@@ -3,7 +3,7 @@ Description=proton drive sync container managed by Podman
 After=network.target
 
 [Container]
-ContainerName=proton-drive-sync
+ContainerName=backup-proton-drive-sync
 Pod=backup.pod
 Image=localhost/proton-drive-sync:v0.2.4
 EnvironmentFile=./%n.d/env

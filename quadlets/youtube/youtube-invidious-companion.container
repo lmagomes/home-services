@@ -2,7 +2,7 @@
 Description=Invidious Companion
 
 [Container]
-ContainerName=invidious-companion
+ContainerName=youtube-invidious-companion
 Image=quay.io/invidious/invidious-companion:latest
 Pod=youtube.pod
 Secret=invidious-server-secret-key,type=env,target=SERVER_SECRET_KEY

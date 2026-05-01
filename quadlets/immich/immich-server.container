@@ -6,7 +6,7 @@ After=immich-redis.service immich-postgres.service
 
 [Container]
 Pod=immich.pod
-ContainerName=immich_server
+ContainerName=immich-server
 EnvironmentFile=immich.service.d/env
 Image=ghcr.io/immich-app/immich-server:v2.7.5
 Volume=/etc/localtime:/etc/localtime:ro

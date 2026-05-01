@@ -3,7 +3,7 @@ Description=lumo tamer container managed by Podman
 After=network.target
 
 [Container]
-ContainerName=lumo-tamer
+ContainerName=llm-lumo-tamer
 Pod=llm.pod
 Image=localhost/lumo-tamer:v0.5.0
 Volume=lumo-tamer-sessions.volume:/app/sessions:Z

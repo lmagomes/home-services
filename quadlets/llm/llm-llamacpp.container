@@ -3,7 +3,7 @@ Description=llamacpp container managed by Podman
 After=network.target
 
 [Container]
-ContainerName=llamacpp
+ContainerName=llm-llamacpp
 Pod=llm.pod
 Image=ghcr.io/ggml-org/llama.cpp:server-vulkan-b8840
 Volume=llamacpp-models.volume:/models:z

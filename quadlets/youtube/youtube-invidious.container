@@ -1,9 +1,9 @@
 [Unit]
 Description=Invidious
-After=invidious-db.service
+After=youtube-invidious-db.service
 
 [Container]
-ContainerName=invidious
+ContainerName=youtube-invidious
 Pod=youtube.pod
 Image=quay.io/invidious/invidious:latest
 EnvironmentFile=./%n.d/env
