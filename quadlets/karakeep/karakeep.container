@@ -1,6 +1,7 @@
 [Unit]
 Description=Karakeep container managed by Podman
-After=network.target
+Requires=karakeep-meilisearch.service
+After=network.target karakeep-meilisearch.service
 
 [Container]
 ContainerName=karakeep

@@ -1,6 +1,7 @@
 [Unit]
 Description=Invidious
-After=youtube-invidious-db.service
+Requires=youtube-invidious-db.service
+After=network.target youtube-invidious-db.service
 
 [Container]
 ContainerName=youtube-invidious
@@ -16,5 +17,8 @@ HealthRetries=2
 
 # LogDriver=journald
 
+[Service]
+Restart=always
+
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target

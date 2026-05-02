@@ -1,5 +1,6 @@
 [Unit]
 Description=Bentopdf container managed by Podman
+After=network.target
 
 [Container]
 ContainerName=tools-bentopdf
@@ -10,4 +11,4 @@ Image=ghcr.io/alam00000/bentopdf-simple:2.8.4
 Restart=on-failure
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target

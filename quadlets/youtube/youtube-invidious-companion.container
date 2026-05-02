@@ -1,5 +1,7 @@
 [Unit]
 Description=Invidious Companion
+Requires=youtube-invidious.service
+After=network.target youtube-invidious.service
 
 [Container]
 ContainerName=youtube-invidious-companion
@@ -11,5 +13,8 @@ Secret=invidious-server-secret-key,type=env,target=SERVER_SECRET_KEY
 #SecurityLabelNested=true
 Volume=youtube-invidious-companion-cache.volume:/var/tmp/youtubei.js:Z
 
+[Service]
+Restart=always
+
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target

@@ -1,5 +1,6 @@
 [Unit]
 Description=json path finder container managed by Podman
+After=network.target
 
 [Container]
 ContainerName=tools-json-path-finder
@@ -10,4 +11,4 @@ Image=localhost/json-path-finder
 Restart=on-failure
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target

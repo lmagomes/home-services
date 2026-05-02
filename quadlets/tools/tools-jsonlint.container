@@ -1,5 +1,6 @@
 [Unit]
 Description=Jsonlint container managed by Podman
+After=network.target
 
 [Container]
 ContainerName=tools-jsonlint
@@ -10,4 +11,4 @@ Image=localhost/jsonlint
 Restart=on-failure
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target

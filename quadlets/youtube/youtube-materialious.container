@@ -1,5 +1,7 @@
 [Unit]
 Description=Materialious
+Requires=youtube-invidious.service
+After=network.target youtube-invidious.service
 
 [Container]
 ContainerName=youtube-materialious
@@ -11,5 +13,8 @@ Secret=youtube-materialious-default-invidious-instance,type=env,target=PUBLIC_DE
 Secret=youtube-materialious-whitelist-base-domain,type=env,target=WHITELIST_BASE_DOMAIN
 Volume=youtube-materialious-data.volume:/materialious-data:Z
 
+[Service]
+Restart=always
+
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target

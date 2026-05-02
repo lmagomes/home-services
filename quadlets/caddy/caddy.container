@@ -1,5 +1,6 @@
 [Unit]
 Description=Caddy container managed by Podman
+After=network.target
 
 [Container]
 ContainerName=caddy
@@ -15,4 +16,4 @@ Volume=./%n.d/Caddyfile:/etc/caddy/Caddyfile:ro,Z
 Restart=on-failure
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
