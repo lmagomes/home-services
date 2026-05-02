@@ -6,3 +6,6 @@ After=network-online.target
 PodName=mssql.pod
 PublishPort=1433:1433
 Network=mssql.network
+
+[Install]
+WantedBy=default.target
