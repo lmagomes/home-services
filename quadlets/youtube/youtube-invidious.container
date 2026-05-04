@@ -1,0 +1,24 @@
+[Unit]
+Description=Invidious
+Requires=youtube-invidious-db.service
+After=network.target youtube-invidious-db.service
+
+[Container]
+ContainerName=youtube-invidious
+Pod=youtube.pod
+Image=quay.io/invidious/invidious:latest
+EnvironmentFile=./%n.d/env
+Volume=./%n.d/config.yml:/invidious/config.yml:Z
+
+HealthCmd=wget -nv --tries=1 --spider http://127.0.0.1:3001/api/v1/stats || exit 1
+HealthInterval=30s
+HealthTimeout=5s
+HealthRetries=2
+
+# LogDriver=journald
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

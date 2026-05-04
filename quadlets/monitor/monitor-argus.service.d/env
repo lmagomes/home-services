@@ -1,0 +1,4 @@
+# Optional UID override # ARGUS_UID=911
+ARGUS_UID=1000
+# Optional GID override # ARGUS_GID=911
+ARGUS_GID=1000

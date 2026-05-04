@@ -1,1 +1,5 @@
+[Unit]
+Description=Dawarich Db Data volume
+
 [Volume]
+VolumeName=dawarich-db-data

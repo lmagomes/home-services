@@ -1,1 +1,5 @@
+[Unit]
+Description=Paperless Media volume
+
 [Volume]
+VolumeName=paperless-media

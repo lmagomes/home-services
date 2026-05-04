@@ -9,6 +9,10 @@ sync-secrets:
     set -l desired_values
     set -l secrets_raw (sops decrypt .secrets/secrets.yaml | yq .secrets)
     for secret in $secrets_raw
+        # skip YAML comment lines
+        if string match -qr '^\s*#' -- $secret
+            continue
+        end
         set -l parts (string split ": " -- $secret)
         set -l name $parts[1]
         set -l value (string join ": " $parts[2..-1])

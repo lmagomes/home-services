@@ -1,0 +1,17 @@
+[Unit]
+Description=llamacpp container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=llm-llamacpp
+Pod=llm.pod
+Image=ghcr.io/ggml-org/llama.cpp:server-vulkan-b8840
+Volume=llm-llamacpp-models.volume:/models:z
+AddDevice=/dev/dri
+EnvironmentFile=./%n.d/env
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

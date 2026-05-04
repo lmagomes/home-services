@@ -1,5 +1,6 @@
 [Unit]
 Description=Dawarich App container managed by Podman
+Requires=dawarich-db.service dawarich-redis.service
 After=network.target dawarich-db.service dawarich-redis.service
 
 [Container]

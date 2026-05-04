@@ -1,5 +1,6 @@
 [Unit]
 Description=Audiobookshelf container managed by Podman
+After=network.target
 
 [Container]
 ContainerName=audiobookshelf
@@ -13,3 +14,6 @@ Mount=type=bind,source=/mnt/nas/media/podcasts,destination=/podcasts,relabel=pri
 
 [Service]
 Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

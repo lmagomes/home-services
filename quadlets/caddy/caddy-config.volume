@@ -1,1 +1,5 @@
+[Unit]
+Description=Caddy Config volume
+
 [Volume]
+VolumeName=caddy-config

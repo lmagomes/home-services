@@ -1,1 +1,5 @@
+[Unit]
+Description=Bichon Root Dir volume
+
 [Volume]
+VolumeName=bichon-root-dir

@@ -1,1 +1,5 @@
+[Unit]
+Description=Firefly Db Data volume
+
 [Volume]
+VolumeName=firefly-db-data

@@ -1,6 +1,7 @@
 [Unit]
 Description=Authentik worker container managed by Podman
-After=network.target
+Requires=authentik-db.service
+After=network.target authentik-db.service
 
 [Container]
 ContainerName=authentik-worker

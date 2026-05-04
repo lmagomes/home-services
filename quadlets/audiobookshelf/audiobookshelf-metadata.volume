@@ -1,2 +1,5 @@
+[Unit]
+Description=Audiobookshelf Metadata volume
 
 [Volume]
+VolumeName=audiobookshelf-metadata

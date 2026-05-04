@@ -1,1 +1,5 @@
+[Unit]
+Description=Paperless Redis Data volume
+
 [Volume]
+VolumeName=paperless-redis-data

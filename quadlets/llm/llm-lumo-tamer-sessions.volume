@@ -1,0 +1,5 @@
+[Unit]
+Description=Llm Lumo Tamer Sessions volume
+
+[Volume]
+VolumeName=llm-lumo-tamer-sessions

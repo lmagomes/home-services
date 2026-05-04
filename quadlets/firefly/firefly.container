@@ -1,6 +1,7 @@
 [Unit]
 Description=Firefly container managed by Podman
-After=network.target
+Requires=firefly-db.service
+After=network.target firefly-db.service
 
 [Container]
 ContainerName=firefly

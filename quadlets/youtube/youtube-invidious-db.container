@@ -1,0 +1,22 @@
+[Unit]
+Description=Invidious PostgreSQL Database
+After=network.target
+
+[Container]
+ContainerName=youtube-invidious-db
+Pod=youtube.pod
+Image=docker.io/postgres:18.1
+EnvironmentFile=./%n.d/env
+Secret=invidious-db-password,type=env,target=POSTGRES_PASSWORD
+Volume=youtube-invidious-db-data.volume:/var/lib/postgresql:Z
+
+HealthCmd=pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
+HealthStartupCmd=pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
+
+LogDriver=journald
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

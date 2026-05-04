@@ -1,0 +1,5 @@
+[Unit]
+Description=Llm Localai Configuration volume
+
+[Volume]
+VolumeName=llm-localai-configuration

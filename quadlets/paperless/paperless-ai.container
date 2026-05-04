@@ -1,5 +1,6 @@
 [Unit]
 Description=Paperless AI container managed by Podman
+Requires=paperless.service
 After=network.target paperless.service
 
 [Container]

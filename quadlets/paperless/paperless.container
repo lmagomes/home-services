@@ -1,6 +1,7 @@
 [Unit]
 Description=Paperless main container managed by Podman
-After=network.target paperless-postgres.service paperless-redis.service gotenberg.service tika.service
+Requires=paperless-postgres.service paperless-redis.service paperless-gotenberg.service paperless-tika.service
+After=network.target paperless-postgres.service paperless-redis.service paperless-gotenberg.service paperless-tika.service
 
 [Container]
 Pod=paperless.pod

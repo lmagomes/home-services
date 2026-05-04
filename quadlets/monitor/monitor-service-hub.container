@@ -1,0 +1,22 @@
+[Unit]
+Description=Service hub for webhooks and version API
+After=network.target
+
+[Container]
+ContainerName=monitor-service-hub
+Pod=monitor.pod
+Image=localhost/service-hub:latest
+EnvironmentFile=./%n.d/env
+Volume=./%n.d/config.yml:/app/config.yml:ro,Z
+Volume=/run/user/%U/podman/podman.sock:/run/user/1000/podman/podman.sock
+Secret=monitor-forgejo-api-token,type=env,target=FORGEJO_TOKEN
+Secret=monitor-forgejo-url,type=env,target=FORGEJO_URL
+Secret=monitor-argus-update-webhook-secret,type=env,target=WEBHOOK_SECRET
+SecurityLabelDisable=true
+User=0
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,6 +1,7 @@
 [Unit]
 Description=termix container managed by Podman
-After=network.target
+Requires=termix-guacd.service
+After=network.target termix-guacd.service
 
 [Container]
 ContainerName=termix
