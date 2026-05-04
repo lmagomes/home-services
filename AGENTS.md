@@ -5,11 +5,13 @@ This repository manages self-hosted services using **Podman Quadlets**, **system
 ## Project Layout
 
 ```
-quadlets/<service>/        # Quadlet definitions (pods, containers, volumes, env)
+quadlets/<service>/        # Quadlet definitions (pods, containers, volumes, env, config)
 justfiles/                 # Modular justfile recipes (imported by root justfile)
 builds/<image>/            # Custom Containerfiles for locally-built images
 timers/                    # Systemd timer + service units
+migrations/                # Idempotent migration scripts (YYYYMMDDHHMMSS-description.fish)
 .secrets/secrets.yaml      # SOPS-encrypted secrets (age key)
+.sops.yaml                 # Age key reference for SOPS
 .forgejo/workflows/        # CI workflows (Forgejo Actions)
 ```
 
@@ -17,7 +19,7 @@ timers/                    # Systemd timer + service units
 
 ### General
 
-- Use **kebab-case** for all names: containers, pods, volumes, files, directories, and just recipes.
+- Use **kebab-case** for all names: containers, pods, volumes, files, directories, just recipes, and secret names.
 - Prefix container-specific resources with the service name (e.g., `paperless-postgres`, `dawarich-redis`).
 
 ### Files
@@ -34,6 +36,7 @@ timers/                    # Systemd timer + service units
 | Disabled files | append `.disabled` suffix | `ollama.container.disabled` |
 | Just modules | `<domain>.just` | `backup.just` |
 | Container builds | `builds/<image>/Containerfile` | `builds/caddy/Containerfile` |
+| Migration scripts | `migrations/<YYYYMMDDHHMMSS>-<description>.fish` | `migrations/20260501140000-volume-naming-convention.fish` |
 
 ### Quadlet directory structure
 
@@ -41,100 +44,33 @@ Each service lives in `quadlets/<service>/` and contains one `.pod` file, one or
 
 ## Quadlet File Format
 
-All quadlet files use INI-style systemd unit syntax. Follow the section ordering and conventions below strictly.
-
-### Pod files (`.pod`)
-
-```ini
-[Unit]
-Description=<Service> pod managed by Podman
-After=network-online.target
-
-[Pod]
-PodName=<service>.pod
-Network=services.network
-# PublishPort=<host>:<container>  (only if externally exposed)
-
-[Install]
-WantedBy=default.target
-```
-
-- `PodName` must end with `.pod`.
-- Always include `Network=services.network` unless the pod has special networking needs.
-- Only add `PublishPort` for services that need host-level port exposure (e.g., Caddy on 443).
-
-### Container files (`.container`)
-
-Section order: `[Unit]` → `[Container]` → `[Service]` → `[Install]`.
-
-```ini
-[Unit]
-Description=<Component> container managed by Podman
-After=network.target
-# Requires=<dependency>.service    (if depends on other containers)
-# After=<dependency>.service       (pair with Requires)
-
-[Container]
-Pod=<service>.pod
-ContainerName=<container-name>
-Image=<registry>/<image>:<version>
-EnvironmentFile=./%n.d/env
-# Secret=<secret-name>,type=env,target=<ENV_VAR>
-# Volume=<volume-name>.volume:<mount-path>:Z
-# Volume=./%n.d/<config-file>:<container-path>:ro,Z
-
-[Service]
-Restart=always                     # or on-failure
-
-[Install]
-WantedBy=multi-user.target         # or default.target
-```
+All quadlet files use INI-style systemd unit syntax. Section order: `[Unit]` → type-specific → `[Service]` → `[Install]`.
 
 Key rules:
-- `ContainerName` uses **kebab-case**.
-- Pin image versions explicitly (e.g., `v2.6.2`, `18.1`). Avoid `:latest` for upstream images.
-- Use `%n` (systemd specifier for the unit name) to reference the `.service.d/` directory: `EnvironmentFile=./%n.d/env`.
-- Attach config files as read-only bind mounts: `Volume=./%n.d/<file>:<path>:ro,Z`.
-- Attach named volumes with `:Z` for SELinux relabeling.
-- Group related directives together: Secrets together, Volumes together.
-- Place `HealthCmd`, `HealthInterval`, `HealthRetries`, etc. at the end of the `[Container]` section.
-- For **s6-overlay / LSIO images** (those using `PUID`/`PGID`): set `PUID=0` and `PGID=0`. Do **not** use `UserNS=keep-id` — it breaks `s6-applyuidgid`. Rootless Podman already maps container root (UID 0) to the host user (UID 1000), so files are written with correct host ownership.
-- Do **not** use `idmap` on bind mounts in rootless Podman — `mount_setattr` requires `CAP_SYS_ADMIN` and will fail with `OCI permission denied`.
+- Pin image versions explicitly — no `:latest` or floating tags
+- Use `EnvironmentFile=./%n.d/env` (`%n` expands to the unit name)
+- Use `Secret=<name>,type=env,target=<ENV_VAR>` for secrets (not `PodmanArgs`)
+- Named volumes use `:Z` for SELinux; bind mounts use `Mount=` with `relabel=private`
+- `UserNS=keep-id` on pod files only, never for LSIO/s6 images
+- LSIO images: `PUID=0`, `PGID=0` in env file
+- Health checks go at the end of `[Container]`, before `[Service]`
 
-### Volume files (`.volume`)
-
-Each volume file should include a `[Unit]` Description and an explicit `VolumeName` (without the `systemd-` prefix):
-
-```ini
-[Unit]
-Description=<Name> volume
-
-[Volume]
-VolumeName=<service>-<purpose>
-```
-
-- `VolumeName` must match the filename (without `.volume`).
-- Explicit `VolumeName` prevents the auto-generated `systemd-` prefix, keeping podman volume names clean.
-- Add `Device=` or `Options=` only when needed for external storage or special mount options.
-
-### Network files (`.network`)
-
-```ini
-[Network]
-
-[Install]
-WantedBy=default.target
-```
+Full templates, directive ordering, and detailed reference are in the `quadlet-reference` agent skill — load it with `/skill quadlet-reference` or by asking about quadlet files.
 
 ## Environment Files
 
 - Located at `<container-name>.service.d/env`.
-- Use `KEY=value` format (no `export`, no quoting unless the value itself requires it).
+- Use `KEY=value` format (no `export`, no quoting unless the value itself contains spaces or special characters).
 - Comment out secrets that are injected via `Secret=` in the container file, documenting where they come from:
   ```
   #DATABASE_PASSWORD is set via Secret in the .container file
   ```
 - Use `SCREAMING_SNAKE_CASE` for all environment variable names.
+- Commented-out variables with example values are acceptable as documentation:
+  ```
+  # OIDC_CLIENT_ID=<Client ID from authentik>
+  # OIDC_CLIENT_SECRET=<Client secret from authentik>
+  ```
 
 ## Secrets
 
@@ -158,7 +94,7 @@ The user will add it themselves.
 - Recipe names use **kebab-case** (e.g., `sync-secrets`, `build-caddy`, `update-quadlet-pr`).
 - Each file starts with a top-level comment describing its purpose.
 - Each recipe has a comment above it describing what it does.
-- Use emoji prefixes in output for visual clarity: `✅` success, `🔄` in-progress/restart, `🗑️` removal, `❗` warning, `⏭️` skip.
+- Use emoji prefixes in output for visual clarity: `✅` success, `🔄` in-progress/restart, `🗑️` removal, `❗` warning, `⏭️` skip, `❌` error.
 - Variables use **kebab-case**: `backup-dir`, `systemd-container-dir`.
 - Justfile variables use `:=` with double-quoted values: `backup-dir := "$HOME/podman_volume_backup"`.
 
@@ -168,11 +104,13 @@ The user will add it themselves.
 - Use multi-stage builds where applicable.
 - Place in `builds/<image-name>/Containerfile`.
 - Tag locally-built images as `localhost/<image-name>:<version>`.
-- Extract the version from the base image when possible (via `sed` in the build recipe).
+- Extract the version from the base image's `FROM` line when possible (via `sed` in the build recipe).
+- Avoid tagging locally-built images as `:latest` — always include a version. Images referenced in `.container` files must have pinned versions.
 
 ## Systemd Timers
 
 - Timer and service unit files live in `timers/`.
+- Timers use descriptive names (e.g., `backup.timer`, `backup.service`).
 - Timers use `OnCalendar=` for scheduling.
 - The companion `.service` references the justfile with:
   ```ini
@@ -183,30 +121,23 @@ The user will add it themselves.
 ## CI / Forgejo Workflows
 
 - Workflows live in `.forgejo/workflows/`.
-- Use YAML format with standard GitHub Actions / Forgejo Actions syntax.
+- Use YAML format with standard Forgejo Actions / GitHub Actions syntax.
 - Runner is `host` (runs directly on the host machine, not in a container).
+- The CI workflow triggers on merged PRs whose branch starts with `updates/`.
 
 ## Version Management
 
 - Container image versions are updated via `just update-quadlet-pr <quadlet> <container> <version>`.
 - This creates a branch `updates/<quadlet>-<date>-<containers>`, commits the change, pushes, and opens a PR.
-- When the PR is merged, the Forgejo workflow pulls images and restarts affected services.
+- When the PR is merged, the Forgejo workflow pulls images and restarts affected services via `just update-podman-images`.
 - Release Argus monitors upstream releases and triggers Service-Hub webhooks to auto-create PRs.
 
 ## Migrations
 
-When quadlet naming conventions or structure change, create a migration script in `migrations/`. Detailed conventions and workflow are in the `migrations` agent skill — load it with `/skill migrations` or by asking about migrations.
+When quadlet naming conventions or structure change, create a migration script in `migrations/`. File naming: `<YYYYMMDDHHMMSS>-<description>.fish`. Migrations must be **idempotent** (safe to run multiple times). Apply with `just apply-migrations`, which tracks applied migrations in `~/.config/containers/systemd/.quadlet-migrations`.
+
+Detailed conventions and workflow are in the `migrations` agent skill — load it with `/skill migrations` or by asking about migrations.
 
 ## Adding a New Service
 
-1. Create `quadlets/<service>/` directory.
-2. Add a `<service>.pod` file with the standard pod template.
-3. Add `.container` files for each component, prefixed with the service name.
-4. Add `.volume` files for persistent data.
-5. Create `.service.d/env` files for each container that needs environment configuration.
-6. Tell the user which secret names are needed (they will add them manually to `.secrets/secrets.yaml`), then run `just sync-secrets`.
-7. If the service needs reverse proxying, add an entry to `caddy.service.d/Caddyfile`.
-8. Run `just symlink-quadlets` and `systemctl --user daemon-reload`.
-9. Optionally add the service to Release Argus and Service-Hub for automated updates.
-
-Detailed conventions, templates, and common pitfalls are in the `add-service` agent skill — load it with `/skill add-service` or by asking about adding a new service.
+Detailed checklist, templates, and common pitfalls are in the `add-service` agent skill — load it with `/skill add-service` or by asking about adding a new service.
