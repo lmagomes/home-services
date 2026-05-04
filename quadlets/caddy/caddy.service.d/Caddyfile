@@ -108,6 +108,11 @@ localai.{env.DOMAIN} {
 	import cloudflare
 }
 
+opencode.{env.DOMAIN} {
+	reverse_proxy dev.pod:3000
+	import cloudflare
+}
+
 # Single services
 
 audiobookshelf.{env.DOMAIN} {

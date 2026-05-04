@@ -197,9 +197,7 @@ just build-all
 just build-transmission
 just build-caddy
 just build-lumo-tamer
-
-# Update all container images and restart affected services
-just update-podman-images
+just build-dev
 ```
 
 ### Systemd Management
@@ -268,6 +266,70 @@ This workflow:
 3. Commits and pushes changes
 4. Creates a PR using `fj` (Forgejo CLI)
 5. Returns to main branch
+
+## Development Environment
+
+A containerized development environment accessible via SSH and a web-based OpenCode interface. The container runs Fedora 44 with fish, just, git, jq, yq, sops, forgejo-cli, tmux, vim, htop, and opencode.
+
+### Setup
+
+**1. Add secrets** to `.secrets/secrets.yaml`:
+
+```yaml
+secrets:
+  # ... existing secrets ...
+
+  # OpenCode web authentication
+  dev-opencode-server-password: "<password>"
+
+  # SSH public key for logging into the container (single line)
+  dev-ssh-pubkey: ssh-ed25519 AAAA... user@host
+
+  # SSH private key for the container to push to Forgejo (base64-encoded)
+  dev-ssh-private-key: "<base64>"
+
+  # SOPS age key for secret management inside the container
+  dev-sops-age-key: AGE-SECRET-KEY-1...
+```
+
+Encode the private key:
+```bash
+# Generate a keypair for the container → Forgejo
+ssh-keygen -t ed25519 -f dev-forgejo -C "dev-container"
+
+# Add dev-forgejo.pub to your Forgejo account (Settings → SSH/GPG Keys)
+
+# Encode the private key
+base64 -w0 dev-forgejo
+# Use the output as the dev-ssh-private-key secret value
+```
+
+**2. Sync secrets:**
+```bash
+just sync-secrets
+```
+
+**3. Build the image:**
+```bash
+just build-dev
+```
+
+### Usage
+
+| Access | Address |
+|---|---|
+| SSH | `ssh -p 2224 root@<host>` |
+| OpenCode Web | `https://opencode.<domain>` |
+| Forgejo CLI | `fj --host forgejo.<domain> auth add-key` (one-time, token persists in volume) |
+
+On first SSH login, clone your repos into `/home/dev/projects/`. The home directory is backed by a persistent volume, so code and sessions survive container rebuilds.
+
+### What's persisted
+
+- `/home/dev/.ssh/` — authorized_keys, private key for Forgejo
+- `/home/dev/projects/` — git repositories
+- `/home/dev/.config/` — forgejo-cli auth, sops keys, opencode sessions
+- `/home/dev/.ssh-host/` — SSH host keys (avoids fingerprint warnings on rebuilds)
 
 ## Services
 

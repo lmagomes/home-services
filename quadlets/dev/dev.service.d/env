@@ -1,0 +1,5 @@
+OPENCODE_SERVER_PORT=3000
+# OPENCODE_SERVER_PASSWORD is set via Secret in the .container file (dev-opencode-server-password)
+# DEV_SSH_PUBKEY is set via Secret in the .container file (your pubkey for SSH login)
+# DEV_SSH_PRIVATE_KEY is set via Secret in the .container file (base64-encoded keypair for pushing to forgejo)
+# SOPS age key is set via file-type Secret in the .container file (dev-sops-age-key)

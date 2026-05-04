@@ -1,0 +1,39 @@
+FROM fedora:44
+
+RUN dnf install -y \
+    fish \
+    just \
+    git \
+    jq \
+    yq \
+    openssh-server \
+    curl \
+    wget \
+    vim \
+    tmux \
+    htop \
+    man-db \
+    dnf-plugins-core \
+    && dnf copr enable lihaohong/forgejo-cli -y \
+    && dnf install forgejo-cli -y \
+    && dnf clean all
+
+RUN usermod -s /usr/bin/fish root && \
+    mkdir -p /etc/profile.d && \
+    echo 'cd /home/dev' > /etc/profile.d/dev-home.sh && \
+    echo 'cd /home/dev' >> /etc/fish/config.fish
+
+RUN curl -fsSL https://opencode.ai/install | bash && \
+    ln -sf /root/.opencode/bin/opencode /usr/local/bin/opencode
+
+RUN curl -sSL https://github.com/getsops/sops/releases/download/v3.12.2/sops-v3.12.2.linux.amd64 -o /usr/local/bin/sops && \
+    chmod +x /usr/local/bin/sops
+
+COPY sshd_config /etc/ssh/sshd_config.d/50-dev.conf
+COPY entrypoint.fish /entrypoint.fish
+
+RUN chmod +x /entrypoint.fish
+
+EXPOSE 22 3000
+
+ENTRYPOINT ["/entrypoint.fish"]

@@ -1,0 +1,11 @@
+[Unit]
+Description=Dev environment pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=dev.pod
+PublishPort=2224:22
+Network=services.network
+
+[Install]
+WantedBy=default.target

@@ -83,6 +83,12 @@ build-proton-drive-sync:
 
     echo "Done! Built localhost/proton-drive-sync:$latest_version"
 
+# create a container image for the dev environment
+build-dev:
+    #!/usr/bin/env fish
+    set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/dev/Containerfile)
+    podman build -t localhost/dev:$image_version builds/dev/
+
 # create a container image for jsonlint
 build-jsonlint:
     #!/usr/bin/env fish
