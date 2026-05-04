@@ -7,7 +7,7 @@ After=network.target paperless-postgres.service paperless-redis.service paperles
 Pod=paperless.pod
 ContainerName=paperless-ngx
 Image=ghcr.io/paperless-ngx/paperless-ngx:2.20.14
-EnvironmentFile=./%n.d/env
+EnvironmentFile=./%n.env
 Secret=paperless-db-password,type=env,target=PAPERLESS_DBPASS
 
 Secret=paperless-url,type=env,target=PAPERLESS_URL

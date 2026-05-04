@@ -1,13 +1,12 @@
 [Unit]
 Description=Immich server container managed by Podman
-After=network.target
-Requires=immich-redis.service immich-postgres.service
-After=immich-redis.service immich-postgres.service
+After=network.target immich-postgres.service immich-redis.service
+Requires=immich-postgres.service immich-redis.service
 
 [Container]
 Pod=immich.pod
 ContainerName=immich-server
-EnvironmentFile=immich.service.d/env
+EnvironmentFile=./immich.env
 Image=ghcr.io/immich-app/immich-server:v2.7.5
 Volume=/etc/localtime:/etc/localtime:ro
 Mount=type=bind,source=/mnt/nas/media/photos/,destination=/data,relabel=private

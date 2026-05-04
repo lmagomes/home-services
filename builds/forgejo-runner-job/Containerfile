@@ -5,6 +5,7 @@ RUN dnf install -y --setopt=install_weak_deps=False \
     git \
     podman \
     systemd \
+    sops \
     curl \
     wget \
     jq \

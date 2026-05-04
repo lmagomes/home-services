@@ -1,4 +1,4 @@
-# justfile for managing systemd symlinks for quadlets and timers
+# justfile for managing systemd units for quadlets and timers
 
 systemd-container-dir := "$HOME/.config/containers/systemd"
 systemd-user-dir := "$HOME/.config/systemd/user"
@@ -101,56 +101,34 @@ unsymlink-quadlets:
     end
     echo "✅ Repo symlinks removed."
 
-# copy all quadlet files to systemd directory, replacing symlinks with real copies
-copy-quadlets:
+# install quadlet files from all service directories into systemd directory using podman quadlet install
+install-quadlets:
     #!/usr/bin/env fish
     set repo_quadlets (readlink -f ./quadlets)
-    mkdir -p {{ systemd-container-dir }}
 
-    # 1. remove symlinks that point into the repo (they will be replaced by real copies)
+    # 0. decrypt any encrypted config files
+    just decrypt-quadlet-configs
+
+    # 1. remove old symlinks (if any, from previous symlink approach)
     find {{ systemd-container-dir }} -type l | while read -l symlink
         set target (readlink -f $symlink)
         if string match -q "$repo_quadlets/*" $target
-            echo "🗑️  Replacing symlink: $(basename $symlink)"
+            echo "🗑️  Removing old symlink: $(basename $symlink)"
             rm $symlink
         end
     end
 
-    # 2. copy all quadlet files/dirs into systemd dir
+    # 2. install all current services via podman quadlet install
     for dir in ./quadlets/*/
-        for item in "$dir"*
-            if string match -q '*.disabled' $item
-                continue
-            end
-            set basename (basename $item)
-            set dest "{{ systemd-container-dir }}/$basename"
-            if test -d $item
-                cp -r $item $dest
-                echo "✅ Copied directory: $basename"
-            else
-                cp $item $dest
-                echo "✅ Copied file: $basename"
-            end
-        end
+        set service (basename $dir)
+        echo "📋 Installing $service quadlets..."
+        podman quadlet install --replace --reload-systemd=false $dir
     end
 
-    # 3. remove stale files in systemd dir not present in any quadlet dir
-    for item in {{ systemd-container-dir }}/*
-        set basename (basename $item)
-        set found 0
-        for dir in ./quadlets/*/
-            if test -e "$dir$basename"
-                set found 1
-                break
-            end
-        end
-        if test $found -eq 0
-            echo "🗑️  Removing stale file: $basename"
-            rm -rf $item
-        end
-    end
+    # 3. reload systemd once after all quadlets are installed
+    systemctl --user daemon-reload
 
-    echo "✅ Quadlets copied to {{ systemd-container-dir }}"
+    echo "✅ All quadlets installed to {{ systemd-container-dir }}"
 
 # create symlinks for timers in the systemd directory
 symlink-timers:

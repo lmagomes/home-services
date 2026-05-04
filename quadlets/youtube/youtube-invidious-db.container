@@ -6,7 +6,7 @@ After=network.target
 ContainerName=youtube-invidious-db
 Pod=youtube.pod
 Image=docker.io/postgres:18.1
-EnvironmentFile=./%n.d/env
+EnvironmentFile=./%n.env
 Secret=invidious-db-password,type=env,target=POSTGRES_PASSWORD
 Volume=youtube-invidious-db-data.volume:/var/lib/postgresql:Z
 

@@ -7,7 +7,7 @@ Pod=immich.pod
 ContainerName=immich-machine-learning
 Image=ghcr.io/immich-app/immich-machine-learning:v2.7.5
 Volume=immich-machine-learning-model-cache.volume:/cache:Z
-EnvironmentFile=immich.service.d/env
+EnvironmentFile=./immich.env
 
 [Service]
 Restart=always
