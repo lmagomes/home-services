@@ -14,7 +14,7 @@ EnvironmentFile=./%n.d/env
 
 Volume=backup-proton-drive-sync-config.volume:/config/proton-drive-sync
 Volume=backup-proton-drive-sync-state.volume:/state/proton-drive-sync
-Volume=/mnt/nas/backup/podman-volumes:/data/podman-volumes-backup:Z
+Mount=type=bind,source=/mnt/nas/backup/podman-volumes,destination=/data/podman-volumes-backup,relabel=private
 Secret=proton-drive-sync-keyring-password,type=env,target=KEYRING_PASSWORD
 
 [Service]
