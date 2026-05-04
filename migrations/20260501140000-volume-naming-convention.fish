@@ -106,7 +106,7 @@ while test $i -le (count $volume_map)
         set -l files (ls -A "$old_mount" 2>/dev/null)
         test -n "$files"
     end
-        if cp -a "$old_mount/." "$new_mount/." 2>/dev/null
+        if podman unshare cp -a "$old_mount/." "$new_mount/." 2>/dev/null
             echo "  ✅ Data copied"
             set migrated (math "$migrated + 1")
         else
