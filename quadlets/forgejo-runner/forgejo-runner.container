@@ -8,10 +8,11 @@ ContainerName=forgejo-runner
 Image=data.forgejo.org/forgejo/runner:12
 User=0:0
 SecurityLabelDisable=true
-EnvironmentFile=./%N.env
+Environment=DOCKER_HOST=unix://%t/podman/podman.sock
+Environment=XDG_RUNTIME_DIR=%t
 Volume=forgejo-runner-data.volume:/data:Z
 Volume=./%N-config.yml:/data/config.yml:ro,Z
-Mount=type=bind,source=/run/user/%U/podman/podman.sock,destination=/run/user/1000/podman/podman.sock
+Mount=type=bind,source=%t/podman/podman.sock,destination=%t/podman/podman.sock
 Exec=/bin/forgejo-runner daemon --config /data/config.yml
 
 [Service]
