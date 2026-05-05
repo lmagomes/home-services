@@ -8,7 +8,7 @@ ContainerName=authentik-worker
 Pod=authentik.pod
 Exec=worker
 Image=ghcr.io/goauthentik/server:2026.2.2
-EnvironmentFile=./authentik.service.d/env
+EnvironmentFile=./authentik.env
 Secret=authentik-db-password,type=env,target=AUTHENTIK_POSTGRESQL__PASSWORD
 Secret=authentik-db-password,type=env,target=AUTHENTIK_POSTGRESQL__PASSWORD
 Secret=authentik-secret-key,type=env,target=AUTHENTIK_SECRET_KEY

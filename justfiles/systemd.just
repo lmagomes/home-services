@@ -1,4 +1,4 @@
-# justfile for managing systemd symlinks for quadlets and timers
+# justfile for managing systemd units for quadlets and timers
 
 systemd-container-dir := "$HOME/.config/containers/systemd"
 systemd-user-dir := "$HOME/.config/systemd/user"
@@ -79,12 +79,56 @@ symlink-quadlets:
             # check if a symlink already exists
             if [ -L $systemd_path ]
                 echo "🔗 symlink for '$full_path' already exists. Skipping..."
+            else if [ -e $systemd_path ]
+                echo "❗ real file at '$systemd_path' already exists. Skipping..."
             else
                 ln -s $full_path $systemd_path
                 echo "✅ created a symlink for '$full_path' at '$systemd_path'"
             end
         end
     end
+
+# remove symlinks that point into this repo's quadlets directory (real files are untouched)
+unsymlink-quadlets:
+    #!/usr/bin/env fish
+    set repo_quadlets (readlink -f ./quadlets)
+    find {{ systemd-container-dir }} -type l | while read -l symlink
+        set target (readlink -f $symlink)
+        if string match -q "$repo_quadlets/*" $target
+            echo "🗑️  Removing symlink: $(basename $symlink)"
+            rm $symlink
+        end
+    end
+    echo "✅ Repo symlinks removed."
+
+# install quadlet files from all service directories into systemd directory using podman quadlet install
+install-quadlets:
+    #!/usr/bin/env fish
+    set repo_quadlets (readlink -f ./quadlets)
+
+    # 0. decrypt any encrypted config files
+    just decrypt-quadlet-configs
+
+    # 1. remove old symlinks (if any, from previous symlink approach)
+    find {{ systemd-container-dir }} -type l | while read -l symlink
+        set target (readlink -f $symlink)
+        if string match -q "$repo_quadlets/*" $target
+            echo "🗑️  Removing old symlink: $(basename $symlink)"
+            rm $symlink
+        end
+    end
+
+    # 2. install all current services via podman quadlet install
+    for dir in ./quadlets/*/
+        set service (basename $dir)
+        echo "📋 Installing $service quadlets..."
+        podman quadlet install --replace --reload-systemd=false $dir
+    end
+
+    # 3. reload systemd once after all quadlets are installed
+    systemctl --user daemon-reload
+
+    echo "✅ All quadlets installed to {{ systemd-container-dir }}"
 
 # create symlinks for timers in the systemd directory
 symlink-timers:
@@ -98,6 +142,8 @@ symlink-timers:
         # check if a symlink already exists
         if [ -L $systemd_path ]
             echo "🔗 symlink for '$full_path' already exists. Skipping..."
+        else if [ -e $systemd_path ]
+            echo "❗ real file at '$systemd_path' already exists. Skipping..."
         else
             ln -s $full_path $systemd_path
             echo "✅ created a symlink for '$full_path' at '$systemd_path'"

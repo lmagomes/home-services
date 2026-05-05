@@ -6,7 +6,7 @@ After=network.target
 Pod=immich.pod
 ContainerName=immich-postgres
 Environment="POSTGRES_INITDB_ARGS=--data-checksums"
-EnvironmentFile=immich.service.d/env
+EnvironmentFile=./immich.env
 Secret=immich-db-password,type=env,target=POSTGRES_PASSWORD
 Volume=immich-postgres-data.volume:/var/lib/postgresql/data:Z
 Image=ghcr.io/immich-app/postgres:14-vectorchord0.5.3

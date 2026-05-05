@@ -6,7 +6,7 @@ After=network.target
 ContainerName=miniflux-db
 Pod=miniflux.pod
 Image=docker.io/postgres:18.1
-EnvironmentFile=./miniflux.service.d/env
+EnvironmentFile=./miniflux.env
 Secret=miniflux-db-password,type=env,target=POSTGRES_PASSWORD
 Volume=miniflux-db-data.volume:/var/lib/postgresql:Z
 

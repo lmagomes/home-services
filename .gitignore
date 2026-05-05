@@ -1,1 +1,2 @@
-quadlets/youtube/invidious.service.d/config.yml
+quadlets/youtube/youtube-invidious-config.yml
+quadlets/forgejo-runner/forgejo-runner-config.yml

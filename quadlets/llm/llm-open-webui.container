@@ -7,7 +7,7 @@ ContainerName=llm-open-webui
 Pod=llm.pod
 Image=ghcr.io/open-webui/open-webui:v0.8.12
 Volume=llm-open-webui-data.volume:/app/backend/data:Z
-EnvironmentFile=./%n.d/env
+EnvironmentFile=./%n.env
 Secret=llm-open-webui-client-id,type=env,target=OAUTH_CLIENT_ID
 Secret=llm-open-webui-client-secret,type=env,target=OAUTH_CLIENT_SECRET
 Secret=llm-open-webui-provider-url,type=env,target=OPENID_PROVIDER_URL

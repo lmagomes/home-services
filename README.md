@@ -17,7 +17,8 @@ This is a collection of podman quadlets that I use for selfhosting several servi
 │   │   ├── argus.pod
 │   │   ├── argus.container
 │   │   ├── argus-data.volume
-│   │   └── argus.service.d/
+│   │   └── argus.env
+│   │   └── argus-config.yml
 │   └── ...                   # Other services
 ├── builds/                   # Custom Containerfiles
 │   ├── caddy/
@@ -337,7 +338,8 @@ The project manages various self-hosted services. Each service is defined in its
 - `.pod` - Pod definition
 - `.container` - Container definitions
 - `.volume` - Volume definitions
-- `.service.d/` - Environment variables file, and extra configuration files.
+- `<container-name>.env` - Environment variables file.
+- `<container-name>-<file>` - Extra configuration files (e.g., config.yml, Caddyfile).
 
 The quadlet files are converted to systemd units automatically by Podman, creating services like `caddy-pod.service`.
 

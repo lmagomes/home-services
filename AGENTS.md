@@ -30,9 +30,8 @@ migrations/                # Idempotent migration scripts (YYYYMMDDHHMMSS-descri
 | Container | `<service>[-component].container` | `immich-server.container` |
 | Volume | `<service>-<purpose>.volume` | `caddy-data.volume` |
 | Network | `<name>.network` | `services.network` |
-| Env directory | `<container-name>.service.d/` | `caddy.service.d/` |
-| Env file | `<container-name>.service.d/env` | `caddy.service.d/env` |
-| Extra config | `<container-name>.service.d/<file>` | `argus.service.d/config.yml` |
+| Env file | `<container-name>.env` | `caddy.env` |
+| Extra config | `<container-name>-<file>` | `argus-config.yml` |
 | Disabled files | append `.disabled` suffix | `ollama.container.disabled` |
 | Just modules | `<domain>.just` | `backup.just` |
 | Container builds | `builds/<image>/Containerfile` | `builds/caddy/Containerfile` |
@@ -40,7 +39,7 @@ migrations/                # Idempotent migration scripts (YYYYMMDDHHMMSS-descri
 
 ### Quadlet directory structure
 
-Each service lives in `quadlets/<service>/` and contains one `.pod` file, one or more `.container` files, zero or more `.volume` files, and a `.service.d/` directory per container that needs environment variables or config files.
+Each service lives in `quadlets/<service>/` and contains one `.pod` file, one or more `.container` files, zero or more `.volume` files, and flat env/config files alongside the quadlet files.
 
 ## Quadlet File Format
 
@@ -48,7 +47,9 @@ All quadlet files use INI-style systemd unit syntax. Section order: `[Unit]` →
 
 Key rules:
 - Pin image versions explicitly — no `:latest` or floating tags
-- Use `EnvironmentFile=./%n.d/env` (`%n` expands to the unit name)
+- Use `EnvironmentFile=./%n.env` (`%n` expands to the unit name) for env files placed alongside the container. Use `Volume=./%n-<config-file>` for config files.
+- For containers that share an env file, use an explicit filename (e.g., `EnvironmentFile=./immich.env`).
+- Use `podman quadlet install` (via `just install-quadlets`) to deploy quadlet files to the systemd directory.
 - Use `Secret=<name>,type=env,target=<ENV_VAR>` for secrets (not `PodmanArgs`)
 - Named volumes use `:Z` for SELinux; bind mounts use `Mount=` with `relabel=private`
 - `UserNS=keep-id` on pod files only, never for LSIO/s6 images
@@ -59,7 +60,7 @@ Full templates, directive ordering, and detailed reference are in the `quadlet-r
 
 ## Environment Files
 
-- Located at `<container-name>.service.d/env`.
+- Located at `<container-name>.env`.
 - Use `KEY=value` format (no `export`, no quoting unless the value itself contains spaces or special characters).
 - Comment out secrets that are injected via `Secret=` in the container file, documenting where they come from:
   ```
@@ -84,6 +85,16 @@ Full templates, directive ordering, and detailed reference are in the `quadlet-r
 decrypted copy of it.** If a task requires a new secret or updating an existing one,
 tell the user the exact secret name needed (and which service/container it's for).
 The user will add it themselves.
+
+**Exception — encrypted quadlet configs (`*.encrypted.yml`):** Unlike `.secrets/secrets.yaml`,
+these files are safe for agents to decrypt with `sops` for review or editing. If changes are
+made, re-encrypt the file back to its `.encrypted.yml` form. Decrypt with:
+
+```
+sops decrypt <file>.encrypted.yml > <file>.yml     # review/edit
+sops encrypt <file>.yml > <file>.encrypted.yml     # re-encrypt after edits
+rm <file>.yml                                      # clean up decrypted copy
+```
 
 ## Justfiles
 

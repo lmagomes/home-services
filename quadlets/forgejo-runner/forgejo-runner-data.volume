@@ -1,0 +1,5 @@
+[Unit]
+Description=Forgejo Runner Data volume
+
+[Volume]
+VolumeName=forgejo-runner-data

@@ -108,3 +108,13 @@ stop-all:
         echo "🔄 Stopping $service_name..."
         systemctl --user stop $service_name
     end
+
+# decrypt quadlet config files stored encrypted (e.g., invidious-config.yml)
+decrypt-quadlet-configs:
+    #!/usr/bin/env fish
+    for encrypted in (find quadlets/ -name "*.encrypted.*")
+        set decrypted (string replace ".encrypted." "." -- $encrypted)
+        echo "🔓 Decrypting $encrypted → $decrypted"
+        sops decrypt --input-type yaml --output-type yaml $encrypted > $decrypted
+    end
+    echo "✅ Quadlet configs decrypted"

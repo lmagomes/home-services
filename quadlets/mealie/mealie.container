@@ -7,7 +7,7 @@ ContainerName=mealie
 Pod=mealie.pod
 Image=ghcr.io/mealie-recipes/mealie:v3.16.0
 Volume=mealie-data.volume:/app/data:Z
-EnvironmentFile=./%n.d/env
+EnvironmentFile=./%n.env
 Secret=mealie-base-url,type=env,target=BASE_URL
 Secret=mealie-oidc-configuration-url,type=env,target=OIDC_CONFIGURATION_URL
 Secret=mealie-oidc-client-id,type=env,target=OIDC_CLIENT_ID

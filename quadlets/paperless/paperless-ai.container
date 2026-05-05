@@ -7,7 +7,7 @@ After=network.target paperless.service
 Pod=paperless.pod
 ContainerName=paperless-ai
 Image=docker.io/clusterzx/paperless-ai:3.0.9
-EnvironmentFile=./%n.d/env
+EnvironmentFile=./%n.env
 Secret=paperless-api-token,type=env,target=PAPERLESS_API_TOKEN
 Volume=paperless-ai-data.volume:/app/data:Z
 

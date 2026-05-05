@@ -1,0 +1,12 @@
+FROM docker.io/library/fedora:43
+
+RUN dnf install -y --setopt=install_weak_deps=False \
+    just \
+    git \
+    podman \
+    systemd \
+    sops \
+    curl \
+    wget \
+    jq \
+    && dnf clean all

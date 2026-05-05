@@ -64,7 +64,7 @@ One volume per persistent data directory.
 
 ### 5. Create environment files
 
-`quadlets/<service>/<container-name>.service.d/env` — one per container that needs env vars.
+`quadlets/<service>/<container-name>.env` — one per container that needs env vars.
 
 - `SCREAMING_SNAKE_CASE` names
 - `KEY=value` format (no export, no quoting unless value requires it)
@@ -87,25 +87,24 @@ Secret=<name>,type=env,target=<ENV_VAR>
 
 ### 7. Add Caddy reverse proxy entry
 
-Add a host entry in `quadlets/caddy/caddy.service.d/Caddyfile`. Match the style of existing entries.
+Add a host entry in `quadlets/caddy/caddy-Caddyfile`. Match the style of existing entries.
 
 ### 8. Symlink and reload
 
 ```bash
-just symlink-quadlets
-systemctl --user daemon-reload
+just install-quadlets
 ```
 
 ### 9. Optional: automated updates
 
-Add the service to Release Argus (`quadlets/monitor/monitor-argus.service.d/config.yml`) and Service-Hub for automatic update PRs.
+Add the service to Release Argus (`quadlets/monitor/monitor-argus-config.yml`) and Service-Hub for automatic update PRs.
 
 ## Common pitfalls
 
 - **`PUID`/`PGID` images (LSIO, s6-overlay)**: Set `PUID=0` and `PGID=0`. Do not use `UserNS=keep-id` — it breaks s6-applyuidgid. Rootless Podman maps container root (UID 0) to the host user.
 - **`idmap` on bind mounts**: Don't use it in rootless Podman — `mount_setattr` requires `CAP_SYS_ADMIN` and fails with `OCI permission denied`.
 - **`:Z` on volumes**: Required for SELinux relabeling on bind mounts and named volumes.
-- **`:ro,Z` on config files**: Config files mounted from `.service.d/` should be read-only.
+- **`:ro,Z` on config files**: Config files mounted alongside the container (e.g., `./%n-config.yml`) should be read-only.
 - **`:latest` tags**: Don't use for upstream images. Pin explicit versions.
 
 ## Example: Adding a simple single-container service
@@ -114,7 +113,6 @@ Add the service to Release Argus (`quadlets/monitor/monitor-argus.service.d/conf
 quadlets/example/
 ├── example.container
 ├── example.pod
-├── example.service.d/
-│   └── env
+├── example.env
 └── example-data.volume
 ```

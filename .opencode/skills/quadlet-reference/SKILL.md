@@ -86,13 +86,13 @@ WantedBy=multi-user.target         # or default.target
 
 **For locally-built images**: Tag as `localhost/<image-name>:<version>` (e.g., `localhost/caddy-cloudflare-l4:2.11.2-alpine`). Build recipes should extract the version from the base image's `FROM` line — do not leave locally-built images tagged as `:latest` in container files (use that only during development).
 
-**`%n` (systemd specifier)**: Expands to the unit name (the `.container` filename without `.container`). Always use `./%n.d/env` for the `EnvironmentFile=` directive so the path references the correct `.service.d/` directory. This avoids copy-paste bugs when cloning containers.
+**`%n` (systemd specifier)**: Expands to the unit name (the `.container` filename without `.container`). Use `./%n.env` for the `EnvironmentFile=` directive so the path references the correct env file alongside the container. This avoids copy-paste bugs when cloning containers.
 
-**EnvironmentFile sharing**: In most cases, each container should reference its own env file via `EnvironmentFile=./%n.d/env`. However, when two containers run the same application image but with different entrypoints (e.g., `dawarich-app` + `dawarich-sidekiq`), both should reference their own env files with their specific config. For helper containers that genuinely share all configuration with the main container (e.g., `firefly-cron` sharing `firefly`'s env vars), reference the main container's env file explicitly — this is the exception, not the rule.
+**EnvironmentFile sharing**: In most cases, each container should reference its own env file via `EnvironmentFile=./%n.env`. However, when two containers run the same application image but with different entrypoints (e.g., `dawarich-app` + `dawarich-sidekiq`), both should reference their own env files with their specific config. For helper containers that genuinely share all configuration with the main container (e.g., `firefly-cron` sharing `firefly`'s env vars), reference the main container's env file explicitly — this is the exception, not the rule.
 
-**`Environment=`**: Only use inline environment variables when the value is trivial (no secrets, no long strings) and there are ≤ 2 variables. Prefer `.service.d/env` files for all other cases. Example: `Environment=MEILI_NO_ANALYTICS="true"`.
+**`Environment=`**: Only use inline environment variables when the value is trivial (no secrets, no long strings) and there are ≤ 2 variables. Prefer `.env` files for all other cases. Example: `Environment=MEILI_NO_ANALYTICS="true"`.
 
-**Secrets**: Group together. Use native `Secret=<name>,type=env,target=<ENV_VAR>` syntax. When referencing secrets, always comment them out in the `.service.d/env` file with:
+**Secrets**: Group together. Use native `Secret=<name>,type=env,target=<ENV_VAR>` syntax. When referencing secrets, always comment them out in the `.env` file with:
 ```
 #DATABASE_PASSWORD is set via Secret in the .container file
 ```
