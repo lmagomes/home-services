@@ -5,9 +5,10 @@ After=network.target
 [Container]
 ContainerName=mssql
 Pod=mssql.pod
-Image=mcr.microsoft.com/mssql/server:2022-latest
+Image=mcr.microsoft.com/mssql/server:2022-CU24-ubuntu-22.04
 Volume=mssql.volume:/var/opt/mssql:Z
-Environment=ACCEPT_EULA=Y MSSQL_SA_PASSWORD=Passw0rd
+EnvironmentFile=./%N.env
+Secret=mssql-sa-password,type=env,target=MSSQL_SA_PASSWORD
 
 [Service]
 Restart=always

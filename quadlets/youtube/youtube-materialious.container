@@ -6,7 +6,7 @@ After=network.target youtube-invidious.service
 [Container]
 ContainerName=youtube-materialious
 Pod=youtube.pod
-Image=docker.io/wardpearce/materialious-full:latest
+Image=docker.io/wardpearce/materialious-full:1.16.26
 EnvironmentFile=./%N.env
 Secret=youtube-materialious-cookie-secret,type=env,target=COOKIE_SECRET
 Secret=youtube-materialious-default-invidious-instance,type=env,target=PUBLIC_DEFAULT_INVIDIOUS_INSTANCE

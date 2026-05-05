@@ -5,7 +5,7 @@ After=network.target youtube-invidious.service
 
 [Container]
 ContainerName=youtube-invidious-companion
-Image=quay.io/invidious/invidious-companion:latest
+Image=quay.io/invidious/invidious-companion:master-d5504eb
 Pod=youtube.pod
 Secret=invidious-server-secret-key,type=env,target=SERVER_SECRET_KEY
 #DropCapability=ALL

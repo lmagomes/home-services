@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=tools-jsonlint
 Pod=tools.pod
-Image=localhost/jsonlint
+Image=localhost/jsonlint:22-alpine
 
 [Service]
 Restart=on-failure

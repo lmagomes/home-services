@@ -10,7 +10,9 @@ build-all:
 
 # create a container image for service-hub
 build-service-hub:
-    podman build -t service-hub:latest builds/service-hub/
+    #!/usr/bin/env fish
+    set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/service-hub/Containerfile | head -1)
+    podman build -t localhost/service-hub:$image_version builds/service-hub/
 
 # create a container image for transmission
 build-transmission:
@@ -93,16 +95,19 @@ build-dev:
 # create a container image for jsonlint
 build-jsonlint:
     #!/usr/bin/env fish
+    set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/jsonlint/Containerfile | tail -1)
     set base_url (sops decrypt .secrets/secrets.yaml | yq '.secrets.jsonlint-app-url')
     echo "Building jsonlint with NEXT_PUBLIC_BASE_URL=$base_url..."
-    podman build --build-arg NEXT_PUBLIC_BASE_URL=$base_url -t localhost/jsonlint:latest builds/jsonlint/
-    echo "Done! Built localhost/jsonlint:latest"
+    podman build --build-arg NEXT_PUBLIC_BASE_URL=$base_url -t localhost/jsonlint:$image_version builds/jsonlint/
+    echo "Done! Built localhost/jsonlint:$image_version"
 
 # create a container image for json-path-finder
 build-json-path-finder:
+    #!/usr/bin/env fish
+    set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/json-path-finder/Containerfile | tail -1)
     echo "Building json-path-finder..."
-    podman build -t localhost/json-path-finder:latest builds/json-path-finder/
-    echo "Done! Built localhost/json-path-finder:latest"
+    podman build -t localhost/json-path-finder:$image_version builds/json-path-finder/
+    echo "Done! Built localhost/json-path-finder:$image_version"
 
 # create a container image for the forgejo runner job execution environment
 build-forgejo-runner-job:

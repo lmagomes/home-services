@@ -6,7 +6,7 @@ After=network.target youtube-invidious-db.service
 [Container]
 ContainerName=youtube-invidious
 Pod=youtube.pod
-Image=quay.io/invidious/invidious:latest
+Image=quay.io/invidious/invidious:2026.05.05-f914ce8
 EnvironmentFile=./%N.env
 Volume=./%N-config.yml:/invidious/config.yml:Z
 
