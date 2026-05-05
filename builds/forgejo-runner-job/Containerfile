@@ -1,12 +1,14 @@
-FROM docker.io/library/fedora:43
+FROM docker.io/library/fedora:44
 
 RUN dnf install -y --setopt=install_weak_deps=False \
     just \
     git \
     podman \
     systemd \
-    sops \
-    curl \
+    yq \
     wget \
     jq \
     && dnf clean all
+
+RUN curl -sSL https://github.com/getsops/sops/releases/download/v3.12.2/sops-v3.12.2.linux.amd64 -o /usr/local/bin/sops && \
+    chmod +x /usr/local/bin/sops
