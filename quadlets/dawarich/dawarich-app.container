@@ -14,6 +14,7 @@ Secret=dawarich-oidc-client-id,type=env,target=OIDC_CLIENT_ID
 Secret=dawarich-oidc-client-secret,type=env,target=OIDC_CLIENT_SECRET
 Secret=dawarich-oidc-issuer,type=env,target=OIDC_ISSUER
 Secret=dawarich-oidc-redirect-uri,type=env,target=OIDC_REDIRECT_URI
+Secret=dawarich-application-hosts,type=env,target=APPLICATION_HOSTS
 Volume=dawarich-public.volume:/var/app/public:Z
 Volume=dawarich-watched.volume:/var/app/tmp/imports/watched:Z
 Volume=dawarich-storage.volume:/var/app/storage:Z
