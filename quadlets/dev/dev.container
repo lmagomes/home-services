@@ -11,7 +11,7 @@ Secret=dev-ssh-pubkey,type=env,target=DEV_SSH_PUBKEY
 Secret=dev-ssh-private-key,type=env,target=DEV_SSH_PRIVATE_KEY
 Secret=dev-sops-age-key,target=/run/secrets/sops-age-key,mode=0600
 Volume=dev-home.volume:/home/dev:Z
-EnvironmentFile=./%n.env
+EnvironmentFile=./%N.env
 
 [Service]
 Restart=on-failure

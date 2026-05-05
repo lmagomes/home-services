@@ -10,7 +10,7 @@ PodmanArgs=--secret cloudflare-token,type=env,target=CF_API_TOKEN
 PodmanArgs=--secret domain-secret,type=env,target=DOMAIN
 Volume=caddy-data.volume:/data:Z
 Volume=caddy-config.volume:/config:Z
-Volume=./%n-Caddyfile:/etc/caddy/Caddyfile:ro,Z
+Volume=./%N-Caddyfile:/etc/caddy/Caddyfile:ro,Z
 
 [Service]
 Restart=on-failure

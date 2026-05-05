@@ -9,7 +9,7 @@ Image=localhost/transmission-flood:4.1.1
 Volume=transmission-data.volume:/config:Z
 Volume=transmission-watch-folder.volume:/watch:Z
 Mount=type=bind,source=/mnt/nas/downloads,destination=/downloads,relabel=private
-EnvironmentFile=./%n.env
+EnvironmentFile=./%N.env
 
 [Service]
 Restart=always

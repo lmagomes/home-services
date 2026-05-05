@@ -10,7 +10,7 @@ AutoUpdate=registry
 Volume=notes-jotty-data.volume:/app/data:Z
 Volume=notes-jotty-config.volume:/app/config:Z
 Volume=notes-jotty-cache.volume:/app/.next/cache:Z
-EnvironmentFile=./%n.env
+EnvironmentFile=./%N.env
 Secret=notes-jotty-oidc-issuer,type=env,target=OIDC_ISSUER
 Secret=notes-jotty-oidc-client-id,type=env,target=OIDC_CLIENT_ID
 Secret=notes-jotty-app-url,type=env,target=APP_URL

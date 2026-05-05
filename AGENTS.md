@@ -47,7 +47,7 @@ All quadlet files use INI-style systemd unit syntax. Section order: `[Unit]` →
 
 Key rules:
 - Pin image versions explicitly — no `:latest` or floating tags
-- Use `EnvironmentFile=./%n.env` (`%n` expands to the unit name) for env files placed alongside the container. Use `Volume=./%n-<config-file>` for config files.
+- Use `EnvironmentFile=./%N.env` (`%N` expands to the unit name) for env files placed alongside the container. Use `Volume=./%N-<config-file>` for config files.
 - For containers that share an env file, use an explicit filename (e.g., `EnvironmentFile=./immich.env`).
 - Use `podman quadlet install` (via `just install-quadlets`) to deploy quadlet files to the systemd directory.
 - Use `Secret=<name>,type=env,target=<ENV_VAR>` for secrets (not `PodmanArgs`)

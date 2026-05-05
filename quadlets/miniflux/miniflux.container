@@ -7,7 +7,7 @@ After=network.target miniflux-db.service
 ContainerName=miniflux
 Pod=miniflux.pod
 Image=docker.io/miniflux/miniflux:2.2.19
-EnvironmentFile=./%n.env
+EnvironmentFile=./%N.env
 Secret=miniflux-admin-password,type=env,target=ADMIN_PASSWORD
 Secret=miniflux-db-url,type=env,target=DATABASE_URL
 Secret=miniflux-oauth2-client-id,type=env,target=OAUTH2_CLIENT_ID

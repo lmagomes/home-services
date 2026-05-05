@@ -7,7 +7,7 @@ After=network.target paperless.service
 Pod=paperless.pod
 ContainerName=paperless-gpt
 Image=docker.io/icereed/paperless-gpt:v0.25.1
-EnvironmentFile=./%n.env
+EnvironmentFile=./%N.env
 Secret=paperless-api-token,type=env,target=PAPERLESS_API_TOKEN
 Volume=paperless-gpt-prompts.volume:/app/prompts:Z
 

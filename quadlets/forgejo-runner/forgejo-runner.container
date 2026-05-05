@@ -6,10 +6,12 @@ After=network-online.target
 Pod=forgejo-runner.pod
 ContainerName=forgejo-runner
 Image=data.forgejo.org/forgejo/runner:12
-EnvironmentFile=./%n.env
+User=0:0
+SecurityLabelDisable=true
+EnvironmentFile=./%N.env
 Volume=forgejo-runner-data.volume:/data:Z
-Volume=./%n-config.yml:/data/config.yml:ro,Z
-Mount=type=bind,source=/run/user/1000/podman/podman.sock,destination=/run/user/1000/podman/podman.sock,relabel=private
+Volume=./%N-config.yml:/data/config.yml:ro,Z
+Mount=type=bind,source=/run/user/%U/podman/podman.sock,destination=/run/user/1000/podman/podman.sock
 Exec=/bin/forgejo-runner daemon --config /data/config.yml
 
 [Service]

@@ -7,7 +7,7 @@ ContainerName=forgejo
 Pod=forgejo.pod
 Image=codeberg.org/forgejo/forgejo:15.0.0
 Volume=forgejo-data.volume:/data:Z
-EnvironmentFile=./%n.env
+EnvironmentFile=./%N.env
 
 [Service]
 Restart=always

@@ -6,7 +6,7 @@ After=network.target
 Pod=dawarich.pod
 Image=docker.io/postgis/postgis:17-3.5-alpine
 ContainerName=dawarich-db
-EnvironmentFile=./%n.env
+EnvironmentFile=./%N.env
 Secret=dawarich-db-password,type=env,target=POSTGRES_PASSWORD
 Volume=dawarich-db-data.volume:/var/lib/postgresql/data:Z
 Volume=dawarich-shared.volume:/var/shared:Z

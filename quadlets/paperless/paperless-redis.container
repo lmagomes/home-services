@@ -13,7 +13,7 @@ HealthTimeout=5s
 HealthRetries=5
 Notify=healthy
 Volume=paperless-redis-data.volume:/data:Z
-EnvironmentFile=./%n.env
+EnvironmentFile=./%N.env
 
 [Service]
 Restart=always

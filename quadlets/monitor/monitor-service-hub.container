@@ -6,8 +6,8 @@ After=network.target
 ContainerName=monitor-service-hub
 Pod=monitor.pod
 Image=localhost/service-hub:latest
-EnvironmentFile=./%n.env
-Volume=./%n-config.yml:/app/config.yml:ro,Z
+EnvironmentFile=./%N.env
+Volume=./%N-config.yml:/app/config.yml:ro,Z
 Volume=/run/user/%U/podman/podman.sock:/run/user/1000/podman/podman.sock
 Secret=monitor-forgejo-api-token,type=env,target=FORGEJO_TOKEN
 Secret=monitor-forgejo-url,type=env,target=FORGEJO_URL

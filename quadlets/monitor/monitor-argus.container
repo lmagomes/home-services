@@ -8,8 +8,8 @@ ContainerName=monitor-argus
 Pod=monitor.pod
 Image=ghcr.io/release-argus/argus:0.29.4
 Volume=monitor-argus-data.volume:/app/data/:Z
-Volume=./%n-config.yml:/app/config.yml:ro,Z
-EnvironmentFile=./%n.env
+Volume=./%N-config.yml:/app/config.yml:ro,Z
+EnvironmentFile=./%N.env
 Secret=domain-secret,type=env,target=BASE_DOMAIN_NAME
 Secret=monitor-github-token,type=env,target=GITHUB_ACCESS_TOKEN
 Secret=monitor-argus-update-webhook-secret,type=env,target=UPDATE_WEBHOOK_SECRET

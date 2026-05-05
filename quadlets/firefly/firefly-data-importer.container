@@ -8,7 +8,7 @@ Pod=firefly-data-importer.pod
 Image=docker.io/fireflyiii/data-importer:version-2.3.2
 Secret=firefly-data-importer-api-token,type=env,target=FIREFLY_III_ACCESS_TOKEN
 Secret=firefly-app-url,type=env,target=VANITY_URL
-EnvironmentFile=./%n.env
+EnvironmentFile=./%N.env
 
 [Service]
 Restart=always

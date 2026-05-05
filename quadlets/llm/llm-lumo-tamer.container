@@ -7,8 +7,8 @@ ContainerName=llm-lumo-tamer
 Pod=llm.pod
 Image=localhost/lumo-tamer:v0.5.0
 Volume=llm-lumo-tamer-sessions.volume:/app/sessions:Z
-Volume=./%n-config.yaml:/app/config.yaml:ro,Z
-EnvironmentFile=./%n.env
+Volume=./%N-config.yaml:/app/config.yaml:ro,Z
+EnvironmentFile=./%N.env
 Secret=llm-lumo-tamer-vault-key,target=/run/secrets/lumo-vault-key,mode=0600
 # Exec=sleep 10m
 # Exec=tamer-server

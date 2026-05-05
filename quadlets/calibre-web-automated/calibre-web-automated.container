@@ -6,7 +6,7 @@ After=network.target
 Pod=calibre-web-automated.pod
 ContainerName=calibre-web-automated
 Image=docker.io/crocodilestick/calibre-web-automated:latest
-EnvironmentFile=./%n.env
+EnvironmentFile=./%N.env
 Secret=calibre-web-automated-hardcover-token,type=env,target=HARDCOVER_TOKEN
 Volume=calibre-web-automated-config.volume:/config:Z
 Volume=calibre-web-automated-plugins.volume:/config/.config/calibre/plugins:Z
