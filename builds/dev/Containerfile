@@ -16,6 +16,8 @@ RUN dnf install -y \
     dnf-plugins-core \
     && dnf copr enable lihaohong/forgejo-cli -y \
     && dnf install forgejo-cli -y \
+    && dnf copr enable atim/lazygit -y \
+    && dnf install lazygit -y \
     && dnf clean all
 
 RUN usermod -s /usr/bin/fish root && \
