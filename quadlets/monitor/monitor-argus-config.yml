@@ -19,7 +19,7 @@ defaults:
 webhook:
   update-pr:
     type: github
-    url: http://service-hub:8081/webhook
+    url: http://monitor-service-hub:8081/webhook
     secret: ${UPDATE_WEBHOOK_SECRET}
     desired_status_code: 200
     max_tries: 3
@@ -36,7 +36,7 @@ service:
       url: release-argus/argus
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/argus
+      url: http://monitor-service-hub:8081/version/argus
       json: version
     webhook:
       update-pr:
@@ -60,7 +60,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/dozzle
+      url: http://monitor-service-hub:8081/version/dozzle
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -82,7 +82,7 @@ service:
       url: louislam/uptime-kuma
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/uptime-kuma
+      url: http://monitor-service-hub:8081/version/uptime-kuma
       json: version
     webhook:
       update-pr:
@@ -106,7 +106,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/proton-drive-sync
+      url: http://monitor-service-hub:8081/version/proton-drive-sync
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -131,7 +131,7 @@ service:
           regex: v([0-9.]+[0-9.]+[0-9.]+-\d.+)
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/it-tools
+      url: http://monitor-service-hub:8081/version/it-tools
       json: version
     webhook:
       update-pr:
@@ -152,7 +152,7 @@ service:
       url: alam00000/bentopdf
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/bentopdf
+      url: http://monitor-service-hub:8081/version/bentopdf
       json: version
       regex: ^([0-9.]+)$
     webhook:
@@ -177,7 +177,7 @@ service:
           regex: version\/([0-9.]+[0-9]+(?:-rc[0-9])?)
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/authentik
+      url: http://monitor-service-hub:8081/version/authentik
       json: version
     webhook:
       update-pr:
@@ -202,7 +202,7 @@ service:
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       method: GET
-      url: http://service-hub:8081/version/audiobookshelf
+      url: http://monitor-service-hub:8081/version/audiobookshelf
       json: version
     webhook:
       update-pr:
@@ -223,7 +223,7 @@ service:
       url: rustmailer/bichon
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/bichon
+      url: http://monitor-service-hub:8081/version/bichon
       json: version
       regex: ^([0-9.]+)$
     webhook:
@@ -245,7 +245,7 @@ service:
       url: caddyserver/caddy
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/caddy
+      url: http://monitor-service-hub:8081/version/caddy
       json: version
       regex: ^([0-9.]+)-alpine$
     webhook:
@@ -269,7 +269,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/firefly
+      url: http://monitor-service-hub:8081/version/firefly
       json: version
       regex: version-([0-9.]+)
     webhook:
@@ -295,7 +295,7 @@ service:
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
       method: GET
-      url: http://service-hub:8081/version/firefly-data-importer
+      url: http://monitor-service-hub:8081/version/firefly-data-importer
       json: version
       regex: ^version-([0-9.]+)
     webhook:
@@ -318,7 +318,7 @@ service:
         - type: regex
           regex: \"tag_name\":\"v([0-9.]+)\"
     deployed_version:
-      url: http://service-hub:8081/version/forgejo
+      url: http://monitor-service-hub:8081/version/forgejo
       json: version
     webhook:
       update-pr:
@@ -339,7 +339,7 @@ service:
       url: immich-app/immich
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/immich_server
+      url: http://monitor-service-hub:8081/version/immich_server
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -364,7 +364,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/jellyfin
+      url: http://monitor-service-hub:8081/version/jellyfin
       json: version
     webhook:
       update-pr:
@@ -385,7 +385,7 @@ service:
       url: fccview/jotty
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/jotty
+      url: http://monitor-service-hub:8081/version/jotty
       json: version
     webhook:
       update-pr:
@@ -409,7 +409,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/drawio
+      url: http://monitor-service-hub:8081/version/drawio
       json: version
     webhook:
       update-pr:
@@ -430,7 +430,7 @@ service:
       url: karakeep-app/karakeep
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/karakeep
+      url: http://monitor-service-hub:8081/version/karakeep
       json: version
     webhook:
       update-pr:
@@ -454,7 +454,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/meilisearch
+      url: http://monitor-service-hub:8081/version/meilisearch
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -478,7 +478,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/mealie
+      url: http://monitor-service-hub:8081/version/mealie
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -500,7 +500,7 @@ service:
       url: miniflux/v2
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/miniflux
+      url: http://monitor-service-hub:8081/version/miniflux
       json: version
     webhook:
       update-pr:
@@ -521,7 +521,7 @@ service:
       url: Freika/dawarich
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/dawarich-app
+      url: http://monitor-service-hub:8081/version/dawarich-app
       json: version
     webhook:
       update-pr:
@@ -545,7 +545,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/lumo-tamer
+      url: http://monitor-service-hub:8081/version/lumo-tamer
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -577,7 +577,7 @@ service:
       #     image: ggml-org/llama.cpp
       #     tag: server-vulkan-b{{ version }}
     deployed_version:
-      url: http://service-hub:8081/version/llamacpp
+      url: http://monitor-service-hub:8081/version/llamacpp
       json: version
       regex: ^server-vulkan-b([0-9.]+)
       url_commands:
@@ -605,7 +605,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/localai
+      url: http://monitor-service-hub:8081/version/localai
       json: version
       regex: ^v([0-9.]+)-gpu-intel$
     webhook:
@@ -630,7 +630,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/open-webui
+      url: http://monitor-service-hub:8081/version/open-webui
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -655,7 +655,7 @@ service:
           regex: release-([0-9.]+)-tag$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/termix
+      url: http://monitor-service-hub:8081/version/termix
       json: version
       regex: ^release-([0-9.]+)$
     webhook:
@@ -680,7 +680,7 @@ service:
           regex: ^([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/termix-guacd
+      url: http://monitor-service-hub:8081/version/termix-guacd
       json: version
       regex: ^([0-9.]+)$
     webhook:
@@ -701,7 +701,7 @@ service:
       url: transmission/transmission
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/transmission
+      url: http://monitor-service-hub:8081/version/transmission
       json: version
     webhook:
       update-pr:
@@ -725,7 +725,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/calibre-web-automated
+      url: http://monitor-service-hub:8081/version/calibre-web-automated
       json: version
       regex: ^v?([0-9.]+)$
     webhook:
@@ -750,7 +750,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/paperless-ngx
+      url: http://monitor-service-hub:8081/version/paperless-ngx
       json: version
       regex: ^v?([0-9.]+)$
     webhook:
@@ -772,7 +772,7 @@ service:
       url: clusterzx/paperless-ai
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/paperless-ai
+      url: http://monitor-service-hub:8081/version/paperless-ai
       json: version
       regex: ^v?([0-9.]+)$
     webhook:
@@ -797,7 +797,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/paperless-gpt
+      url: http://monitor-service-hub:8081/version/paperless-gpt
       json: version
       regex: ^v([0-9.]+)$
     webhook:
@@ -822,7 +822,7 @@ service:
           regex: v([0-9.]+)$
       access_token: ${GITHUB_ACCESS_TOKEN}
     deployed_version:
-      url: http://service-hub:8081/version/paperless-gotenberg
+      url: http://monitor-service-hub:8081/version/paperless-gotenberg
       json: version
       regex: ^v?([0-9.]+)$
     webhook:
