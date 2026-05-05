@@ -101,7 +101,7 @@ unsymlink-quadlets:
     end
     echo "✅ Repo symlinks removed."
 
-# install quadlet files from all service directories into systemd directory using podman quadlet install
+# copy quadlet files to systemd directory, decrypting encrypted configs first
 install-quadlets:
     #!/usr/bin/env fish
     set repo_quadlets (readlink -f ./quadlets)
@@ -118,17 +118,41 @@ install-quadlets:
         end
     end
 
-    # 2. install all current services via podman quadlet install
+    # 2. copy all quadlet files/dirs into systemd dir
     for dir in ./quadlets/*/
-        set service (basename $dir)
-        echo "📋 Installing $service quadlets..."
-        podman quadlet install --replace --reload-systemd=false $dir
+        for item in "$dir"*
+            set basename (basename $item)
+            set dest "{{ systemd-container-dir }}/$basename"
+            if test -d $item
+                cp -r $item $dest
+            else
+                cp $item $dest
+            end
+        end
     end
 
-    # 3. reload systemd once after all quadlets are installed
+    # 3. remove stale files in systemd dir not present in any quadlet dir
+    for item in {{ systemd-container-dir }}/*
+        set basename (basename $item)
+        set found 0
+        for dir in ./quadlets/*/
+            if test -e "$dir$basename"
+                set found 1
+                break
+            end
+        end
+        if test $found -eq 0
+            echo "🗑️  Removing stale file: $basename"
+            rm -rf $item
+        end
+    end
+
+    # 4. reload systemd
+    echo "🔄 Reloading systemd user daemon..."
     systemctl --user daemon-reload
 
     echo "✅ All quadlets installed to {{ systemd-container-dir }}"
+
 
 # create symlinks for timers in the systemd directory
 symlink-timers:
