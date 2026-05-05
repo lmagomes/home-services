@@ -5,32 +5,32 @@ base_branch: main
 services:
   backup/proton-drive-sync:
     containers:
-      - file: quadlets/backup/proton-drive-sync.container
+      - file: quadlets/backup/backup-proton-drive-sync.container
         tag_template: "v{{.Version}}"
 
   monitor/argus:
     containers:
-      - file: quadlets/monitor/argus.container
+      - file: quadlets/monitor/monitor-argus.container
         tag_template: "{{.Version}}"
 
   monitor/dozzle:
     containers:
-      - file: quadlets/monitor/dozzle.container
+      - file: quadlets/monitor/monitor-dozzle.container
         tag_template: "v{{.Version}}"
 
   monitor/uptime-kuma:
     containers:
-      - file: quadlets/monitor/uptime-kuma.container
+      - file: quadlets/monitor/monitor-uptime-kuma.container
         tag_template: "{{.Version}}"
 
   tools/it-tools:
     containers:
-      - file: quadlets/tools/it-tools.container
+      - file: quadlets/tools/tools-it-tools.container
         tag_template: "{{.Version}}"
 
   tools/bentopdf:
     containers:
-      - file: quadlets/tools/bentopdf.container
+      - file: quadlets/tools/tools-bentopdf.container
         tag_template: "{{.Version}}"
 
   services/audiobookshelf:
@@ -79,12 +79,12 @@ services:
 
   notes/jotty:
     containers:
-      - file: quadlets/notes/jotty.container
+      - file: quadlets/notes/notes-jotty.container
         tag_template: "{{.Version}}"
 
   notes/drawio:
     containers:
-      - file: quadlets/notes/drawio.container
+      - file: quadlets/notes/notes-drawio.container
         tag_template: "{{.Version}}"
 
   services/karakeep:
@@ -94,7 +94,7 @@ services:
 
   karakeep/meilisearch:
     containers:
-      - file: quadlets/karakeep/meilisearch.container
+      - file: quadlets/karakeep/karakeep-meilisearch.container
         tag_template: "v{{.Version}}"
 
   services/mealie:
@@ -121,22 +121,22 @@ services:
 
   llm/lumo-tamer:
     containers:
-      - file: quadlets/llm/lumo-tamer.container
+      - file: quadlets/llm/llm-lumo-tamer.container
         tag_template: "v{{.Version}}"
 
   llm/llamacpp:
     containers:
-      - file: quadlets/llm/llamacpp.container
+      - file: quadlets/llm/llm-llamacpp.container
         tag_template: "server-vulkan-b{{.Version}}"
 
   llm/localai:
     containers:
-      - file: quadlets/llm/localai.container
+      - file: quadlets/llm/llm-localai.container
         tag_template: "v{{.Version}}-gpu-intel"
 
   llm/open-webui:
     containers:
-      - file: quadlets/llm/open-webui.container
+      - file: quadlets/llm/llm-open-webui.container
         tag_template: "v{{.Version}}"
 
   services/termix:
