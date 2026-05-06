@@ -164,6 +164,39 @@ build-and-push image dir version-strategy:
 
     echo "✅ Pushed $remote_image"
 
+# detect changed build directories since previous commit and build+push them (for CI)
+build-and-push-changed:
+    #!/usr/bin/env fish
+    set changed_dirs (git diff --name-only HEAD~1 HEAD -- builds/ | cut -d'/' -f2 | sort -u)
+
+    if test (count $changed_dirs) -eq 0
+        echo "No build directories changed."
+        exit 0
+    end
+
+    echo "Changed build directories: $changed_dirs"
+
+    for dir in $changed_dirs
+        switch $dir
+            case caddy
+                just build-and-push caddy-cloudflare-l4 builds/caddy last
+            case transmission
+                just build-and-push transmission-flood builds/transmission first
+            case service-hub
+                just build-and-push service-hub builds/service-hub first
+            case jsonlint
+                echo "⏭️  Skipping jsonlint (needs secrets — build manually with build-jsonlint)"
+            case json-path-finder
+                just build-and-push json-path-finder builds/json-path-finder last
+            case forgejo-runner-job
+                just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
+            case dev
+                just build-and-push dev builds/dev first
+            case '*'
+                echo "⏭️  No build-and-push configured for builds/$dir"
+        end
+    end
+
 # build and push all images to the forgejo container registry
 build-and-push-all:
     just build-and-push caddy-cloudflare-l4 builds/caddy last
