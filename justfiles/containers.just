@@ -121,9 +121,9 @@ build-and-push image dir version-strategy:
     #!/usr/bin/env fish
     set -l image_version
     if test "{{ version-strategy }}" = "first"
-        set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' {{ dir }}/Containerfile | head -1)
+        set image_version (sed -n 's/^FROM .*:\([^ ]*\).*/\1/p' {{ dir }}/Containerfile | head -1)
     else if test "{{ version-strategy }}" = "last"
-        set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' {{ dir }}/Containerfile | tail -1)
+        set image_version (sed -n 's/^FROM .*:\([^ ]*\).*/\1/p' {{ dir }}/Containerfile | tail -1)
     else
         set image_version "{{ version-strategy }}"
     end
