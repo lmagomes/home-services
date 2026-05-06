@@ -5,7 +5,7 @@ After=network.target
 [Container]
 Pod=dev.pod
 ContainerName=dev
-Image=home-services/dev:44-r1
+Image=home-services/dev:44-r2
 Secret=dev-opencode-server-password,type=env,target=OPENCODE_SERVER_PASSWORD
 Secret=dev-ssh-pubkey,type=env,target=DEV_SSH_PUBKEY
 Secret=dev-ssh-private-key,type=env,target=DEV_SSH_PRIVATE_KEY

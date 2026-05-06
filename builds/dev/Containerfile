@@ -1,5 +1,8 @@
 FROM fedora:44
 
+ENV EDITOR=hx \
+    VISUAL=hx
+
 RUN dnf install -y \
     fish \
     just \
@@ -10,6 +13,7 @@ RUN dnf install -y \
     curl \
     wget \
     vim \
+    helix \
     tmux \
     htop \
     man-db \
