@@ -1,6 +1,6 @@
 ---
-name: issues
-description: Work with issues from this repository using the fj CLI — list open issues, view details, implement fixes, and create PRs
+name: forgejo-issue
+description: Work with Forgejo issues from this repository using the fj CLI — list open issues, view details, implement fixes, and create PRs
 ---
 
 ## Overview
@@ -57,9 +57,11 @@ Read the body thoroughly to understand what needs to be done. Check the comments
    ```
    git push -u origin feature/issue-<id>-<short-description>
    ```
-8. Create a pull request. Use `--autofill` when there is a single commit, or provide `--title` and `--body` explicitly:
+8. Create a pull request. Include `Closes #<id>` in the PR body so the issue is automatically closed when the PR is merged. Use `--autofill` when there is a single commit, or provide `--title` and `--body` explicitly:
    ```
-   fj pr create -R origin --head feature/issue-<id>-<short-description> --base main --title "..." --body "..."
+   fj pr create -R origin --head feature/issue-<id>-<short-description> --base main --title "..." --body "Closes #<id>
+
+   <description of changes>"
    ```
 9. If the changes introduced new secrets, add a comment on the PR listing exactly what secrets the user needs to add to `.secrets/secrets.yaml`:
    ```
