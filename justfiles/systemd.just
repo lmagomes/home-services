@@ -322,3 +322,101 @@ update-podman-images:
             systemctl --user restart $service_name
         end
     end
+
+# record a removed quadlet service in the removed-quadlets.md journal (run after committing the removal)
+record-removed-quadlet service *notes:
+    #!/usr/bin/env fish
+    set service_dir "quadlets/{{ service }}"
+
+    if test -d $service_dir
+        echo "❗ Warning: $service_dir still exists on disk. Did you forget to delete the files?"
+        set last_commit (git rev-parse --short HEAD)
+    else if git ls-tree -r HEAD --name-only quadlets/ | grep -q "^$service_dir/"
+        echo "Files deleted but not yet committed — using HEAD as last commit."
+        set last_commit (git rev-parse --short HEAD)
+    else
+        set last_commit (git rev-parse --short HEAD~1 2>/dev/null)
+        if test -z "$last_commit"
+            echo "❌ HEAD has no parent (first commit). Cannot determine last commit."
+            exit 1
+        end
+
+        # safety check: verify the parent commit actually contains the service
+        if not git ls-tree -r "$last_commit" --name-only quadlets/ | grep -q "^$service_dir/"
+            echo "❗ Service {{ service }} not found in commit $last_commit either. Nothing to record."
+            exit 1
+        end
+    end
+
+    set date (date +%Y-%m-%d)
+    set notes_str ""
+    set raw_notes "{{ notes }}"
+    if test "$raw_notes" != ""
+        set notes_str "$raw_notes"
+    end
+
+    echo "| {{ service }} | $date | $last_commit | $notes_str |" >> removed-quadlets.md
+
+    # sort table by date (oldest first)
+    set sep_line (grep -n '^|---' removed-quadlets.md | head -1 | string split -f1 ':')
+    set data_start (math $sep_line + 1)
+    head -n $sep_line removed-quadlets.md > /tmp/removed-quadlets-tmp.md
+    tail -n +$data_start removed-quadlets.md | sort -t'|' -k2,2 >> /tmp/removed-quadlets-tmp.md
+    mv /tmp/removed-quadlets-tmp.md removed-quadlets.md
+
+    echo "✅ Recorded removal of {{ service }} (last commit: $last_commit) in removed-quadlets.md"
+
+# backfill the removed-quadlets.md journal from git history for past service removals
+backfill-removed-quadlets:
+    #!/usr/bin/env fish
+    if not test -f removed-quadlets.md
+        echo "❌ removed-quadlets.md not found. Create it first."
+        exit 1
+    end
+
+    set found 0
+    set commits (git log --diff-filter=D --format="%H" -- 'quadlets/*.pod')
+    for commit in $commits
+        set deleted_pods (git diff-tree --no-commit-id --diff-filter=D --name-only -r $commit -- 'quadlets/*.pod')
+        for pod_file in $deleted_pods
+            set service (basename -s .pod $pod_file)
+
+            # skip if already in journal
+            if grep -qF "| $service |" removed-quadlets.md
+                echo "⏭️  $service already in journal, skipping."
+                continue
+            end
+
+            # check if a .pod for this service still exists in the current tree (full-removal check)
+            if test -f "quadlets/$service/$service.pod"
+                echo "⏭️  $service.pod still exists in quadlets/$service/, skipping (not a full-service removal)."
+                continue
+            end
+
+            # get parent commit
+            set parent (git rev-parse --short $commit~1 2>/dev/null)
+            if test -z "$parent"
+                echo "❗ $commit is a root commit (no parent), skipping $service."
+                continue
+            end
+
+            set date (git log -1 --format="%as" $commit)
+            echo "| $service | $date | $parent | |" >> removed-quadlets.md
+            echo "✅ Recorded $service (removed $date, last commit: $parent)"
+            set found (math $found + 1)
+        end
+    end
+
+    if test $found -eq 0
+        echo "No past removals to backfill."
+    else
+        # sort table by date (oldest first)
+        set sep_line (grep -n '^|---' removed-quadlets.md | head -1 | string split -f1 ':')
+        set data_start (math $sep_line + 1)
+        head -n $sep_line removed-quadlets.md > /tmp/removed-quadlets-tmp.md
+        tail -n +$data_start removed-quadlets.md | sort -t'|' -k2,2 >> /tmp/removed-quadlets-tmp.md
+        mv /tmp/removed-quadlets-tmp.md removed-quadlets.md
+
+        echo ""
+        echo "🔄 Backfill complete. Review removed-quadlets.md and commit manually."
+    end
