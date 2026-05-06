@@ -6,3 +6,6 @@ After=network-online.target
 PodName=youtube.pod
 Network=services.network
 PublishPort=3333:3000
+
+[Install]
+WantedBy=default.target

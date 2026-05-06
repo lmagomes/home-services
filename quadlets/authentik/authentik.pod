@@ -5,3 +5,6 @@ After=network-online.target
 [Pod]
 PodName=authentik.pod
 Network=services.network
+
+[Install]
+WantedBy=default.target

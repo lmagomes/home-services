@@ -6,3 +6,6 @@ After=network-online.target
 PodName=tools.pod
 Network=services.network
 PublishPort=3030:3030
+
+[Install]
+WantedBy=default.target

@@ -6,3 +6,6 @@ After=network-online.target
 PodName=notes.pod
 UserNS=keep-id:uid=1000,gid=1000
 Network=services.network
+
+[Install]
+WantedBy=default.target

@@ -5,3 +5,6 @@ After=network-online.target
 [Pod]
 PodName=firefly-data-importer.pod
 Network=services.network
+
+[Install]
+WantedBy=default.target

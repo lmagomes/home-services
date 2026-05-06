@@ -6,8 +6,8 @@ After=network.target
 ContainerName=caddy
 Pod=caddy.pod
 Image=home-services/caddy-cloudflare-l4:2.11.2-alpine
-PodmanArgs=--secret cloudflare-token,type=env,target=CF_API_TOKEN
-PodmanArgs=--secret domain-secret,type=env,target=DOMAIN
+Secret=cloudflare-token,type=env,target=CF_API_TOKEN
+Secret=domain-secret,type=env,target=DOMAIN
 Volume=caddy-data.volume:/data:Z
 Volume=caddy-config.volume:/config:Z
 Volume=./%N-Caddyfile:/etc/caddy/Caddyfile:ro,Z

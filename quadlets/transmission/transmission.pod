@@ -7,3 +7,6 @@ PodName=transmission.pod
 PublishPort=51413:51413
 PublishPort=51413:51413/udp
 Network=services.network
+
+[Install]
+WantedBy=default.target

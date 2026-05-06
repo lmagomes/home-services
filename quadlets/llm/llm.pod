@@ -7,3 +7,6 @@ PodName=llm.pod
 # port for the browser, temporarly used for logging in to lumo
 # PublishPort=8888:3001
 Network=services.network
+
+[Install]
+WantedBy=default.target
