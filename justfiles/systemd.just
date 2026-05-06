@@ -326,23 +326,28 @@ update-podman-images:
 # record a removed quadlet service in the removed-quadlets.md journal (run after committing the removal)
 record-removed-quadlet service *notes:
     #!/usr/bin/env fish
-    set service_dir "quadlets/{{ service }}"
+    set repo_root (git rev-parse --show-toplevel 2>/dev/null)
+    if test -z "$repo_root"
+        echo "❌ Not in a git repository."
+        exit 1
+    end
+
+    set service_dir "$repo_root/quadlets/{{ service }}"
 
     if test -d $service_dir
         echo "❗ Warning: $service_dir still exists on disk. Did you forget to delete the files?"
-        set last_commit (git rev-parse --short HEAD)
-    else if git ls-tree -r HEAD --name-only quadlets/ | grep -q "^$service_dir/"
+        set last_commit (git -C $repo_root rev-parse --short HEAD)
+    else if git -C $repo_root ls-tree -r HEAD --name-only quadlets/ | grep -q "^quadlets/{{ service }}/"
         echo "Files deleted but not yet committed — using HEAD as last commit."
-        set last_commit (git rev-parse --short HEAD)
+        set last_commit (git -C $repo_root rev-parse --short HEAD)
     else
-        set last_commit (git rev-parse --short HEAD~1 2>/dev/null)
+        set last_commit (git -C $repo_root rev-parse --short HEAD~1 2>/dev/null)
         if test -z "$last_commit"
-            echo "❌ HEAD has no parent (first commit). Cannot determine last commit."
-            exit 1
+            echo "HEAD has no parent — using HEAD itself (deletion commit still shows files in tree)."
+            set last_commit (git -C $repo_root rev-parse --short HEAD)
         end
 
-        # safety check: verify the parent commit actually contains the service
-        if not git ls-tree -r "$last_commit" --name-only quadlets/ | grep -q "^$service_dir/"
+        if not git -C $repo_root ls-tree -r "$last_commit" --name-only quadlets/ | grep -q "^quadlets/{{ service }}/"
             echo "❗ Service {{ service }} not found in commit $last_commit either. Nothing to record."
             exit 1
         end
@@ -359,9 +364,13 @@ record-removed-quadlet service *notes:
 
     # sort table by date (oldest first)
     set sep_line (grep -n '^|---' removed-quadlets.md | head -1 | string split -f1 ':')
+    if test -z "$sep_line"
+        echo "❌ Could not find separator line in removed-quadlets.md. Table may be malformed."
+        exit 1
+    end
     set data_start (math $sep_line + 1)
     head -n $sep_line removed-quadlets.md > /tmp/removed-quadlets-tmp.md
-    tail -n +$data_start removed-quadlets.md | sort -t'|' -k2,2 >> /tmp/removed-quadlets-tmp.md
+    tail -n +$data_start removed-quadlets.md | sort -t'|' -k3,3 >> /tmp/removed-quadlets-tmp.md
     mv /tmp/removed-quadlets-tmp.md removed-quadlets.md
 
     echo "✅ Recorded removal of {{ service }} (last commit: $last_commit) in removed-quadlets.md"
@@ -414,7 +423,7 @@ backfill-removed-quadlets:
         set sep_line (grep -n '^|---' removed-quadlets.md | head -1 | string split -f1 ':')
         set data_start (math $sep_line + 1)
         head -n $sep_line removed-quadlets.md > /tmp/removed-quadlets-tmp.md
-        tail -n +$data_start removed-quadlets.md | sort -t'|' -k2,2 >> /tmp/removed-quadlets-tmp.md
+        tail -n +$data_start removed-quadlets.md | sort -t'|' -k3,3 >> /tmp/removed-quadlets-tmp.md
         mv /tmp/removed-quadlets-tmp.md removed-quadlets.md
 
         echo ""
