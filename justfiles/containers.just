@@ -12,13 +12,17 @@ build-all:
 build-service-hub:
     #!/usr/bin/env fish
     set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/service-hub/Containerfile | head -1)
+    set build_version (cat builds/service-hub/build-version | string trim)
+    set image_version "$image_version-r$build_version"
     podman build -t localhost/service-hub:$image_version builds/service-hub/
+    podman tag localhost/service-hub:$image_version localhost/service-hub:latest
 
 # create a container image for transmission
 build-transmission:
     #!/usr/bin/env fish
     set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/transmission/Containerfile)
     podman build -t transmission-flood:$image_version builds/transmission/
+    podman tag transmission-flood:$image_version transmission-flood:latest
 
 # create a container image for caddy with cloudflare and l4 plugins
 build-caddy:
@@ -26,6 +30,7 @@ build-caddy:
     set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/caddy/Containerfile | tail -1)
     echo $image_version
     podman build -t caddy-cloudflare-l4:$image_version builds/caddy/
+    podman tag caddy-cloudflare-l4:$image_version caddy-cloudflare-l4:latest
 
 # create a container image for lumo-tamer and the companion browser image
 build-lumo-tamer:
@@ -90,7 +95,10 @@ build-proton-drive-sync:
 build-dev:
     #!/usr/bin/env fish
     set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/dev/Containerfile)
+    set build_version (cat builds/dev/build-version | string trim)
+    set image_version "$image_version-r$build_version"
     podman build -t localhost/dev:$image_version builds/dev/
+    podman tag localhost/dev:$image_version localhost/dev:latest
 
 # create a container image for jsonlint
 build-jsonlint:
@@ -99,6 +107,7 @@ build-jsonlint:
     set base_url (sops decrypt .secrets/secrets.yaml | yq '.secrets.jsonlint-app-url')
     echo "Building jsonlint with NEXT_PUBLIC_BASE_URL=$base_url..."
     podman build --build-arg NEXT_PUBLIC_BASE_URL=$base_url -t localhost/jsonlint:$image_version builds/jsonlint/
+    podman tag localhost/jsonlint:$image_version localhost/jsonlint:latest
     echo "Done! Built localhost/jsonlint:$image_version"
 
 # create a container image for json-path-finder
@@ -107,13 +116,18 @@ build-json-path-finder:
     set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/json-path-finder/Containerfile | tail -1)
     echo "Building json-path-finder..."
     podman build -t localhost/json-path-finder:$image_version builds/json-path-finder/
+    podman tag localhost/json-path-finder:$image_version localhost/json-path-finder:latest
     echo "Done! Built localhost/json-path-finder:$image_version"
 
 # create a container image for the forgejo runner job execution environment
 build-forgejo-runner-job:
-    echo "Building forgejo-runner-job..."
-    podman build -t localhost/forgejo-runner-job:latest builds/forgejo-runner-job/
-    echo "Done! Built localhost/forgejo-runner-job:latest"
+    #!/usr/bin/env fish
+    set image_version "44"
+    set build_version (cat builds/forgejo-runner-job/build-version | string trim)
+    set image_version "$image_version-r$build_version"
+    podman build -t localhost/forgejo-runner-job:$image_version builds/forgejo-runner-job/
+    podman tag localhost/forgejo-runner-job:$image_version localhost/forgejo-runner-job:latest
+    echo "Done! Built localhost/forgejo-runner-job:$image_version"
 
 # build and push a container image to the forgejo container registry.
 # version-strategy: "first" (first FROM line), "last" (last FROM line), or literal version string.
@@ -128,17 +142,25 @@ build-and-push image dir version-strategy:
         set image_version "{{ version-strategy }}"
     end
 
+    if test -f {{ dir }}/build-version
+        set build_version (cat {{ dir }}/build-version | string trim)
+        set image_version "$image_version-r$build_version"
+    end
+
     set registry_path (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-path')
     set remote_image "$registry_path/{{ image }}:$image_version"
 
     echo "🔄 Building {{ image }}:$image_version..."
     podman build -t localhost/{{ image }}:$image_version {{ dir }}
+    podman tag localhost/{{ image }}:$image_version localhost/{{ image }}:latest
 
     echo "🔖 Tagging $remote_image..."
     podman tag localhost/{{ image }}:$image_version $remote_image
+    podman tag localhost/{{ image }}:$image_version "$registry_path/{{ image }}:latest"
 
     echo "📤 Pushing $remote_image..."
     podman push $remote_image
+    podman push "$registry_path/{{ image }}:latest"
 
     echo "✅ Pushed $remote_image"
 
