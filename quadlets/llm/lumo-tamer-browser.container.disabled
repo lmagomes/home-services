@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=lumo-tamer-browser
 Pod=llm.pod
-Image=localhost/lumo-tamer-chromium:latest
+Image=home-services/lumo-tamer-chromium:latest
 Volume=lumo-tamer-browser-data.volume:/config:Z
 EnvironmentFile=./%n.d/env
 ShmSize=2g

@@ -1,0 +1,55 @@
+name: Build and Push Container Images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'builds/**'
+
+jobs:
+  build-and-push:
+    runs-on: host
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Login to Forgejo Container Registry
+        run: just registry-login-ci
+        env:
+          REGISTRY_USER: ${{ secrets.REGISTRY_USER }}
+          REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+
+      - name: Build and push changed images
+        run: |
+          #!/usr/bin/env fish
+          set changed_dirs (git diff --name-only HEAD~1 HEAD -- builds/ | cut -d'/' -f2 | sort -u)
+
+          if test (count $changed_dirs) -eq 0
+            echo "No build directories changed."
+            exit 0
+          end
+
+          echo "Changed build directories: $changed_dirs"
+
+          for dir in $changed_dirs
+            switch $dir
+              case caddy
+                just build-and-push caddy-cloudflare-l4 builds/caddy last
+              case transmission
+                just build-and-push transmission-flood builds/transmission first
+              case service-hub
+                just build-and-push service-hub builds/service-hub first
+              case jsonlint
+                echo "⏭️  Skipping jsonlint (needs secrets — build manually with build-jsonlint)"
+              case json-path-finder
+                just build-and-push json-path-finder builds/json-path-finder last
+              case forgejo-runner-job
+                just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
+              case dev
+                just build-and-push dev builds/dev first
+              case '*'
+                echo "⏭️  No build-and-push configured for builds/$dir"
+            end
+          end

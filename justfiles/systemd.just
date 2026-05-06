@@ -106,10 +106,13 @@ install-quadlets:
     #!/usr/bin/env fish
     set repo_quadlets (readlink -f ./quadlets)
 
-    # 0. decrypt any encrypted config files
+    # 0. generate registries.conf from secrets
+    just generate-registries-conf
+
+    # 1. decrypt any encrypted config files
     just decrypt-quadlet-configs
 
-    # 1. remove old symlinks (if any, from previous symlink approach)
+    # 2. remove old symlinks (if any, from previous symlink approach)
     find {{ systemd-container-dir }} -type l | while read -l symlink
         set target (readlink -f $symlink)
         if string match -q "$repo_quadlets/*" $target
@@ -118,7 +121,7 @@ install-quadlets:
         end
     end
 
-    # 2. copy all quadlet files/dirs into systemd dir
+    # 3. copy all quadlet files/dirs into systemd dir
     for dir in ./quadlets/*/
         for item in "$dir"*
             set basename (basename $item)
@@ -131,7 +134,7 @@ install-quadlets:
         end
     end
 
-    # 3. remove stale files in systemd dir not present in any quadlet dir
+    # 4. remove stale files in systemd dir not present in any quadlet dir
     for item in {{ systemd-container-dir }}/*
         set basename (basename $item)
         set found 0
@@ -147,12 +150,29 @@ install-quadlets:
         end
     end
 
-    # 4. reload systemd
+    # 5. reload systemd
     echo "🔄 Reloading systemd user daemon..."
     systemctl --user daemon-reload
 
     echo "✅ All quadlets installed to {{ systemd-container-dir }}"
 
+
+# generate the podman registries alias config from SOPS secrets
+generate-registries-conf:
+    #!/usr/bin/env fish
+    set registry_path (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-path')
+    if test -z "$registry_path" -o "$registry_path" = "null"
+        echo "❌ registry-path not set in .secrets/secrets.yaml"
+        exit 1
+    end
+
+    set dest_dir "$HOME/.config/containers/registries.conf.d"
+    mkdir -p $dest_dir
+
+    set dest_file "$dest_dir/50-home-services-registries.conf"
+    printf '[aliases]\n"home-services" = "%s"\n' "$registry_path" > $dest_file
+
+    echo "✅ Generated $dest_file"
 
 # create symlinks for timers in the systemd directory
 symlink-timers:

@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=tools-json-path-finder
 Pod=tools.pod
-Image=localhost/json-path-finder:alpine
+Image=home-services/json-path-finder:alpine
 
 [Service]
 Restart=on-failure

@@ -114,3 +114,46 @@ build-forgejo-runner-job:
     echo "Building forgejo-runner-job..."
     podman build -t localhost/forgejo-runner-job:latest builds/forgejo-runner-job/
     echo "Done! Built localhost/forgejo-runner-job:latest"
+
+# build and push a container image to the forgejo container registry.
+# version-strategy: "first" (first FROM line), "last" (last FROM line), or literal version string.
+build-and-push image dir version-strategy:
+    #!/usr/bin/env fish
+    if test "{{ version-strategy }}" = "first"
+        set version (sed -n 's/^FROM .*:\(.*\)$/\1/p' {{ dir }}/Containerfile | head -1)
+    else if test "{{ version-strategy }}" = "last"
+        set version (sed -n 's/^FROM .*:\(.*\)$/\1/p' {{ dir }}/Containerfile | tail -1)
+    else
+        set version "{{ version-strategy }}"
+    end
+
+    set registry_path (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-path')
+    set remote_image "$registry_path/{{ image }}:$version"
+
+    echo "🔄 Building {{ image }}:$version..."
+    podman build -t localhost/{{ image }}:$version {{ dir }}
+
+    echo "🔖 Tagging $remote_image..."
+    podman tag localhost/{{ image }}:$version $remote_image
+
+    echo "📤 Pushing $remote_image..."
+    podman push $remote_image
+
+    echo "✅ Pushed $remote_image"
+
+# build and push all images to the forgejo container registry
+build-and-push-all:
+    just build-and-push caddy-cloudflare-l4 builds/caddy last
+    just build-and-push transmission-flood builds/transmission first
+    just build-and-push service-hub builds/service-hub first
+    just build-and-push json-path-finder builds/json-path-finder last
+    just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
+    just build-and-push dev builds/dev first
+    echo "❗ Skipped jsonlint — needs secrets, use build-jsonlint + manual push"
+
+# log in to the forgejo container registry (for CI, uses Actions secrets as env vars)
+registry-login-ci:
+    #!/usr/bin/env fish
+    set registry_domain (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-domain')
+    echo "$REGISTRY_TOKEN" | podman login $registry_domain -u "$REGISTRY_USER" --password-stdin
+    echo "✅ Logged in to $registry_domain container registry"

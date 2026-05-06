@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=backup-proton-drive-sync
 Pod=backup.pod
-Image=localhost/proton-drive-sync:v0.2.4
+Image=home-services/proton-drive-sync:v0.2.4
 EnvironmentFile=./%N.env
 
 # Overrides for debugging: keep the container alive

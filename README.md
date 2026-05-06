@@ -63,7 +63,7 @@ This decrypts the SOPS-encrypted secrets file and creates Podman secrets.
 
 ### 3. Create images
 
-Run the just recipe, to create all the necessary custom images for the containers:
+Run the just recipe to create all the necessary custom images for the containers:
 
 ```bash
 just build-all
@@ -73,6 +73,18 @@ This will create a few custom containers:
 - caddy with cloudflare (used for let's encrypt certificates), l4 (layer 4 to redirect ssh through port 443)
 - transmission with the flood Web UI
 - lumo tamer. Note that it will clone the lumo tamer repository into a temporary folder, in order to build the necessary images.
+
+### 4. Container registry alias
+
+Custom container images are stored in the **Forgejo container registry** and referenced in quadlet files using the short alias `home-services/` (e.g., `Image=home-services/caddy-cloudflare-l4:2.11.2-alpine`).
+
+The alias mapping is generated at deploy time by `just install-quadlets` from the `registry-path` secret in `.secrets/secrets.yaml`. It writes a Podman `registries.conf.d` drop-in that maps `home-services/` to the full registry namespace. No domain appears in any file in the repository — only in the encrypted secrets file.
+
+To push images to the registry:
+```bash
+just registry-login            # log in to the Forgejo container registry
+just build-and-push-all        # build and push all images
+```
 
 ### podman socket
 

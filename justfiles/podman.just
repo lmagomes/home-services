@@ -118,3 +118,16 @@ decrypt-quadlet-configs:
         sops decrypt --input-type yaml --output-type yaml $encrypted > $decrypted
     end
     echo "✅ Quadlet configs decrypted"
+
+# log in to the forgejo container registry
+registry-login:
+    #!/usr/bin/env fish
+    set user (sops decrypt .secrets/secrets.yaml | yq '.secrets.forgejo-registry-user')
+    set token (sops decrypt .secrets/secrets.yaml | yq '.secrets.forgejo-registry-token')
+    if test -z "$user" -o -z "$token" -o "$user" = "null" -o "$token" = "null"
+        echo "❌ forgejo-registry-user and forgejo-registry-token must be set in .secrets/secrets.yaml"
+        exit 1
+    end
+    set registry_domain (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-domain')
+    echo "$token" | podman login $registry_domain -u "$user" --password-stdin
+    echo "✅ Logged in to $registry_domain container registry"
