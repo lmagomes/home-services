@@ -1,6 +1,6 @@
 # AGENTS.md — Code Style & Conventions
 
-This repository manages self-hosted services using **Podman Quadlets**, **systemd**, and **just** (command runner). All containers run rootless under a single user. Follow the conventions below when making changes.
+This repository manages self-hosted services using **Podman Quadlets**, **systemd**, and **just** (command runner). All containers run rootless under a single user. Issue tracking and PRs are on **Forgejo** (not GitHub) — use the `fj` CLI, not `gh`. Follow the conventions below when making changes.
 
 ## Project Layout
 
@@ -97,6 +97,12 @@ sops encrypt <file>.yml > <file>.encrypted.yml     # re-encrypt after edits
 rm <file>.yml                                      # clean up decrypted copy
 ```
 
+## Domain Names
+
+- Never include the real domain name in any tracked file.
+- When a domain reference is needed in documentation, skills, or examples, use a placeholder like `example.com` or `your-domain.com`.
+- If a task requires referencing the real domain and a placeholder cannot work (e.g., an encrypted config file), inform the user rather than writing the real domain.
+
 ## Justfiles
 
 - The root `justfile` only contains imports and sets the shell to fish.
@@ -153,3 +159,9 @@ Detailed conventions and workflow are in the `migrations` agent skill — load i
 ## Adding a New Service
 
 Detailed checklist, templates, and common pitfalls are in the `add-service` agent skill — load it with `/skill add-service` or by asking about adding a new service.
+
+## Working on Issues
+
+Issues and pull requests are tracked on **Forgejo** (not GitHub). Use the `fj` CLI for all issue and PR operations — never use GitHub CLI (`gh`).
+
+Detailed workflow (listing, viewing, branching, committing, pushing, PR creation) is in the `issues` agent skill — load it with `/skill issues` or by asking about issues or working on an issue.
