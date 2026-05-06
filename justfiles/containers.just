@@ -119,22 +119,23 @@ build-forgejo-runner-job:
 # version-strategy: "first" (first FROM line), "last" (last FROM line), or literal version string.
 build-and-push image dir version-strategy:
     #!/usr/bin/env fish
+    set -l image_version
     if test "{{ version-strategy }}" = "first"
-        set version (sed -n 's/^FROM .*:\(.*\)$/\1/p' {{ dir }}/Containerfile | head -1)
+        set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' {{ dir }}/Containerfile | head -1)
     else if test "{{ version-strategy }}" = "last"
-        set version (sed -n 's/^FROM .*:\(.*\)$/\1/p' {{ dir }}/Containerfile | tail -1)
+        set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' {{ dir }}/Containerfile | tail -1)
     else
-        set version "{{ version-strategy }}"
+        set image_version "{{ version-strategy }}"
     end
 
     set registry_path (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-path')
-    set remote_image "$registry_path/{{ image }}:$version"
+    set remote_image "$registry_path/{{ image }}:$image_version"
 
-    echo "🔄 Building {{ image }}:$version..."
-    podman build -t localhost/{{ image }}:$version {{ dir }}
+    echo "🔄 Building {{ image }}:$image_version..."
+    podman build -t localhost/{{ image }}:$image_version {{ dir }}
 
     echo "🔖 Tagging $remote_image..."
-    podman tag localhost/{{ image }}:$version $remote_image
+    podman tag localhost/{{ image }}:$image_version $remote_image
 
     echo "📤 Pushing $remote_image..."
     podman push $remote_image
