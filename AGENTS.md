@@ -165,3 +165,5 @@ Detailed checklist, templates, and common pitfalls are in the `add-service` agen
 Issues and pull requests are tracked on **Forgejo** (not GitHub). Use the `fj` CLI for all issue and PR operations — never use GitHub CLI (`gh`).
 
 Detailed workflow (listing, viewing, branching, committing, pushing, PR creation) is in the `issues` agent skill — load it with `/skill issues` or by asking about issues or working on an issue.
+
+To expand a request into a new issue, use the `create-issue` skill — load it with `/skill create-issue` or by asking to create an issue.
