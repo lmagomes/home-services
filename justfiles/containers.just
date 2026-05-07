@@ -34,7 +34,7 @@ build-caddy:
 # create a container image for lumo-tamer and the companion browser image
 build-lumo-tamer:
     #!/usr/bin/env fish
-    set latest_version (curl -s https://api.github.com/repos/ZeroTricks/lumo-tamer/releases/latest | jq -r '.tag_name')
+    set latest_version (just github-latest-version ZeroTricks/lumo-tamer)
     echo "Building lumo-tamer:$latest_version..."
     podman build -t localhost/lumo-tamer:$latest_version builds/lumo-tamer/
     podman tag localhost/lumo-tamer:$latest_version localhost/lumo-tamer:latest
@@ -51,7 +51,7 @@ build-proton-drive-sync:
 
     # Get the latest release version
     echo "Fetching latest release version..."
-    set latest_version (curl -s https://api.github.com/repos/DamianB-BitFlipper/proton-drive-sync/releases/latest | jq -r '.tag_name')
+    set latest_version (just github-latest-version DamianB-BitFlipper/proton-drive-sync)
     echo "Latest version: $latest_version"
 
     # Change to the cloned repository
@@ -79,7 +79,7 @@ build-dev:
 # create a container image for json-path-finder
 build-json-path-finder:
     #!/usr/bin/env fish
-    set latest_version (curl -s https://api.github.com/repos/joebeachjoebeach/json-path-finder/releases/latest | jq -r '.tag_name')
+    set latest_version (just github-latest-version joebeachjoebeach/json-path-finder)
     echo "Building json-path-finder..."
     podman build -t localhost/json-path-finder:$latest_version builds/json-path-finder/
     podman tag localhost/json-path-finder:$latest_version localhost/json-path-finder:latest
@@ -95,8 +95,12 @@ build-forgejo-runner-job:
     podman tag localhost/forgejo-runner-job:$image_version localhost/forgejo-runner-job:latest
     echo "Done! Built localhost/forgejo-runner-job:$image_version"
 
+# fetch the latest release version from a GitHub repository
+github-latest-version repo:
+    curl -s https://api.github.com/repos/{{ repo }}/releases/latest | jq -r '.tag_name'
+
 # build and push a container image to the forgejo container registry.
-# version-strategy: "first" (first FROM line), "last" (last FROM line), or literal version string.
+# version-strategy: "first" (first FROM line), "last" (last FROM line), "github:owner/repo", or literal version string.
 build-and-push image dir version-strategy:
     #!/usr/bin/env fish
     set -l image_version
@@ -104,6 +108,9 @@ build-and-push image dir version-strategy:
         set image_version (sed -n 's/^FROM .*:\([^ ]*\).*/\1/p' {{ dir }}/Containerfile | head -1)
     else if test "{{ version-strategy }}" = "last"
         set image_version (sed -n 's/^FROM .*:\([^ ]*\).*/\1/p' {{ dir }}/Containerfile | tail -1)
+    else if string match -q 'github:*' "{{ version-strategy }}"
+        set repo (string replace 'github:' '' "{{ version-strategy }}")
+        set image_version (just github-latest-version $repo)
     else
         set image_version "{{ version-strategy }}"
     end
@@ -151,11 +158,9 @@ build-and-push-changed:
             case service-hub
                 just build-and-push service-hub builds/service-hub first
             case json-path-finder
-                set latest_version (curl -s https://api.github.com/repos/joebeachjoebeach/json-path-finder/releases/latest | jq -r '.tag_name')
-                just build-and-push json-path-finder builds/json-path-finder "$latest_version"
+                just build-and-push json-path-finder builds/json-path-finder "github:joebeachjoebeach/json-path-finder"
             case lumo-tamer
-                set latest_version (curl -s https://api.github.com/repos/ZeroTricks/lumo-tamer/releases/latest | jq -r '.tag_name')
-                just build-and-push lumo-tamer builds/lumo-tamer "$latest_version"
+                just build-and-push lumo-tamer builds/lumo-tamer "github:ZeroTricks/lumo-tamer"
             case forgejo-runner-job
                 just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
             case dev
@@ -171,11 +176,10 @@ build-and-push-all:
     just build-and-push caddy-cloudflare-l4 builds/caddy last
     just build-and-push transmission-flood builds/transmission first
     just build-and-push service-hub builds/service-hub first
-    just build-and-push json-path-finder builds/json-path-finder last
+    just build-and-push json-path-finder builds/json-path-finder "github:joebeachjoebeach/json-path-finder"
     just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
     just build-and-push dev builds/dev first
-    set latest_version (curl -s https://api.github.com/repos/ZeroTricks/lumo-tamer/releases/latest | jq -r '.tag_name')
-    just build-and-push lumo-tamer builds/lumo-tamer "$latest_version"
+    just build-and-push lumo-tamer builds/lumo-tamer "github:ZeroTricks/lumo-tamer"
 
 
 # log in to the forgejo container registry (for CI, uses Actions secrets as env vars)
