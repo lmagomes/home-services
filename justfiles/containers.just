@@ -34,34 +34,11 @@ build-caddy:
 # create a container image for lumo-tamer and the companion browser image
 build-lumo-tamer:
     #!/usr/bin/env fish
-    # Create temporary directory
-    set temp_dir (mktemp -d)
-    echo "Cloning repository into $temp_dir..."
-
-    # Clone the repository
-    git clone https://github.com/ZeroTricks/lumo-tamer $temp_dir/lumo-tamer
-
-    # Get the latest release version
-    echo "Fetching latest release version..."
     set latest_version (curl -s https://api.github.com/repos/ZeroTricks/lumo-tamer/releases/latest | jq -r '.tag_name')
-    echo "Latest version: $latest_version"
-
-    # Change to the cloned repository
-    cd $temp_dir/lumo-tamer
-
-    # Build the main container with version tag
     echo "Building lumo-tamer:$latest_version..."
-    podman build -f Dockerfile -t localhost/lumo-tamer:$latest_version .
-
-    # Build the browser container with latest tag
-    echo "Building lumo-tamer-chromium:latest..."
-    podman build -f Dockerfile.browser -t localhost/lumo-tamer-chromium:latest .
-
-    # Clean up
-    echo "Cleaning up temporary directory..."
-    rm -rf $temp_dir
-
-    echo "Done! Built localhost/lumo-tamer:$latest_version and localhost/lumo-tamer-chromium:latest"
+    podman build -t localhost/lumo-tamer:$latest_version builds/lumo-tamer/
+    podman tag localhost/lumo-tamer:$latest_version localhost/lumo-tamer:latest
+    echo "Done! Built localhost/lumo-tamer:$latest_version"
 
 build-proton-drive-sync:
     #!/usr/bin/env fish
@@ -176,6 +153,9 @@ build-and-push-changed:
             case json-path-finder
                 set latest_version (curl -s https://api.github.com/repos/joebeachjoebeach/json-path-finder/releases/latest | jq -r '.tag_name')
                 just build-and-push json-path-finder builds/json-path-finder "$latest_version"
+            case lumo-tamer
+                set latest_version (curl -s https://api.github.com/repos/ZeroTricks/lumo-tamer/releases/latest | jq -r '.tag_name')
+                just build-and-push lumo-tamer builds/lumo-tamer "$latest_version"
             case forgejo-runner-job
                 just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
             case dev
@@ -187,12 +167,15 @@ build-and-push-changed:
 
 # build and push all images to the forgejo container registry
 build-and-push-all:
+    #!/usr/bin/env fish
     just build-and-push caddy-cloudflare-l4 builds/caddy last
     just build-and-push transmission-flood builds/transmission first
     just build-and-push service-hub builds/service-hub first
     just build-and-push json-path-finder builds/json-path-finder last
     just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
     just build-and-push dev builds/dev first
+    set latest_version (curl -s https://api.github.com/repos/ZeroTricks/lumo-tamer/releases/latest | jq -r '.tag_name')
+    just build-and-push lumo-tamer builds/lumo-tamer "$latest_version"
 
 
 # log in to the forgejo container registry (for CI, uses Actions secrets as env vars)
