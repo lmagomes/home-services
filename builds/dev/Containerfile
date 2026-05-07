@@ -1,8 +1,5 @@
 FROM fedora:44
 
-ENV EDITOR=hx \
-    VISUAL=hx
-
 RUN dnf install -y \
     fish \
     just \
