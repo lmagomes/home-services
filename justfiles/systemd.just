@@ -170,7 +170,7 @@ generate-registries-conf:
     mkdir -p $dest_dir
 
     set dest_file "$dest_dir/50-home-services-registries.conf"
-    printf '[aliases]\n"home-services" = "%s"\n' "$registry_path" > $dest_file
+    printf 'short-name-mode = "permissive"\n\n[aliases]\n"home-services" = "%s"\n' "$registry_path" > $dest_file
 
     echo "✅ Generated $dest_file"
 
