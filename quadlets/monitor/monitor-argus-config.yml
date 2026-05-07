@@ -739,7 +739,7 @@ service:
       auto_approve: true
       web_url: https://github.com/crocodilestick/Calibre-Web-Automated/releases/tag/v{{ version }}
       icon: https://raw.githubusercontent.com/crocodilestick/Calibre-Web-Automated/a7f5aa45cab19e191f8870617fc77d6fb0d62680/cps/static/icon.svg
-      icon_link_to: https://calibre-web-automated.${BASE_DOMAIN_NAME}/
+      icon_link_to: https://calibre.${BASE_DOMAIN_NAME}/
 
   paperless/paperless-ngx:
     latest_version:
