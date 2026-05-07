@@ -324,10 +324,20 @@ func (fc *forgejoClient) createBranch(name, from string) error {
 		"new_branch_name": name,
 		"old_branch_name": from,
 	}
-	_, err := fc.apiCall("POST",
+	statusCode, body, err := fc.apiCallRaw("POST",
 		fmt.Sprintf("/api/v1/repos/%s/%s/branches", fc.owner, fc.repo),
 		payload)
-	return err
+	if err != nil {
+		return err
+	}
+	if statusCode == 409 {
+		log.Printf("branch %s already exists, skipping creation", name)
+		return nil
+	}
+	if statusCode < 200 || statusCode >= 300 {
+		return fmt.Errorf("API POST .../branches returned %d: %s", statusCode, string(body))
+	}
+	return nil
 }
 
 func (fc *forgejoClient) deleteBranch(name string) error {
@@ -388,11 +398,22 @@ func (fc *forgejoClient) createPR(title, head, base string) error {
 }
 
 func (fc *forgejoClient) apiCall(method, path string, payload interface{}) ([]byte, error) {
+	statusCode, body, err := fc.apiCallRaw(method, path, payload)
+	if err != nil {
+		return nil, err
+	}
+	if statusCode < 200 || statusCode >= 300 {
+		return nil, fmt.Errorf("API %s %s returned %d: %s", method, path, statusCode, string(body))
+	}
+	return body, nil
+}
+
+func (fc *forgejoClient) apiCallRaw(method, path string, payload interface{}) (int, []byte, error) {
 	var bodyReader io.Reader
 	if payload != nil {
 		data, err := json.Marshal(payload)
 		if err != nil {
-			return nil, fmt.Errorf("marshal payload: %w", err)
+			return 0, nil, fmt.Errorf("marshal payload: %w", err)
 		}
 		bodyReader = bytes.NewReader(data)
 	}
@@ -400,7 +421,7 @@ func (fc *forgejoClient) apiCall(method, path string, payload interface{}) ([]by
 	url := fc.baseURL + path
 	req, err := http.NewRequest(method, url, bodyReader)
 	if err != nil {
-		return nil, fmt.Errorf("create request: %w", err)
+		return 0, nil, fmt.Errorf("create request: %w", err)
 	}
 
 	req.Header.Set("Authorization", "token "+fc.token)
@@ -409,20 +430,16 @@ func (fc *forgejoClient) apiCall(method, path string, payload interface{}) ([]by
 
 	resp, err := fc.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("request %s %s: %w", method, path, err)
+		return 0, nil, fmt.Errorf("request %s %s: %w", method, path, err)
 	}
 	defer resp.Body.Close()
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("read response: %w", err)
+		return 0, nil, fmt.Errorf("read response: %w", err)
 	}
 
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("API %s %s returned %d: %s", method, path, resp.StatusCode, string(respBody))
-	}
-
-	return respBody, nil
+	return resp.StatusCode, respBody, nil
 }
 
 // --- Helpers ---
