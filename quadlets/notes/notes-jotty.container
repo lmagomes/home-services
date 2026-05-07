@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=notes-jotty
 Pod=notes.pod
-Image=ghcr.io/fccview/jotty:1.22.0
+Image=ghcr.io/fccview/jotty:1.23.0
 AutoUpdate=registry
 Volume=notes-jotty-data.volume:/app/data:Z
 Volume=notes-jotty-config.volume:/app/config:Z
