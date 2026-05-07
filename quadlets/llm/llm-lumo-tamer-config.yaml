@@ -32,7 +32,6 @@ auth:
     # Chrome DevTools Protocol endpoint for remote browser
     # cdpEndpoint: "http://localhost:9222"
     # use this if you're running both app and browser docker containers:
-    cdpEndpoint: "http://lumo-tamer-browser:9222"
 
   # Login-specific config (only used when method: login)
   login:

@@ -17,3 +17,4 @@ git show <last-commit>:quadlets/<service>/ > quadlets/<service>/
 | papra       | 2026-03-20   | d10875b     | replaced with paperless-ngx                                                |
 | version-api | 2026-02-18   | 6b30fcb     | replaced with service-hub                                                  |
 | youtube     | 2026-05-06   | 459967d     | YouTube services (Invidious, Companion, DB, Materialious) no longer needed |
+| lumo-tamer-browser | 2026-05-07   | dc6976c     | browser companion removed from llm pod                                     |
