@@ -214,12 +214,29 @@ merge-quadlet-pr pr_number:
     echo "✅ Merged PR #$pr_number into main"
 
 # restart podman services so they pull new images on start
-update-podman-images:
+# pass optional quadlet directories to restart only specific pods (default: auto-detect from git or restart all)
+update-podman-images *dirs:
     #!/usr/bin/env fish
     set root_dirs
 
-    for container_file in (find quadlets/ -name "*.container")
-        set -a root_dirs (dirname $container_file)
+    set -l explicit_dirs {{ dirs }}
+    if test (count $explicit_dirs) -gt 0
+        for dir in $explicit_dirs
+            set -a root_dirs $dir
+        end
+        echo "🔄 Restarting explicitly specified pod(s)"
+    else
+        set changed_files (git diff --name-only HEAD~1 -- 'quadlets/*.container' 2>/dev/null)
+        if test (count $changed_files) -gt 0
+            echo "🔄 Detected changed container files from git diff"
+            for file in $changed_files
+                set -a root_dirs (dirname $file)
+            end
+        else
+            for container_file in (find quadlets/ -name "*.container")
+                set -a root_dirs (dirname $container_file)
+            end
+        end
     end
 
     if test (count $root_dirs) -eq 0
@@ -239,7 +256,7 @@ update-podman-images:
         end
     end
 
-    echo "✅ All services restarted."
+    echo "✅ Updated services restarted."
 
 # record a removed quadlet service in the removed-quadlets.md journal (run after committing the removal)
 record-removed-quadlet service *notes:
