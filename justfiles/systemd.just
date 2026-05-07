@@ -274,8 +274,14 @@ update-podman-images:
     #!/usr/bin/env fish
     set root_dirs
 
+    set alias_registry_path (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-path')
+
     for container_file in (find quadlets/ -name "*.container")
         set image_name (grep "Image=" $container_file | cut -d'=' -f2)
+
+        if string match -q 'home-services/*' $image_name
+            set image_name (string replace 'home-services/' "$alias_registry_path/" $image_name)
+        end
 
         # If this is not :latest (or default latest), keep the original behavior.
         if not string match -qr ':latest$' $image_name; and string match -q '*:*' $image_name
