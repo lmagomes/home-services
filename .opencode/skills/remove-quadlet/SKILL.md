@@ -151,4 +151,3 @@ systemctl --user start <service>.pod
 - **Secrets cleanup**: Tell the user which secrets to remove. The agent must never modify `.secrets/secrets.yaml` directly.
 - **Data volumes**: Named volumes are not automatically removed. The user must manually run `podman volume rm` to free disk space.
 - **Record before pushing**: Run `just record-removed-quadlet` after committing the removal but before pushing, so the `removed-quadlets.md` update is included in the same PR.
-- **Disabled files**: Files with `.disabled` suffix are ignored by `install-quadlets`. If you want to keep files for reference but disable the service, rename them to `.disabled` instead of deleting.

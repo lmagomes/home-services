@@ -31,7 +31,6 @@ timers/                    # Systemd timer + service units
 | Network | `<name>.network` | `services.network` |
 | Env file | `<container-name>.env` | `caddy.env` |
 | Extra config | `<container-name>-<file>` | `argus-config.yml` |
-| Disabled files | append `.disabled` suffix | `ollama.container.disabled` |
 | Just modules | `<domain>.just` | `backup.just` |
 | Container builds | `builds/<image>/Containerfile` | `builds/caddy/Containerfile` |
 
