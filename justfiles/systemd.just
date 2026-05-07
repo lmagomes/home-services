@@ -3,17 +3,6 @@
 systemd-container-dir := "$HOME/.config/containers/systemd"
 systemd-user-dir := "$HOME/.config/systemd/user"
 
-# remove broken symlinks in systemd directory
-clean-symlinks:
-    #!/usr/bin/env fish
-    find {{ systemd-container-dir }} -type l | while read -l symlink
-        set target (readlink $symlink)
-        if not test -e $target
-            echo "❗ Removing broken symlink: $symlink"
-            rm $symlink
-        end
-    end
-
 # run all pending migration scripts in order (idempotent)
 apply-migrations:
     #!/usr/bin/env fish
@@ -55,51 +44,6 @@ apply-migrations:
 
     echo "🔄 Reloading systemd user daemon..."
     systemctl --user daemon-reload
-
-# create symlinks for quadlets in the systemd directory
-symlink-quadlets:
-    #!/usr/bin/env fish
-    if [ ! -d "{{ systemd-container-dir }}" ]
-        mkdir -p "{{ systemd-container-dir }}"
-    end
-
-    # go thorugh each quadlet directory
-    for dir in ./quadlets/*/
-        # go through each item in the quadlet directory
-        for item in "$dir"*
-            # skip disabled files
-            if string match -q '*.disabled' $item
-                echo "⏭️  skipping disabled file: $item"
-                continue
-            end
-
-            set full_path "$(readlink -f "$dir")/$(basename "$item")"
-            set systemd_path "{{ systemd-container-dir }}/$(basename "$item")"
-
-            # check if a symlink already exists
-            if [ -L $systemd_path ]
-                echo "🔗 symlink for '$full_path' already exists. Skipping..."
-            else if [ -e $systemd_path ]
-                echo "❗ real file at '$systemd_path' already exists. Skipping..."
-            else
-                ln -s $full_path $systemd_path
-                echo "✅ created a symlink for '$full_path' at '$systemd_path'"
-            end
-        end
-    end
-
-# remove symlinks that point into this repo's quadlets directory (real files are untouched)
-unsymlink-quadlets:
-    #!/usr/bin/env fish
-    set repo_quadlets (readlink -f ./quadlets)
-    find {{ systemd-container-dir }} -type l | while read -l symlink
-        set target (readlink -f $symlink)
-        if string match -q "$repo_quadlets/*" $target
-            echo "🗑️  Removing symlink: $(basename $symlink)"
-            rm $symlink
-        end
-    end
-    echo "✅ Repo symlinks removed."
 
 # copy quadlet files to systemd directory, decrypting encrypted configs first
 install-quadlets:
