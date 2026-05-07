@@ -269,69 +269,33 @@ merge-quadlet-pr pr_number:
 
     echo "✅ Merged PR #$pr_number into main"
 
-# pull new podman images and restart affected services
+# restart podman services so they pull new images on start
 update-podman-images:
     #!/usr/bin/env fish
     set root_dirs
 
-    set alias_registry_path (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-path')
-
     for container_file in (find quadlets/ -name "*.container")
-        set image_name (grep "Image=" $container_file | cut -d'=' -f2)
-
-        if string match -q 'home-services/*' $image_name
-            set image_name (string replace 'home-services/' "$alias_registry_path/" $image_name)
-        end
-
-        # If this is not :latest (or default latest), keep the original behavior.
-        if not string match -qr ':latest$' $image_name; and string match -q '*:*' $image_name
-            if podman image exists $image_name
-                echo "Image $image_name already exists, skipping pull."
-                continue
-            else
-                echo "Pulling image $image_name."
-                podman pull $image_name
-                set -a root_dirs (dirname $container_file)
-                continue
-            end
-        end
-
-        echo "Checking image $image_name for updates..."
-
-        # Get current digest if image exists
-        set old_digest ""
-        if podman image exists $image_name
-            set old_digest (podman image inspect $image_name --format '{{ "{{.Digest}}" }}' 2>/dev/null)
-        end
-
-        # Pull the image
-        podman pull $image_name
-
-        # Get new digest
-        set new_digest (podman image inspect $image_name --format '{{ "{{.Digest}}" }}' 2>/dev/null)
-
-        # Check if digest changed (or image was new)
-        if test "$old_digest" != "$new_digest"
-            echo "✅ Image $image_name was updated."
-            set -a root_dirs (dirname $container_file)
-        else
-            echo "Image $image_name is already up to date."
-        end
+        set -a root_dirs (dirname $container_file)
     end
 
-    # check if root_dirs list is not empty
-    if test (count $root_dirs) -ne 0
-        # reload systemd user daemon to recognize any new/updated services
-        systemctl --user daemon-reload
+    if test (count $root_dirs) -eq 0
+        echo "No container files found."
+        exit 0
+    end
 
-        # go through each root dir and get the .pod file
-        for dir in $root_dirs
-            set service_name (find $dir -name "*.pod" -exec basename {} \; | sed 's/\.pod/-pod.service/')
+    set root_dirs (printf '%s\n' $root_dirs | sort -u)
 
-            echo "Restarting service $service_name to create container with new image."
+    systemctl --user daemon-reload
+
+    for dir in $root_dirs
+        for pod_file in (find $dir -name "*.pod")
+            set service_name (basename $pod_file .pod)-pod.service
+            echo "🔄 Restarting $service_name"
             systemctl --user restart $service_name
         end
     end
+
+    echo "✅ All services restarted."
 
 # record a removed quadlet service in the removed-quadlets.md journal (run after committing the removal)
 record-removed-quadlet service *notes:
