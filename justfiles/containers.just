@@ -102,11 +102,11 @@ build-dev:
 # create a container image for json-path-finder
 build-json-path-finder:
     #!/usr/bin/env fish
-    set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/json-path-finder/Containerfile | tail -1)
+    set latest_version (curl -s https://api.github.com/repos/joebeachjoebeach/json-path-finder/releases/latest | jq -r '.tag_name')
     echo "Building json-path-finder..."
-    podman build -t localhost/json-path-finder:$image_version builds/json-path-finder/
-    podman tag localhost/json-path-finder:$image_version localhost/json-path-finder:latest
-    echo "Done! Built localhost/json-path-finder:$image_version"
+    podman build -t localhost/json-path-finder:$latest_version builds/json-path-finder/
+    podman tag localhost/json-path-finder:$latest_version localhost/json-path-finder:latest
+    echo "Done! Built localhost/json-path-finder:$latest_version"
 
 # create a container image for the forgejo runner job execution environment
 build-forgejo-runner-job:
@@ -174,7 +174,8 @@ build-and-push-changed:
             case service-hub
                 just build-and-push service-hub builds/service-hub first
             case json-path-finder
-                just build-and-push json-path-finder builds/json-path-finder last
+                set latest_version (curl -s https://api.github.com/repos/joebeachjoebeach/json-path-finder/releases/latest | jq -r '.tag_name')
+                just build-and-push json-path-finder builds/json-path-finder "$latest_version"
             case forgejo-runner-job
                 just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
             case dev
