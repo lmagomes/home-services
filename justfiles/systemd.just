@@ -3,48 +3,6 @@
 systemd-container-dir := "$HOME/.config/containers/systemd"
 systemd-user-dir := "$HOME/.config/systemd/user"
 
-# run all pending migration scripts in order (idempotent)
-apply-migrations:
-    #!/usr/bin/env fish
-    set state_file "{{ systemd-container-dir }}/.quadlet-migrations"
-    touch $state_file
-
-    if not test -d migrations
-        echo "No migrations directory found."
-        exit 0
-    end
-
-    for script in (ls migrations/*.fish | sort)
-        set mig_id (basename $script .fish)
-        if grep -qF -- "$mig_id" $state_file
-            echo "⏭️  Skipping (already applied): $mig_id"
-            continue
-        end
-
-        echo ""
-        echo "🔄 Running migration: $mig_id"
-        echo ""
-        if fish $script
-            echo ""
-            echo "✅ Migration applied: $mig_id"
-            echo $mig_id >> $state_file
-        else
-            echo ""
-            echo "❌ Migration FAILED: $mig_id — aborting"
-            exit 1
-        end
-    end
-
-    echo ""
-    echo "✅ All migrations applied."
-
-    echo ""
-    echo "🔄 Updating quadlet symlinks..."
-    just symlink-quadlets
-
-    echo "🔄 Reloading systemd user daemon..."
-    systemctl --user daemon-reload
-
 # copy quadlet files to systemd directory, decrypting encrypted configs first
 install-quadlets:
     #!/usr/bin/env fish

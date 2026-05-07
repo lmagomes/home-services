@@ -105,4 +105,4 @@ Keep comments concise and focused on the work done.
 - Never read, write, or decrypt `.secrets/secrets.yaml` — ask the user to handle secrets
 - For encrypted quadlet configs (`*.encrypted.yml`), use `sops decrypt` / `sops encrypt`
 - If the issue requires a new service, load the `add-service` skill for detailed guidance
-- If the issue requires a migration, load the `migrations` skill
+

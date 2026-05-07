@@ -93,4 +93,4 @@ Agent:
 - Use existing patterns from the codebase — look at similar files before drafting
 - Never include real secrets or domain names in the issue body
 - If the issue is about a new service, load the `add-service` skill for context
-- If the issue involves a migration, load the `migrations` skill for context
+

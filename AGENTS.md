@@ -9,7 +9,6 @@ quadlets/<service>/        # Quadlet definitions (pods, containers, volumes, env
 justfiles/                 # Modular justfile recipes (imported by root justfile)
 builds/<image>/            # Custom Containerfiles for locally-built images
 timers/                    # Systemd timer + service units
-migrations/                # Idempotent migration scripts (YYYYMMDDHHMMSS-description.fish)
 .secrets/secrets.yaml      # SOPS-encrypted secrets (age key)
 .sops.yaml                 # Age key reference for SOPS
 .forgejo/workflows/        # CI workflows (Forgejo Actions)
@@ -35,7 +34,6 @@ migrations/                # Idempotent migration scripts (YYYYMMDDHHMMSS-descri
 | Disabled files | append `.disabled` suffix | `ollama.container.disabled` |
 | Just modules | `<domain>.just` | `backup.just` |
 | Container builds | `builds/<image>/Containerfile` | `builds/caddy/Containerfile` |
-| Migration scripts | `migrations/<YYYYMMDDHHMMSS>-<description>.fish` | `migrations/20260501140000-volume-naming-convention.fish` |
 
 ### Quadlet directory structure
 
@@ -149,12 +147,6 @@ rm <file>.yml                                      # clean up decrypted copy
 - This creates a branch `updates/<quadlet>-<date>-<containers>`, commits the change, pushes, and opens a PR.
 - When the PR is merged, the Forgejo workflow pulls images and restarts affected services via `just update-podman-images`.
 - Release Argus monitors upstream releases and triggers Service-Hub webhooks to auto-create PRs.
-
-## Migrations
-
-When quadlet naming conventions or structure change, create a migration script in `migrations/`. File naming: `<YYYYMMDDHHMMSS>-<description>.fish`. Migrations must be **idempotent** (safe to run multiple times). Apply with `just apply-migrations`, which tracks applied migrations in `~/.config/containers/systemd/.quadlet-migrations`.
-
-Detailed conventions and workflow are in the `migrations` agent skill — load it with `/skill migrations` or by asking about migrations.
 
 ## Adding a New Service
 
