@@ -1,5 +1,0 @@
-[Unit]
-Description=Youtube Materialious Data volume
-
-[Volume]
-VolumeName=youtube-materialious-data

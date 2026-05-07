@@ -1,5 +1,0 @@
-[Unit]
-Description=Youtube Invidious Companion Cache volume
-
-[Volume]
-VolumeName=youtube-invidious-companion-cache

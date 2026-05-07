@@ -1,5 +1,0 @@
-[Unit]
-Description=Youtube Invidious Db Data volume
-
-[Volume]
-VolumeName=youtube-invidious-db-data

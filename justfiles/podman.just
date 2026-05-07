@@ -109,7 +109,7 @@ stop-all:
         systemctl --user stop $service_name
     end
 
-# decrypt quadlet config files stored encrypted (e.g., invidious-config.yml)
+# decrypt quadlet config files stored encrypted (e.g., forgejo-runner-config.yml)
 decrypt-quadlet-configs:
     #!/usr/bin/env fish
     for encrypted in (find quadlets/ -name "*.encrypted.*")

@@ -46,9 +46,6 @@ set -a volume_map systemd-uptime-kuma-data          monitor-uptime-kuma-data
 set -a volume_map systemd-jotty-cache               notes-jotty-cache
 set -a volume_map systemd-jotty-config              notes-jotty-config
 set -a volume_map systemd-jotty-data                notes-jotty-data
-set -a volume_map systemd-invidious-companion-cache youtube-invidious-companion-cache
-set -a volume_map systemd-invidious-db-data         youtube-invidious-db-data
-set -a volume_map systemd-materialious-data         youtube-materialious-data
 
 # ─── Main ──────────────────────────────────────────────────────────────────────
 

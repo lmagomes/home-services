@@ -214,17 +214,3 @@ transmission.{env.DOMAIN} {
 	import cloudflare
 }
 
-invidious.{env.DOMAIN} {
-	reverse_proxy youtube.pod:3001
-	import cloudflare
-}
-
-invidious-companion.{env.DOMAIN} {
-	reverse_proxy youtube.pod:8282
-	import cloudflare
-}
-
-youtube.{env.DOMAIN} {
-	reverse_proxy youtube.pod:3000
-	import cloudflare
-}
