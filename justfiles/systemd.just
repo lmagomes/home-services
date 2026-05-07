@@ -166,7 +166,11 @@ generate-registries-conf:
         exit 1
     end
 
-    set dest_dir "$HOME/.config/containers/registries.conf.d"
+    if test (id -u) -eq 0
+        set dest_dir "/etc/containers/registries.conf.d"
+    else
+        set dest_dir "$HOME/.config/containers/registries.conf.d"
+    end
     mkdir -p $dest_dir
 
     set dest_file "$dest_dir/50-home-services-registries.conf"
