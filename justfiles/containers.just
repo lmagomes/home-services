@@ -42,30 +42,13 @@ build-lumo-tamer:
 
 build-proton-drive-sync:
     #!/usr/bin/env fish
-    # Create temporary directory
-    set temp_dir (mktemp -d)
-    echo "Cloning repository into $temp_dir..."
-
-    # Clone the repository
-    git clone https://github.com/DamianB-BitFlipper/proton-drive-sync.git $temp_dir/proton-drive-sync
-
-    # Get the latest release version
-    echo "Fetching latest release version..."
-    set latest_version (just github-latest-version DamianB-BitFlipper/proton-drive-sync)
-    echo "Latest version: $latest_version"
-
-    # Change to the cloned repository
-    cd $temp_dir/proton-drive-sync
-
-    # Build the main container with version tag
-    echo "Building proton-drive-sync:$latest_version..."
-    podman build -f docker/Dockerfile -t localhost/proton-drive-sync:$latest_version .
-
-    # Clean up
-    echo "Cleaning up temporary directory..."
-    rm -rf $temp_dir
-
-    echo "Done! Built localhost/proton-drive-sync:$latest_version"
+    echo "Building proton-drive-sync with temp tag..."
+    podman build -t localhost/proton-drive-sync:temp builds/proton-drive-sync/
+    set image_version (podman run --rm localhost/proton-drive-sync:temp rpm -q --qf '%{VERSION}-%{RELEASE}' proton-drive-sync-prerelease)
+    podman tag localhost/proton-drive-sync:temp localhost/proton-drive-sync:$image_version
+    podman tag localhost/proton-drive-sync:temp localhost/proton-drive-sync:latest
+    podman rmi localhost/proton-drive-sync:temp 2>/dev/null
+    echo "Done! Built localhost/proton-drive-sync:$image_version"
 
 # create a container image for the dev environment
 build-dev:
@@ -100,10 +83,11 @@ github-latest-version repo:
     curl -s https://api.github.com/repos/{{ repo }}/releases/latest | jq -r '.tag_name'
 
 # build and push a container image to the forgejo container registry.
-# version-strategy: "first" (first FROM line), "last" (last FROM line), "github:owner/repo", or literal version string.
+# version-strategy: "first" (first FROM line), "last" (last FROM line), "github:owner/repo", "rpm:package-name", or literal version string.
 build-and-push image dir version-strategy:
     #!/usr/bin/env fish
     set -l image_version
+    set -l skip_build false
     if test "{{ version-strategy }}" = "first"
         set image_version (sed -n 's/^FROM .*:\([^ ]*\).*/\1/p' {{ dir }}/Containerfile | head -1)
     else if test "{{ version-strategy }}" = "last"
@@ -111,6 +95,15 @@ build-and-push image dir version-strategy:
     else if string match -q 'github:*' "{{ version-strategy }}"
         set repo (string replace 'github:' '' "{{ version-strategy }}")
         set image_version (just github-latest-version $repo)
+    else if string match -q 'rpm:*' "{{ version-strategy }}"
+        set package (string replace 'rpm:' '' "{{ version-strategy }}")
+        echo "🔄 Building {{ image }} with temp tag for RPM version extraction..."
+        podman build -t localhost/{{ image }}:temp {{ dir }}
+        set image_version (podman run --rm localhost/{{ image }}:temp rpm -q --qf '%{VERSION}-%{RELEASE}' $package)
+        podman tag localhost/{{ image }}:temp localhost/{{ image }}:$image_version
+        podman tag localhost/{{ image }}:temp localhost/{{ image }}:latest
+        podman rmi localhost/{{ image }}:temp 2>/dev/null
+        set skip_build true
     else
         set image_version "{{ version-strategy }}"
     end
@@ -123,9 +116,11 @@ build-and-push image dir version-strategy:
     set registry_path (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-path')
     set remote_image "$registry_path/{{ image }}:$image_version"
 
-    echo "🔄 Building {{ image }}:$image_version..."
-    podman build -t localhost/{{ image }}:$image_version {{ dir }}
-    podman tag localhost/{{ image }}:$image_version localhost/{{ image }}:latest
+    if not $skip_build
+        echo "🔄 Building {{ image }}:$image_version..."
+        podman build -t localhost/{{ image }}:$image_version {{ dir }}
+        podman tag localhost/{{ image }}:$image_version localhost/{{ image }}:latest
+    end
 
     echo "🔖 Tagging $remote_image..."
     podman tag localhost/{{ image }}:$image_version $remote_image
@@ -161,6 +156,8 @@ build-and-push-changed:
                 just build-and-push json-path-finder builds/json-path-finder "github:joebeachjoebeach/json-path-finder"
             case lumo-tamer
                 just build-and-push lumo-tamer builds/lumo-tamer "github:ZeroTricks/lumo-tamer"
+            case proton-drive-sync
+                just build-and-push proton-drive-sync builds/proton-drive-sync "rpm:proton-drive-sync-prerelease"
             case forgejo-runner-job
                 just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
             case dev
@@ -180,6 +177,7 @@ build-and-push-all:
     just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
     just build-and-push dev builds/dev first
     just build-and-push lumo-tamer builds/lumo-tamer "github:ZeroTricks/lumo-tamer"
+    just build-and-push proton-drive-sync builds/proton-drive-sync "rpm:proton-drive-sync-prerelease"
 
 
 # log in to the forgejo container registry (for CI, uses Actions secrets as env vars)
