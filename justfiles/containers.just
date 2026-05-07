@@ -4,7 +4,6 @@ build-all:
     just build-caddy
     just build-lumo-tamer
     just build-service-hub
-    just build-jsonlint
     just build-json-path-finder
     just build-forgejo-runner-job
 
@@ -100,16 +99,6 @@ build-dev:
     podman build -t localhost/dev:$image_version builds/dev/
     podman tag localhost/dev:$image_version localhost/dev:latest
 
-# create a container image for jsonlint
-build-jsonlint:
-    #!/usr/bin/env fish
-    set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/jsonlint/Containerfile | tail -1)
-    set base_url (sops decrypt .secrets/secrets.yaml | yq '.secrets.jsonlint-app-url')
-    echo "Building jsonlint with NEXT_PUBLIC_BASE_URL=$base_url..."
-    podman build --build-arg NEXT_PUBLIC_BASE_URL=$base_url -t localhost/jsonlint:$image_version builds/jsonlint/
-    podman tag localhost/jsonlint:$image_version localhost/jsonlint:latest
-    echo "Done! Built localhost/jsonlint:$image_version"
-
 # create a container image for json-path-finder
 build-json-path-finder:
     #!/usr/bin/env fish
@@ -184,8 +173,6 @@ build-and-push-changed:
                 just build-and-push transmission-flood builds/transmission first
             case service-hub
                 just build-and-push service-hub builds/service-hub first
-            case jsonlint
-                echo "⏭️  Skipping jsonlint (needs secrets — build manually with build-jsonlint)"
             case json-path-finder
                 just build-and-push json-path-finder builds/json-path-finder last
             case forgejo-runner-job
@@ -205,7 +192,7 @@ build-and-push-all:
     just build-and-push json-path-finder builds/json-path-finder last
     just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
     just build-and-push dev builds/dev first
-    echo "❗ Skipped jsonlint — needs secrets, use build-jsonlint + manual push"
+
 
 # log in to the forgejo container registry (for CI, uses Actions secrets as env vars)
 registry-login-ci:
