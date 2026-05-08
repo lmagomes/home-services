@@ -123,9 +123,24 @@ git add -A
 git commit -m "Remove <container-name> from <service>"
 ```
 
-**Note:** Single container removals are not recorded in `removed-quadlets.md` — that journal only tracks full service removals.
+### 7. Record the removal
 
-### 7. Ask about host-side cleanup
+After committing, run:
+
+```bash
+just record-removed-quadlet <container-name> "removed from <service>"
+```
+
+Then commit the updated journal:
+
+```bash
+git add removed-quadlets.md
+git commit -m "Record removal of <container-name> in removed-quadlets.md"
+```
+
+**Note:** Single container removals are also recorded in `removed-quadlets.md`.
+
+### 8. Ask about host-side cleanup
 
 After committing, ask the user if they want a list of host-side actions needed (stopping/disabling the removed container, running `just install-quadlets`).
 
