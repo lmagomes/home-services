@@ -12,6 +12,7 @@ RUN dnf install -y \
     vim \
     helix \
     tmux \
+    zellij \
     htop \
     man-db \
     dnf-plugins-core \
