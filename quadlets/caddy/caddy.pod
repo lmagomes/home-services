@@ -4,7 +4,7 @@ After=network-online.target
 
 [Pod]
 PodName=caddy.pod
-PublishPort=443:443
+PublishPort=192.168.8.64:443:443
 PublishPort=2019:2019
 Network=services.network
 
