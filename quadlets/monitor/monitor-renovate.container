@@ -3,8 +3,8 @@ Description=Renovate dependency updater
 After=network.target
 
 [Container]
-ContainerName=renovate
-Network=services.network
+ContainerName=monitor-renovate
+Pod=monitor.pod
 Image=ghcr.io/renovatebot/renovate:43.169.4-full
 EnvironmentFile=./%N.env
 Secret=monitor-renovate-forgejo-token,type=env,target=RENOVATE_TOKEN
