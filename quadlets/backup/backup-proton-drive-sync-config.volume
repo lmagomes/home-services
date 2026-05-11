@@ -1,5 +1,0 @@
-[Unit]
-Description=Backup Proton Drive Sync Config volume
-
-[Volume]
-VolumeName=backup-proton-drive-sync-config

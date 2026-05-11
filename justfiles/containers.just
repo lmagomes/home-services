@@ -5,6 +5,7 @@ build-all:
     just build-lumo-tamer
     just build-json-path-finder
     just build-forgejo-runner-job
+    just build-backup-restic
 
 # create a container image for transmission
 build-transmission:
@@ -30,13 +31,14 @@ build-lumo-tamer:
     podman tag localhost/lumo-tamer:$latest_version localhost/lumo-tamer:latest
     echo "Done! Built localhost/lumo-tamer:$latest_version"
 
-build-proton-drive-sync:
+# create a container image for backup-restic
+build-backup-restic:
     #!/usr/bin/env fish
-    set latest_version (cat builds/proton-drive-sync/.upstream-version | string trim)
-    echo "Building proton-drive-sync:$latest_version..."
-    podman build -t localhost/proton-drive-sync:$latest_version builds/proton-drive-sync/
-    podman tag localhost/proton-drive-sync:$latest_version localhost/proton-drive-sync:latest
-    echo "Done! Built localhost/proton-drive-sync:$latest_version"
+    set image_version "44"
+    set build_version (cat builds/backup-restic/build-version | string trim)
+    set image_version "$image_version-r$build_version"
+    podman build -t localhost/backup-restic:$image_version builds/backup-restic/
+    podman tag localhost/backup-restic:$image_version localhost/backup-restic:latest
 
 # create a container image for the dev environment
 build-dev:
@@ -145,8 +147,8 @@ build-and-push-changed:
                 just build-and-push json-path-finder builds/json-path-finder "upstream-file:.upstream-version"
             case lumo-tamer
                 just build-and-push lumo-tamer builds/lumo-tamer "upstream-file:.upstream-version"
-            case proton-drive-sync
-                just build-and-push proton-drive-sync builds/proton-drive-sync "upstream-file:.upstream-version"
+            case backup-restic
+                just build-and-push backup-restic builds/backup-restic "44"
             case forgejo-runner-job
                 just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
             case dev
@@ -165,7 +167,7 @@ build-and-push-all:
     just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
     just build-and-push dev builds/dev first
     just build-and-push lumo-tamer builds/lumo-tamer "upstream-file:.upstream-version"
-    just build-and-push proton-drive-sync builds/proton-drive-sync "upstream-file:.upstream-version"
+    just build-and-push backup-restic builds/backup-restic "44"
 
 
 # log in to the forgejo container registry (for CI, uses Actions secrets as env vars)

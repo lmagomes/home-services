@@ -20,3 +20,4 @@ git show <last-commit>:quadlets/<service>/ > quadlets/<service>/
 | lumo-tamer-browser  | 2026-05-07   | e68b4d1     | browser companion removed from llm pod                                     |
 | ollama              | 2026-05-07   | 49ab130     | disabled files cleaned up                                                  |
 | monitor-argus       | 2026-05-07   | c66a653     | replaced with Renovate                                                     |
+| proton-drive-sync   | 2026-05-10   | 628e60f     | replaced by rclone for Proton Drive sync                                   |

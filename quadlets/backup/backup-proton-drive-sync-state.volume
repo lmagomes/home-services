@@ -1,5 +1,0 @@
-[Unit]
-Description=Backup Proton Drive Sync State volume
-
-[Volume]
-VolumeName=backup-proton-drive-sync-state

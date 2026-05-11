@@ -1,0 +1,25 @@
+[Unit]
+Description=Backup rclone oneshot container
+After=network-online.target
+
+[Container]
+ContainerName=backup-rclone
+Pod=backup.pod
+Image=docker.io/rclone/rclone:1.71
+
+Entrypoint=/bin/bash
+Exec=-c "rclone sync /data/books protondrive:books; rclone sync /data/audiobooks protondrive:audiobooks; rclone sync /data/podman-volumes protondrive:backup/podman"
+
+EnvironmentFile=./%N.env
+
+Volume=backup-rclone-config.volume:/config/rclone
+
+Mount=type=bind,source=/mnt/nas/backup/podman-volumes,destination=/data/podman-volumes,relabel=private
+Mount=type=bind,source=/mnt/nas/media/books,destination=/data/books,relabel=private
+Mount=type=bind,source=/mnt/nas/media/audiobooks,destination=/data/audiobooks,relabel=private
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+# No [Install] - only triggered by timer
