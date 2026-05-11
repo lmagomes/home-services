@@ -54,7 +54,7 @@
     {
       "description": "LLaMA.cpp uses build-number tags (server-vulkan-b8840)",
       "matchPackagePatterns": ["ggml-org/llama\\.cpp"],
-      "versioning": "regex:^server-vulkan-b(?<build>\\d+)$"
+      "versioning": "regex:^server-vulkan-b(?<patch>\\d+)$"
     },
     {
       "description": "Firefly III uses version- prefix (version-6.6.2)",
