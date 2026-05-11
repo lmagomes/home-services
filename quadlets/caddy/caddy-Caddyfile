@@ -111,7 +111,7 @@ opencode.{env.DOMAIN} {
 # Single services
 
 audiobookshelf.{env.DOMAIN} {
-	reverse_proxy audiobookshelf.pod:80
+	reverse_proxy audiobookshelf.pod:8080
 	encode gzip zstd
 	import cloudflare
 }
@@ -208,4 +208,3 @@ transmission.{env.DOMAIN} {
 	reverse_proxy transmission.pod:9091
 	import cloudflare
 }
-
