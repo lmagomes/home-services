@@ -12,7 +12,6 @@ RUN dnf install -y \
     vim \
     helix \
     tmux \
-    zellij \
     htop \
     man-db \
     dnf-plugins-core \
@@ -32,6 +31,8 @@ RUN curl -fsSL https://opencode.ai/install | bash && \
 
 RUN curl -sSL https://github.com/getsops/sops/releases/download/v3.12.2/sops-v3.12.2.linux.amd64 -o /usr/local/bin/sops && \
     chmod +x /usr/local/bin/sops
+
+RUN curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 
 COPY sshd_config /etc/ssh/sshd_config.d/50-dev.conf
 COPY entrypoint.fish /entrypoint.fish
