@@ -7,7 +7,7 @@ ContainerName=backup-rclone
 Pod=backup.pod
 Image=docker.io/rclone/rclone:1.71
 
-Entrypoint=/bin/bash
+Entrypoint=/bin/sh
 Exec=-c "rclone sync /data/books protondrive:books; rclone sync /data/audiobooks protondrive:audiobooks; rclone sync /data/podman-volumes protondrive:backup/podman"
 
 EnvironmentFile=./%N.env
