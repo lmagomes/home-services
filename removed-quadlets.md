@@ -19,3 +19,5 @@ git show <last-commit>:quadlets/<service>/ > quadlets/<service>/
 | youtube     | 2026-05-06   | 459967d     | YouTube services (Invidious, Companion, DB, Materialious) no longer needed |
 | lumo-tamer-browser | 2026-05-07   | dc6976c     | browser companion removed from llm pod                                     |
 | ollama              | 2026-05-07   | 108124a     | disabled files cleaned up                                                  |
+| monitor-argus       | 2026-05-07   | 5189fc6     | replaced with Renovate                                                    |
+| monitor-service-hub | 2026-05-07   | 5189fc6     | replaced with Renovate                                                    |

@@ -1,0 +1,15 @@
+[Unit]
+Description=Renovate dependency updater
+After=network.target
+
+[Container]
+ContainerName=renovate
+Network=services.network
+Image=ghcr.io/renovatebot/renovate:43.169.4-full
+EnvironmentFile=./%N.env
+Secret=monitor-renovate-forgejo-token,type=env,target=RENOVATE_TOKEN
+Secret=renovate-registry-alias,type=env,target=RENOVATE_REGISTRY_ALIASES
+Secret=renovate-repo-endpoint,type=env,target=RENOVATE_ENDPOINT
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,6 @@
+[Unit]
+Description=Renovate runner
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl --user start renovate.service

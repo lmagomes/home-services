@@ -3,18 +3,8 @@ build-all:
     just build-transmission
     just build-caddy
     just build-lumo-tamer
-    just build-service-hub
     just build-json-path-finder
     just build-forgejo-runner-job
-
-# create a container image for service-hub
-build-service-hub:
-    #!/usr/bin/env fish
-    set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/service-hub/Containerfile | head -1)
-    set build_version (cat builds/service-hub/build-version | string trim)
-    set image_version "$image_version-r$build_version"
-    podman build -t localhost/service-hub:$image_version builds/service-hub/
-    podman tag localhost/service-hub:$image_version localhost/service-hub:latest
 
 # create a container image for transmission
 build-transmission:
@@ -34,7 +24,7 @@ build-caddy:
 # create a container image for lumo-tamer and the companion browser image
 build-lumo-tamer:
     #!/usr/bin/env fish
-    set latest_version (just github-latest-version ZeroTricks/lumo-tamer)
+    set latest_version (cat builds/lumo-tamer/.upstream-version | string trim)
     echo "Building lumo-tamer:$latest_version..."
     podman build -t localhost/lumo-tamer:$latest_version builds/lumo-tamer/
     podman tag localhost/lumo-tamer:$latest_version localhost/lumo-tamer:latest
@@ -42,13 +32,11 @@ build-lumo-tamer:
 
 build-proton-drive-sync:
     #!/usr/bin/env fish
-    echo "Building proton-drive-sync with temp tag..."
-    podman build -t localhost/proton-drive-sync:temp builds/proton-drive-sync/
-    set image_version (podman run --rm localhost/proton-drive-sync:temp rpm -q --qf '%{VERSION}-%{RELEASE}' proton-drive-sync-prerelease)
-    podman tag localhost/proton-drive-sync:temp localhost/proton-drive-sync:$image_version
-    podman tag localhost/proton-drive-sync:temp localhost/proton-drive-sync:latest
-    podman rmi localhost/proton-drive-sync:temp 2>/dev/null
-    echo "Done! Built localhost/proton-drive-sync:$image_version"
+    set latest_version (cat builds/proton-drive-sync/.upstream-version | string trim)
+    echo "Building proton-drive-sync:$latest_version..."
+    podman build -t localhost/proton-drive-sync:$latest_version builds/proton-drive-sync/
+    podman tag localhost/proton-drive-sync:$latest_version localhost/proton-drive-sync:latest
+    echo "Done! Built localhost/proton-drive-sync:$latest_version"
 
 # create a container image for the dev environment
 build-dev:
@@ -62,7 +50,7 @@ build-dev:
 # create a container image for json-path-finder
 build-json-path-finder:
     #!/usr/bin/env fish
-    set latest_version (just github-latest-version joebeachjoebeach/json-path-finder)
+    set latest_version (cat builds/json-path-finder/.upstream-version | string trim)
     echo "Building json-path-finder..."
     podman build -t localhost/json-path-finder:$latest_version builds/json-path-finder/
     podman tag localhost/json-path-finder:$latest_version localhost/json-path-finder:latest
@@ -83,7 +71,7 @@ github-latest-version repo:
     curl -s https://api.github.com/repos/{{ repo }}/releases/latest | jq -r '.tag_name'
 
 # build and push a container image to the forgejo container registry.
-# version-strategy: "first" (first FROM line), "last" (last FROM line), "github:owner/repo", "rpm:package-name", or literal version string.
+# version-strategy: "first" (first FROM line), "last" (last FROM line), "github:owner/repo", "rpm:package-name", "upstream-file:<path>", or literal version string.
 build-and-push image dir version-strategy:
     #!/usr/bin/env fish
     set -l image_version
@@ -104,6 +92,9 @@ build-and-push image dir version-strategy:
         podman tag localhost/{{ image }}:temp localhost/{{ image }}:latest
         podman rmi localhost/{{ image }}:temp 2>/dev/null
         set skip_build true
+    else if string match -q 'upstream-file:*' "{{ version-strategy }}"
+        set file (string replace 'upstream-file:' '' "{{ version-strategy }}")
+        set image_version (cat "{{ dir }}/$file" | string trim)
     else
         set image_version "{{ version-strategy }}"
     end
@@ -150,14 +141,12 @@ build-and-push-changed:
                 just build-and-push caddy-cloudflare-l4 builds/caddy last
             case transmission
                 just build-and-push transmission-flood builds/transmission first
-            case service-hub
-                just build-and-push service-hub builds/service-hub first
             case json-path-finder
-                just build-and-push json-path-finder builds/json-path-finder "github:joebeachjoebeach/json-path-finder"
+                just build-and-push json-path-finder builds/json-path-finder "upstream-file:.upstream-version"
             case lumo-tamer
-                just build-and-push lumo-tamer builds/lumo-tamer "github:ZeroTricks/lumo-tamer"
+                just build-and-push lumo-tamer builds/lumo-tamer "upstream-file:.upstream-version"
             case proton-drive-sync
-                just build-and-push proton-drive-sync builds/proton-drive-sync "rpm:proton-drive-sync-prerelease"
+                just build-and-push proton-drive-sync builds/proton-drive-sync "upstream-file:.upstream-version"
             case forgejo-runner-job
                 just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
             case dev
@@ -172,12 +161,11 @@ build-and-push-all:
     #!/usr/bin/env fish
     just build-and-push caddy-cloudflare-l4 builds/caddy last
     just build-and-push transmission-flood builds/transmission first
-    just build-and-push service-hub builds/service-hub first
-    just build-and-push json-path-finder builds/json-path-finder "github:joebeachjoebeach/json-path-finder"
+    just build-and-push json-path-finder builds/json-path-finder "upstream-file:.upstream-version"
     just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
     just build-and-push dev builds/dev first
-    just build-and-push lumo-tamer builds/lumo-tamer "github:ZeroTricks/lumo-tamer"
-    just build-and-push proton-drive-sync builds/proton-drive-sync "rpm:proton-drive-sync-prerelease"
+    just build-and-push lumo-tamer builds/lumo-tamer "upstream-file:.upstream-version"
+    just build-and-push proton-drive-sync builds/proton-drive-sync "upstream-file:.upstream-version"
 
 
 # log in to the forgejo container registry (for CI, uses Actions secrets as env vars)
