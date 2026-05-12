@@ -1,96 +1,78 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "enabledManagers": ["quadlet"],
-  "labels": ["renovate"],
-  "branchPrefix": "updates/renovate-",
-  "dependencyDashboard": true,
-  "schedule": ["before 6am"],
-  "prHourlyLimit": 10,
-  "prConcurrentLimit": 5,
-  "customManagers": [
-    {
-      "customType": "regex",
-      "description": "Track upstream lumo-tamer releases from GitHub",
-      "datasourceTemplate": "github-releases",
-      "depNameTemplate": "ZeroTricks/lumo-tamer",
-      "managerFilePatterns": [
-        "/^builds/lumo-tamer/\\.upstream-version$/"
-      ],
-      "matchStrings": ["^(?<currentValue>v?\\d+\\.\\d+\\.\\d+(-[\\w.]+)?)$"]
-    },
-    {
-      "customType": "regex",
-      "description": "Track upstream proton-drive-sync releases from GitHub",
-      "datasourceTemplate": "github-releases",
-      "depNameTemplate": "DamianB-BitFlipper/proton-drive-sync",
-      "managerFilePatterns": [
-        "/^builds/proton-drive-sync/\\.upstream-version$/"
-      ],
-      "matchStrings": ["^(?<currentValue>v?\\d+\\.\\d+\\.\\d+(-[\\w.]+)?)$"]
-    },
-    {
-      "customType": "regex",
-      "description": "Track upstream json-path-finder releases from GitHub",
-      "datasourceTemplate": "github-releases",
-      "depNameTemplate": "joebeachjoebeach/json-path-finder",
-      "managerFilePatterns": [
-        "/^builds/json-path-finder/\\.upstream-version$/"
-      ],
-      "matchStrings": ["^(?<currentValue>v?\\d+\\.\\d+\\.\\d+(-[\\w.]+)?)$"]
-    }
-  ],
-  "packageRules": [
-    {
-      "description": "Exclude images with non-standard or unparseable version tags",
-      "enabled": false,
-      "matchPackageNames": [
-        "/mcr\\.microsoft\\.com/mssql/server/",
-        "/immich-app/postgres/",
-        "/zenika-hub/alpine-chrome/",
-        "/postgis/postgis/"
-      ]
-    },
-    {
-      "description": "Authentik uses year-based versioning (2026.2.2)",
-      "versioning": "regex:^(?<major>\\d{4})\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
-      "matchPackageNames": [
-        "/goauthentik/server/"
-      ]
-    },
-    {
-      "description": "LLaMA.cpp uses build-number tags (server-vulkan-b8840)",
-      "versioning": "regex:^server-vulkan-b(?<patch>\\d+)$",
-      "matchPackageNames": [
-        "/ggml-org/llama\\.cpp/"
-      ]
-    },
-    {
-      "description": "Firefly III uses version- prefix (version-6.6.2)",
-      "versioning": "regex:^version-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
-      "matchPackageNames": [
-        "/fireflyiii/core$/"
-      ]
-    },
-    {
-      "description": "Firefly Data Importer uses version- prefix (version-2.3.2)",
-      "versioning": "regex:^version-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
-      "matchPackageNames": [
-        "/fireflyiii/data-importer/"
-      ]
-    },
-    {
-      "description": "Termix uses release- prefix (release-2.2.0)",
-      "versioning": "regex:^release-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
-      "matchPackageNames": [
-        "/lukegus/termix/"
-      ]
-    },
-    {
-      "description": "LocalAI uses gpu-intel suffix — only match same suffix",
-      "allowedVersions": "/^v\\d+\\.\\d+\\.\\d+-gpu-intel$/",
-      "matchPackageNames": [
-        "/localai/localai/"
-      ]
-    }
-  ]
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "enabledManagers": ["quadlet"],
+    "labels": ["renovate"],
+    "branchPrefix": "updates/renovate-",
+    "dependencyDashboard": true,
+    "schedule": ["before 6am"],
+    "prHourlyLimit": 10,
+    "prConcurrentLimit": 5,
+    "customManagers": [
+        {
+            "customType": "regex",
+            "description": "Track upstream lumo-tamer releases from GitHub",
+            "datasourceTemplate": "github-releases",
+            "depNameTemplate": "ZeroTricks/lumo-tamer",
+            "managerFilePatterns": [
+                "/^builds/lumo-tamer/\\.upstream-version$/"
+            ],
+            "matchStrings": [
+                "^(?<currentValue>v?\\d+\\.\\d+\\.\\d+(-[\\w.]+)?)$"
+            ]
+        },
+        {
+            "customType": "regex",
+            "description": "Track upstream json-path-finder releases from GitHub",
+            "datasourceTemplate": "github-releases",
+            "depNameTemplate": "joebeachjoebeach/json-path-finder",
+            "managerFilePatterns": [
+                "/^builds/json-path-finder/\\.upstream-version$/"
+            ],
+            "matchStrings": [
+                "^(?<currentValue>v?\\d+\\.\\d+\\.\\d+(-[\\w.]+)?)$"
+            ]
+        }
+    ],
+    "packageRules": [
+        {
+            "description": "Exclude images with non-standard or unparseable version tags",
+            "enabled": false,
+            "matchPackageNames": [
+                "/mcr\\.microsoft\\.com/mssql/server/",
+                "/immich-app/postgres/",
+                "/zenika-hub/alpine-chrome/",
+                "/postgis/postgis/"
+            ]
+        },
+        {
+            "description": "Authentik uses year-based versioning (2026.2.2)",
+            "versioning": "regex:^(?<major>\\d{4})\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
+            "matchPackageNames": ["/goauthentik/server/"]
+        },
+        {
+            "description": "LLaMA.cpp uses build-number tags (server-vulkan-b8840)",
+            "versioning": "regex:^server-vulkan-b(?<patch>\\d+)$",
+            "matchPackageNames": ["/ggml-org/llama\\.cpp/"]
+        },
+        {
+            "description": "Firefly III uses version- prefix (version-6.6.2)",
+            "versioning": "regex:^version-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
+            "matchPackageNames": ["/fireflyiii/core$/"]
+        },
+        {
+            "description": "Firefly Data Importer uses version- prefix (version-2.3.2)",
+            "versioning": "regex:^version-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
+            "matchPackageNames": ["/fireflyiii/data-importer/"]
+        },
+        {
+            "description": "Termix uses release- prefix (release-2.2.0)",
+            "versioning": "regex:^release-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
+            "matchPackageNames": ["/lukegus/termix/"]
+        },
+        {
+            "description": "LocalAI uses gpu-intel suffix — only match same suffix",
+            "allowedVersions": "/^v\\d+\\.\\d+\\.\\d+-gpu-intel$/",
+            "matchPackageNames": ["/localai/localai/"]
+        }
+    ]
 }
