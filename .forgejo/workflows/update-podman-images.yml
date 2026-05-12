@@ -1,12 +1,12 @@
 name: Update Podman Images
 
 on:
-  pull_request:
-    types: [closed]
+  push:
+    branches: [main]
+    paths: ['quadlets/**']
 
 jobs:
   update:
-    if: forgejo.event.pull_request.merged == true && startsWith(forgejo.event.pull_request.head.ref, 'updates/')
     runs-on: host
     steps:
       - name: Checkout repository
