@@ -8,8 +8,9 @@ Pod=monitor.pod
 Image=ghcr.io/renovatebot/renovate:43.169.4-full
 EnvironmentFile=./%N.env
 Secret=monitor-renovate-forgejo-token,type=env,target=RENOVATE_TOKEN
-Secret=renovate-registry-alias,type=env,target=RENOVATE_REGISTRY_ALIASES
-Secret=renovate-repo-endpoint,type=env,target=RENOVATE_ENDPOINT
+Secret=monitor-renovate-registry-alias,type=env,target=RENOVATE_REGISTRY_ALIASES
+Secret=monitor-renovate-repo-endpoint,type=env,target=RENOVATE_ENDPOINT
+Secret=monitor-renovate-github-token,type=env,target=RENOVATE_GITHUB_COM_TOKEN
 
 [Install]
 WantedBy=multi-user.target
