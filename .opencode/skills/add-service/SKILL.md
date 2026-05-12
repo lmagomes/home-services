@@ -43,7 +43,7 @@ Follow the standard container template from AGENTS.md:
 - Section order: `[Unit]` → `[Container]` → `[Service]` → `[Install]`
 - `ContainerName=<service>-<component>` (kebab-case)
 - `Pod=<service>.pod`
-- `EnvironmentFile=./%n.d/env`
+- `EnvironmentFile=./%N.env`
 - Pin image versions — no `:latest` for upstream images
 - Add `Requires=` and `After=` for inter-container dependencies
 - Place `HealthCmd`, `HealthInterval`, etc. at the end of `[Container]`
@@ -94,13 +94,8 @@ Add a host entry in `quadlets/caddy/caddy-Caddyfile`. Match the style of existin
 ```bash
 just install-quadlets
 ```
-
-### 9. Optional: automated updates
-
-Add the service to Release Argus (`quadlets/monitor/monitor-argus-config.yml`) and Service-Hub for automatic update PRs.
-
-## Common pitfalls
-
+ 
+ ## Common pitfalls
 - **`PUID`/`PGID` images (LSIO, s6-overlay)**: Set `PUID=0` and `PGID=0`. Do not use `UserNS=keep-id` — it breaks s6-applyuidgid. Rootless Podman maps container root (UID 0) to the host user.
 - **`idmap` on bind mounts**: Don't use it in rootless Podman — `mount_setattr` requires `CAP_SYS_ADMIN` and fails with `OCI permission denied`.
 - **`:Z` on volumes**: Required for SELinux relabeling on bind mounts and named volumes.

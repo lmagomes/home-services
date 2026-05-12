@@ -6,6 +6,7 @@ build-all:
     just build-json-path-finder
     just build-forgejo-runner-job
     just build-backup-restic
+    just build-dev
 
 # create a container image for transmission
 build-transmission:

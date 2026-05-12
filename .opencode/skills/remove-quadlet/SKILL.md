@@ -36,23 +36,15 @@ rm -rf quadlets/<service>/
 
 Remove the host block for this service from `quadlets/caddy/caddy-Caddyfile`.
 
-### 3. Remove from Release Argus config
-
-Remove the service's webhook/monitor entry from `quadlets/monitor/monitor-argus-config.yml`.
-
-### 4. Remove from Service-Hub config
-
-Remove the service's entry from `quadlets/monitor/monitor-service-hub-config.yml`.
-
-### 5. Remove custom container builds
+### 3. Remove custom container builds
 
 If the service uses locally-built images from `builds/<image>/`, remove the build directory. If it was referenced in `justfiles/containers.just` (e.g., a `build-<image>` recipe or a switch case in `build-and-push-changed`), clean up those references.
 
-### 6. Handle secrets
+### 4. Handle secrets
 
 Tell the user which secrets they can remove from `.secrets/secrets.yaml`. **Never edit `.secrets/secrets.yaml` yourself** — list the secret names for the user to handle manually.
 
-### 7. Commit and record the removal
+### 5. Commit and record the removal
 
 ```bash
 git add -A
@@ -72,7 +64,7 @@ git add removed-quadlets.md
 git commit -m "Record removal of <service> in removed-quadlets.md"
 ```
 
-### 8. Ask about host-side cleanup
+### 6. Ask about host-side cleanup
 
 After committing, ask the user if they want a list of host-side actions needed (stopping/disabling services, running `just install-quadlets`, restarting dependent services like Caddy, cleaning podman pods and volumes).
 
@@ -112,18 +104,14 @@ rm quadlets/<service>/<container-name>.service.d/config.yml    # if it exists
 
 If the removed container referenced any secrets that are no longer used by the remaining service, tell the user which secrets can be removed from `.secrets/secrets.yaml`. **Never edit `.secrets/secrets.yaml` yourself.**
 
-### 5. Update monitor configs
-
-If the removed container had its own entry in `monitor-argus-config.yml` or `monitor-service-hub-config.yml`, remove it.
-
-### 6. Commit
+### 5. Commit
 
 ```bash
 git add -A
 git commit -m "Remove <container-name> from <service>"
 ```
 
-### 7. Record the removal
+### 6. Record the removal
 
 After committing, run:
 
@@ -140,7 +128,7 @@ git commit -m "Record removal of <container-name> in removed-quadlets.md"
 
 **Note:** Single container removals are also recorded in `removed-quadlets.md`.
 
-### 8. Ask about host-side cleanup
+### 7. Ask about host-side cleanup
 
 After committing, ask the user if they want a list of host-side actions needed (stopping/disabling the removed container, running `just install-quadlets`).
 

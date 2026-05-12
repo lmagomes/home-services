@@ -9,13 +9,13 @@ When a locally-built container image needs changes (Containerfile modifications,
 
 ## Images with build-version tracking
 
-Three images have in-repo source/config that changes independently of their base image:
+Four images have in-repo source/config that changes independently of their base image:
 
 | Image | Build dir | Base version source | Composed version |
 |-------|-----------|---------------------|------------------|
 | `dev` | `builds/dev/` | FROM line (`fedora:44` → `44`) | `44-r<N>` |
 | `forgejo-runner-job` | `builds/forgejo-runner-job/` | Literal (`44`) | `44-r<N>` |
-| `service-hub` | `builds/service-hub/` | First FROM line (`golang:1.24-alpine` → `1.24-alpine`) | `1.24-alpine-r<N>` |
+| `backup-restic` | `builds/backup-restic/` | Literal (`44`) | `44-r<N>` |
 
 ## Images without build-version tracking
 
@@ -26,7 +26,7 @@ These images derive their version solely from their base image — no build-vers
 | `caddy-cloudflare-l4` | `builds/caddy/` |
 | `transmission-flood` | `builds/transmission/` |
 | `json-path-finder` | `builds/json-path-finder/` |
-| `jsonlint` | `builds/jsonlint/` |
+| `lumo-tamer` | `builds/lumo-tamer/` |
 
 ## Workflow for changing a tracked image
 
@@ -62,7 +62,7 @@ Image=home-services/dev:44-r2
 
 The `.container` file locations:
 - `dev`: `quadlets/dev/dev.container`
-- `service-hub`: `quadlets/monitor/monitor-service-hub.container`
+- `backup-restic`: `quadlets/backup/backup-restic.container`
 - `forgejo-runner-job`: No quadlet file — the runner config (`quadlets/forgejo-runner/forgejo-runner-config.encrypted.yml`) uses `:latest` via a runner label, so no update needed
 
 ### 4. Build and test
