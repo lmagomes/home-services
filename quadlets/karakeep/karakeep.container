@@ -6,7 +6,7 @@ After=network.target karakeep-meilisearch.service
 [Container]
 ContainerName=karakeep
 Pod=karakeep.pod
-Image=ghcr.io/karakeep-app/karakeep:0.31.0
+Image=ghcr.io/karakeep-app/karakeep:0.32.0
 Volume=karakeep-data.volume:/data:Z
 Secret=karakeep-nextauth-secret,type=env,target=NEXTAUTH_SECRET
 Secret=karakeep-meili-master-key,type=env,target=MEILI_MASTER_KEY
