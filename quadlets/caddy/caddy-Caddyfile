@@ -18,17 +18,17 @@
 
 	servers {
 		listener_wrappers {
-		layer4 {
-			# Check traffic for ssh and route it to forgejo:2222 if it matches
-			@ssh ssh
-			route @ssh {
-			proxy forgejo.pod:2222
+			layer4 {
+				# Check traffic for ssh and route it to forgejo:2222 if it matches
+				@ssh ssh
+				route @ssh {
+					proxy forgejo.pod:2222
+				}
+				route
 			}
-			route
+			tls
 		}
-		tls
-		}
-  }
+	}
 }
 
 # Home servers
