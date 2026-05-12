@@ -5,7 +5,7 @@ After=network.target
 [Container]
 Pod=paperless.pod
 ContainerName=paperless-redis
-Image=docker.io/valkey/valkey:9.0.1
+Image=docker.io/valkey/valkey:9.0.4
 HealthCmd="/usr/local/bin/redis-cli ping || exit 1"
 HealthStartPeriod=30s
 HealthInterval=10s
