@@ -6,7 +6,7 @@ After=network.target firefly-db.service
 [Container]
 ContainerName=firefly-cron
 Pod=firefly.pod
-Image=docker.io/alpine:3.21.7
+Image=docker.io/alpine:3.23.4
 AutoUpdate=registry
 Exec=sh -c 'apk add tzdata && (ln -s /usr/share/zoneinfo/$$TZ /etc/localtime || true) && echo "0 3 * * * wget -qO- http://firefly:8080/api/v1/cron/$$STATIC_CRON_TOKEN;echo" | crontab - && crond -f -L /dev/stdout'
 EnvironmentFile=./firefly.env
