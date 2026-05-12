@@ -1,13 +1,14 @@
-name: Build and Push Container Images
+name: Build Images and Update Podman
 
 on:
   push:
     branches: [main]
     paths:
       - 'builds/**'
+      - 'quadlets/**'
 
 jobs:
-  build-and-push:
+  build:
     runs-on: host
     steps:
       - name: Checkout repository
@@ -23,3 +24,18 @@ jobs:
 
       - name: Build and push changed images
         run: just build-and-push-changed
+
+  update-podman:
+    needs: [build]
+    runs-on: host
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Sync quadlets and update images
+        run: |
+          just sync-secrets
+          just install-quadlets
+          just update-podman-images
