@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=notes-drawio
 Pod=notes.pod
-Image=docker.io/jgraph/drawio:29.7.12
+Image=docker.io/jgraph/drawio:30.0.1
 
 [Service]
 Restart=always
