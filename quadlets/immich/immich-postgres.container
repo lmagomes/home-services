@@ -9,7 +9,7 @@ Environment="POSTGRES_INITDB_ARGS=--data-checksums"
 EnvironmentFile=./immich.env
 Secret=immich-db-password,type=env,target=POSTGRES_PASSWORD
 Volume=immich-postgres-data.volume:/var/lib/postgresql/data:Z
-Image=ghcr.io/immich-app/postgres:14-vectorchord0.5.3
+Image=ghcr.io/immich-app/postgres:17-vectorchord0.5.3
 ShmSize=128mb
 
 [Service]
