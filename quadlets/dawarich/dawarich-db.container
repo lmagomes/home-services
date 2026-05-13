@@ -4,11 +4,11 @@ After=network.target
 
 [Container]
 Pod=dawarich.pod
-Image=docker.io/postgis/postgis:17-3.5-alpine
+Image=docker.io/postgis/postgis:18-3.6-alpine
 ContainerName=dawarich-db
 EnvironmentFile=./%N.env
 Secret=dawarich-db-password,type=env,target=POSTGRES_PASSWORD
-Volume=dawarich-db-data.volume:/var/lib/postgresql/data:Z
+Volume=dawarich-db-data.volume:/var/lib/postgresql:Z
 Volume=dawarich-shared.volume:/var/shared:Z
 ShmSize=1G
 HealthCmd=pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-dawarich}

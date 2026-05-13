@@ -40,8 +40,7 @@
             "matchPackageNames": [
                 "/mcr\\.microsoft\\.com/mssql/server/",
                 "/immich-app/postgres/",
-                "/zenika-hub/alpine-chrome/",
-                "/postgis/postgis/"
+                "/zenika-hub/alpine-chrome/"
             ]
         },
         {
@@ -73,6 +72,11 @@
             "description": "LocalAI uses gpu-intel suffix — only match same suffix",
             "allowedVersions": "/^v\\d+\\.\\d+\\.\\d+-gpu-intel$/",
             "matchPackageNames": ["/localai/localai/"]
+        },
+        {
+            "description": "PostGIS uses {pg-major}-{postgis-major}.{postgis-minor}[-alpine] tag format",
+            "versioning": "regex:^(?<major>\\d+)-(?<minor>\\d+)\\.(?<patch>\\d+)(-alpine)?$",
+            "matchPackageNames": ["/postgis/postgis/"]
         }
     ]
 }
