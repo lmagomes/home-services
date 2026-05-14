@@ -42,11 +42,6 @@ mila.{env.DOMAIN} {
 
 # Monitor services
 
-argus.{env.DOMAIN} {
-	reverse_proxy monitor.pod:9090
-	import cloudflare
-}
-
 dozzle.{env.DOMAIN} {
 	reverse_proxy monitor.pod:8080
 	import cloudflare

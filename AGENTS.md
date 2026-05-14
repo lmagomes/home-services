@@ -30,7 +30,7 @@ timers/                    # Systemd timer + service units
 | Volume | `<service>-<purpose>.volume` | `caddy-data.volume` |
 | Network | `<name>.network` | `services.network` |
 | Env file | `<container-name>.env` | `caddy.env` |
-| Extra config | `<container-name>-<file>` | `argus-config.yml` |
+| Extra config | `<container-name>-<file>` | `glance.yml` |
 | Just modules | `<domain>.just` | `backup.just` |
 | Container builds | `builds/<image>/Containerfile` | `builds/caddy/Containerfile` |
 
@@ -145,7 +145,7 @@ rm <file>.yml                                      # clean up decrypted copy
 - Container image versions are updated via `just update-quadlet-pr <quadlet> <container> <version>`.
 - This creates a branch `updates/<quadlet>-<date>-<containers>`, commits the change, pushes, and opens a PR.
 - When the PR is merged, the Forgejo workflow pulls images and restarts affected services via `just update-podman-images`.
-- Release Argus monitors upstream releases and triggers Service-Hub webhooks to auto-create PRs.
+- Renovate monitors upstream releases and triggers Service-Hub webhooks to auto-create PRs.
 
 ## Adding a New Service
 

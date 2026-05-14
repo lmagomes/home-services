@@ -13,12 +13,11 @@ This is a collection of podman quadlets that I use for selfhosting several servi
 │   ├── podman.just           # Podman management commands
 │   └── systemd.just          # Systemd linking and updates
 ├── quadlets/                 # Service definitions
-│   ├── argus/                # Example: Argus service
-│   │   ├── argus.pod
-│   │   ├── argus.container
-│   │   ├── argus-data.volume
-│   │   └── argus.env
-│   │   └── argus-config.yml
+│   ├── transmission/          # Example: Transmission service
+│   │   ├── transmission.pod
+│   │   ├── transmission.container
+│   │   ├── transmission-data.volume
+│   │   └── transmission.env
 │   └── ...                   # Other services
 ├── builds/                   # Custom Containerfiles
 │   ├── caddy/
@@ -167,7 +166,7 @@ just start-all
 Or start individual services:
 
 ```bash
-systemctl --user start argus-pod.service
+systemctl --user start transmission-pod.service
 ```
 
 ## Common Commands
@@ -194,10 +193,10 @@ just restart-all
 just stop-all
 
 # List containers in a specific pod
-just list-pod-containers argus.pod
+just list-pod-containers transmission.pod
 
 # List volumes used by a container
-just list-container-volumes argus
+just list-container-volumes transmission
 ```
 
 ### Container Image Management
