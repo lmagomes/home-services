@@ -139,6 +139,11 @@ dawarich.{env.DOMAIN} {
 	import cloudflare
 }
 
+glance.{env.DOMAIN} {
+	reverse_proxy glance.pod:8080
+	import cloudflare
+}
+
 firefly.{env.DOMAIN} {
 	reverse_proxy firefly.pod:8080
 	import cloudflare

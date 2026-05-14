@@ -1,0 +1,10 @@
+[Unit]
+Description=Glance dashboard pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=glance.pod
+Network=services.network
+
+[Install]
+WantedBy=default.target

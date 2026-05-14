@@ -1,0 +1,193 @@
+server:
+    host: 0.0.0.0
+    port: 8080
+    proxied: true
+
+theme:
+    background-color: 240 8 9
+    primary-color: 43 50 70
+
+branding:
+    app-name: Home Services
+    hide-footer: false
+
+pages:
+    - name: Home
+      width: wide
+      columns:
+          - size: small
+            widgets:
+                - type: server-stats
+                  servers:
+                      - type: local
+                        name: Server
+
+                - type: docker-containers
+                  title: Containers
+                  hide-by-default: false
+
+          - size: full
+            widgets:
+                - type: group
+                  widgets:
+                      - type: monitor
+                        title: Services
+                        cache: 1m
+                        sites:
+                            - title: Forgejo
+                              url: https://forgejo.${DOMAIN}
+                              icon: si:gitea
+                            - title: Immich
+                              url: https://immich.${DOMAIN}
+                              icon: si:immich
+                            - title: Paperless
+                              url: https://paperless.${DOMAIN}
+                              icon: si:paperless-ngx
+                            - title: Jellyfin
+                              url: https://jellyfin.${DOMAIN}
+                              icon: si:jellyfin
+                            - title: Miniflux
+                              url: https://miniflux.${DOMAIN}
+                              icon: si:miniflux
+                            - title: Authentik
+                              url: https://authentik.${DOMAIN}
+                              icon: si:goauthentik
+                            - title: Mealie
+                              url: https://mealie.${DOMAIN}
+                              icon: si:mealie
+                            - title: Dawarich
+                              url: https://dawarich.${DOMAIN}
+                              icon: di:dawarich
+                            - title: Audiobookshelf
+                              url: https://audiobookshelf.${DOMAIN}
+                              icon: si:audiobookshelf
+                            - title: Firefly
+                              url: https://firefly.${DOMAIN}
+                              icon: si:firefly-iii
+                            - title: Karakeep
+                              url: https://karakeep.${DOMAIN}
+                            - title: Calibre
+                              url: https://calibre.${DOMAIN}
+                              icon: si:calibre
+
+                      - type: releases
+                        title: Upstream Releases
+                        cache: 1d
+                        show-source-icon: true
+                        repositories:
+                            - immich-app/immich
+                            - paperless-ngx/paperless-ngx
+                            - glanceapp/glance
+                            - go-gitea/gitea
+                            - jellyfin/jellyfin
+                            - louislam/uptime-kuma
+                            - miniflux/v2
+                            - mealie-recipes/mealie
+                            - advplyr/audiobookshelf
+
+                - type: releases
+                  title: My Tools
+                  cache: 1d
+                  show-source-icon: true
+                  repositories:
+                      - glanceapp/glance
+                      - go-gitea/gitea
+                      - ZeroTricks/lumo-tamer
+
+          - size: small
+            widgets:
+                - type: custom-api
+                  title: Open Updates
+                  cache: 5m
+                  url: https://forgejo.${DOMAIN}/api/v1/repos/lgomes/home-services/pulls?state=open&labels=renovate
+                  headers:
+                      Authorization: Bearer ${FORGEJO_TOKEN}
+                  template: |
+                      {{ $pulls := .JSON.Array "." }}
+                      {{ if eq (len $pulls) 0 }}
+                        <p class="size-h4 color-positive">No open Renovate PRs</p>
+                      {{ else }}
+                        <ul class="list list-gap-10">
+                        {{ range $pulls }}
+                          <li class="text-truncate">
+                            <a class="size-h4 color-highlight" href="https://forgejo.${DOMAIN}/{{ .String "head.repo.full_name" }}/pulls/{{ .Int "number" }}">
+                              {{ .String "title" }}
+                            </a>
+                          </li>
+                        {{ end }}
+                        </ul>
+                      {{ end }}
+
+                - type: bookmarks
+                  title: Services
+                  groups:
+                      - title: Media
+                        color: 340 60 50
+                        links:
+                            - title: Immich
+                              url: https://immich.${DOMAIN}
+                              icon: si:immich
+                            - title: Jellyfin
+                              url: https://jellyfin.${DOMAIN}
+                              icon: si:jellyfin
+                            - title: Audiobookshelf
+                              url: https://audiobookshelf.${DOMAIN}
+                              icon: si:audiobookshelf
+                            - title: Calibre
+                              url: https://calibre.${DOMAIN}
+                              icon: si:calibre
+
+                      - title: Automation
+                        color: 200 50 50
+                        links:
+                            - title: Forgejo
+                              url: https://forgejo.${DOMAIN}
+                              icon: si:gitea
+                            - title: Miniflux
+                              url: https://miniflux.${DOMAIN}
+                              icon: si:miniflux
+                            - title: Mealie
+                              url: https://mealie.${DOMAIN}
+                              icon: si:mealie
+                            - title: Paperless
+                              url: https://paperless.${DOMAIN}
+                              icon: si:paperless-ngx
+
+                      - title: Monitoring
+                        color: 120 40 45
+                        links:
+                            - title: Dozzle
+                              url: https://dozzle.${DOMAIN}
+                              icon: di:dozzle
+                            - title: Uptime Kuma
+                              url: https://uptime-kuma.${DOMAIN}
+                              icon: si:uptime-kuma
+
+                      - title: Tools
+                        color: 30 60 50
+                        links:
+                            - title: Authentik
+                              url: https://authentik.${DOMAIN}
+                              icon: si:goauthentik
+                            - title: Dawarich
+                              url: https://dawarich.${DOMAIN}
+                              icon: di:dawarich
+                            - title: Firefly
+                              url: https://firefly.${DOMAIN}
+                              icon: si:firefly-iii
+                            - title: Karakeep
+                              url: https://karakeep.${DOMAIN}
+                            - title: Termix
+                              url: https://termix.${DOMAIN}
+                              icon: si:termix
+                            - title: Transmission
+                              url: https://transmission.${DOMAIN}
+                              icon: si:transmission
+
+                - type: rss
+                  title: selfh.st
+                  cache: 1h
+                  limit: 10
+                  collapse-after: 5
+                  feeds:
+                      - url: https://selfh.st/rss/

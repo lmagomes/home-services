@@ -4,6 +4,7 @@
     "labels": ["renovate"],
     "branchPrefix": "updates/renovate-",
     "dependencyDashboard": true,
+    "dependencyDashboardApproval": false,
     "schedule": ["before 6am"],
     "prHourlyLimit": 10,
     "prConcurrentLimit": 5,
