@@ -1,0 +1,10 @@
+[Unit]
+Description=Portabase pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=portabase.pod
+Network=services.network
+
+[Install]
+WantedBy=default.target

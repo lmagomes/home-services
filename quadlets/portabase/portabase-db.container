@@ -1,0 +1,19 @@
+[Unit]
+Description=Portabase Postgres container managed by Podman
+After=network.target
+
+[Container]
+Pod=portabase.pod
+Image=docker.io/postgres:18.3
+ContainerName=portabase-db
+EnvironmentFile=./%N.env
+Secret=portabase-db-password,type=env,target=POSTGRES_PASSWORD
+Volume=portabase-db-data.volume:/var/lib/postgresql/data:Z
+ShmSize=128mb
+HealthCmd=pg_isready -U ${POSTGRES_USER:-portabase} -d ${POSTGRES_DB:-portabase}
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -109,6 +109,9 @@ pages:
                             - title: Open WebUI
                               url: https://open-webui.${DOMAIN}
                               icon: di:open-webui
+                            - title: Portabase
+                              url: https://portabase.${DOMAIN}
+                              icon: sh:portabase
 
                       - type: releases
                         title: Upstream Releases
@@ -193,6 +196,9 @@ pages:
                             - title: Termix
                               url: https://termix.${DOMAIN}
                               icon: sh:termix
+                            - title: Portabase
+                              url: https://portabase.${DOMAIN}
+                              icon: sh:portabase
 
                       - title: Notes
                         color: 240 40 45

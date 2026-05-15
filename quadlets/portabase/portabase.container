@@ -1,0 +1,25 @@
+[Unit]
+Description=Portabase dashboard container managed by Podman
+Requires=portabase-db.service
+After=network.target portabase-db.service
+
+[Container]
+Pod=portabase.pod
+Image=docker.io/portabase/portabase:1.14.0
+ContainerName=portabase
+EnvironmentFile=./%N.env
+Secret=portabase-db-url,type=env,target=DATABASE_URL
+Secret=portabase-secret,type=env,target=PROJECT_SECRET
+Secret=portabase-project-url,type=env,target=PROJECT_URL
+Secret=portabase-trusted-domains,type=env,target=TRUSTED_DOMAINS
+Secret=portabase-oidc-client-id,type=env,target=AUTH_OIDC_CLIENT
+Secret=portabase-oidc-client-secret,type=env,target=AUTH_OIDC_SECRET
+Secret=portabase-oidc-issuer-url,type=env,target=AUTH_OIDC_ISSUER_URL
+Volume=portabase-data.volume:/app/private:Z
+HealthCmd=wget -qO /dev/null http://127.0.0.1:80
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

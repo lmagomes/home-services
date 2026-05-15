@@ -194,6 +194,11 @@ paperless-gpt.{env.DOMAIN} {
 	import cloudflare
 }
 
+portabase.{env.DOMAIN} {
+	reverse_proxy portabase.pod:80
+	import cloudflare
+}
+
 termix.{env.DOMAIN} {
 	reverse_proxy termix.pod:8080
 	import cloudflare

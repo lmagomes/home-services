@@ -1,0 +1,20 @@
+[Unit]
+Description=Portabase Agent container managed by Podman
+Requires=portabase.service
+After=network.target portabase.service
+
+[Container]
+Pod=portabase.pod
+Image=docker.io/portabase/agent:1.11.0
+ContainerName=portabase-agent
+EnvironmentFile=./%N.env
+Secret=portabase-agent-edge-key,type=env,target=EDGE_KEY
+Volume=portabase-agent-data.volume:/data:Z
+Volume=./databases.json:/config/config.json:ro,Z
+AddHost=host.containers.internal:host-gateway
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

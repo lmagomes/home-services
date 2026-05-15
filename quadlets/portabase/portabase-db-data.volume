@@ -1,0 +1,5 @@
+[Unit]
+Description=Portabase Db Data volume
+
+[Volume]
+VolumeName=portabase-db-data
