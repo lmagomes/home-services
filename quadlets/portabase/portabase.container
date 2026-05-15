@@ -5,7 +5,7 @@ After=network.target portabase-db.service
 
 [Container]
 Pod=portabase.pod
-Image=docker.io/portabase/portabase:1.14.0
+Image=docker.io/portabase/portabase:1.14.1
 ContainerName=portabase
 EnvironmentFile=./%N.env
 Secret=portabase-db-url,type=env,target=DATABASE_URL
@@ -16,6 +16,7 @@ Secret=portabase-oidc-client-id,type=env,target=AUTH_OIDC_CLIENT
 Secret=portabase-oidc-client-secret,type=env,target=AUTH_OIDC_SECRET
 Secret=portabase-oidc-issuer-url,type=env,target=AUTH_OIDC_ISSUER_URL
 Volume=portabase-data.volume:/app/private:Z
+Volume=/mnt/nas/backup/databases:/data:Z
 HealthCmd=wget -qO /dev/null http://127.0.0.1:80
 
 [Service]

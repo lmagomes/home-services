@@ -114,8 +114,17 @@ decrypt-quadlet-configs:
     #!/usr/bin/env fish
     for encrypted in (find quadlets/ -name "*.encrypted.*")
         set decrypted (string replace ".encrypted." "." -- $encrypted)
+        set ext (string replace -r ".*\\.encrypted\\." "" -- $encrypted)
+        if test "$ext" = "yml" -o "$ext" = "yaml"
+            set type yaml
+        else if test "$ext" = "json"
+            set type json
+        else
+            echo "⚠️ Unknown file type .$ext, skipping $encrypted"
+            continue
+        end
         echo "🔓 Decrypting $encrypted → $decrypted"
-        sops decrypt --input-type yaml --output-type yaml $encrypted > $decrypted
+        sops decrypt --input-type $type --output-type $type $encrypted > $decrypted
     end
     echo "✅ Quadlet configs decrypted"
 

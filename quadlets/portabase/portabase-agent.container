@@ -10,8 +10,7 @@ ContainerName=portabase-agent
 EnvironmentFile=./%N.env
 Secret=portabase-agent-edge-key,type=env,target=EDGE_KEY
 Volume=portabase-agent-data.volume:/data:Z
-Volume=./databases.json:/config/config.json:ro,Z
-AddHost=host.containers.internal:host-gateway
+Volume=./databases.json:/data/config.json:ro,Z
 
 [Service]
 Restart=always

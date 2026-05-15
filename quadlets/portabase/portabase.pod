@@ -5,6 +5,7 @@ After=network-online.target
 [Pod]
 PodName=portabase.pod
 Network=services.network
+AddHost=host.containers.internal:host-gateway
 
 [Install]
 WantedBy=default.target

@@ -8,7 +8,7 @@ Image=docker.io/postgres:18.3
 ContainerName=portabase-db
 EnvironmentFile=./%N.env
 Secret=portabase-db-password,type=env,target=POSTGRES_PASSWORD
-Volume=portabase-db-data.volume:/var/lib/postgresql/data:Z
+Volume=portabase-db-data.volume:/var/lib/postgresql:Z
 ShmSize=128mb
 HealthCmd=pg_isready -U ${POSTGRES_USER:-portabase} -d ${POSTGRES_DB:-portabase}
 
