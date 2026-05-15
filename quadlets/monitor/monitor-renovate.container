@@ -10,7 +10,7 @@ EnvironmentFile=./%N.env
 Secret=monitor-renovate-forgejo-token,type=env,target=RENOVATE_TOKEN
 Secret=monitor-renovate-registry-alias,type=env,target=RENOVATE_REGISTRY_ALIASES
 Secret=monitor-renovate-repo-endpoint,type=env,target=RENOVATE_ENDPOINT
-Secret=monitor-renovate-github-token,type=env,target=RENOVATE_GITHUB_COM_TOKEN
+Secret=github-read-token,type=env,target=RENOVATE_GITHUB_COM_TOKEN
 
 [Install]
 WantedBy=multi-user.target

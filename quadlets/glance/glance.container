@@ -7,11 +7,12 @@ ContainerName=glance
 Pod=glance.pod
 Image=docker.io/glanceapp/glance:v0.8.4
 Mount=type=bind,source=./glance.yml,destination=/app/config/glance.yml,relabel=private,ro=true
-Volume=/run/user/%U/podman/podman.sock:/run/podman/podman.sock
+Volume=/run/user/%U/podman/podman.sock:/var/run/docker.sock
 SecurityLabelDisable=true
 User=0
 Secret=glance-forgejo-token,type=env,target=FORGEJO_TOKEN
 Secret=domain-secret,type=env,target=DOMAIN
+Secret=github-read-token,type=env,target=GITHUB_TOKEN
 
 [Service]
 Restart=always

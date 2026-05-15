@@ -34,46 +34,87 @@ pages:
                         title: Services
                         cache: 1m
                         sites:
+                            - title: opencode
+                              url: https://opencode.${DOMAIN}
+                              icon: di:opencode
                             - title: Forgejo
                               url: https://forgejo.${DOMAIN}
-                              icon: si:gitea
-                            - title: Immich
-                              url: https://immich.${DOMAIN}
-                              icon: si:immich
-                            - title: Paperless
-                              url: https://paperless.${DOMAIN}
-                              icon: si:paperless-ngx
-                            - title: Jellyfin
-                              url: https://jellyfin.${DOMAIN}
-                              icon: si:jellyfin
-                            - title: Miniflux
-                              url: https://miniflux.${DOMAIN}
-                              icon: si:miniflux
+                              icon: di:forgejo
+                            - title: Cockpit
+                              url: https://mila.${DOMAIN}
+                              icon: sh:cockpit
                             - title: Authentik
                               url: https://authentik.${DOMAIN}
-                              icon: si:goauthentik
+                              icon: sh:authentik
+                            - title: Termix
+                              url: https://termix.${DOMAIN}
+                              icon: sh:termix
+                            - title: Jotty
+                              url: https://jotty.${DOMAIN}
+                              icon: di:jotty
+                            - title: Draw.io
+                              url: https://drawio.${DOMAIN}
+                              icon: di:draw-io
+                            - title: Karakeep
+                              url: https://karakeep.${DOMAIN}
+                              icon: sh:karakeep
+                            - title: Jellyfin
+                              url: https://jellyfin.${DOMAIN}
+                              icon: di:jellyfin
+                            - title: Audiobookshelf
+                              url: https://audiobookshelf.${DOMAIN}
+                              icon: di:audiobookshelf
+                            - title: Calibre
+                              url: https://calibre.${DOMAIN}
+                              icon: sh:calibre-web
+                            - title: Immich
+                              url: https://immich.${DOMAIN}
+                              icon: di:immich
+                            - title: Transmission
+                              url: https://transmission.${DOMAIN}
+                              icon: di:transmission
+                            - title: Dozzle
+                              url: https://dozzle.${DOMAIN}
+                              icon: di:dozzle
+                            - title: Uptime Kuma
+                              url: https://uptime-kuma.${DOMAIN}
+                              icon: sh:uptime-kuma
+                            - title: Miniflux
+                              url: https://miniflux.${DOMAIN}
+                              icon: sh:miniflux
                             - title: Mealie
                               url: https://mealie.${DOMAIN}
-                              icon: si:mealie
+                              icon: di:mealie
+                            - title: Paperless
+                              url: https://paperless.${DOMAIN}
+                              icon: sh:paperless-ngx
+                            - title: Paperless AI
+                              url: https://paperless-ai.${DOMAIN}
+                              icon: di:paperless-ngx
+                            - title: Paperless GPT
+                              url: https://paperless-gpt.${DOMAIN}
+                              icon: di:paperless-gpt
                             - title: Dawarich
                               url: https://dawarich.${DOMAIN}
                               icon: di:dawarich
-                            - title: Audiobookshelf
-                              url: https://audiobookshelf.${DOMAIN}
-                              icon: si:audiobookshelf
                             - title: Firefly
                               url: https://firefly.${DOMAIN}
-                              icon: si:firefly-iii
-                            - title: Karakeep
-                              url: https://karakeep.${DOMAIN}
-                            - title: Calibre
-                              url: https://calibre.${DOMAIN}
-                              icon: si:calibre
+                              icon: di:firefly-iii
+                            - title: Firefly Data Importer
+                              url: https://firefly-data-importer.${DOMAIN}
+                              icon: di:firefly-iii
+                            - title: Bichon
+                              url: https://bichon.${DOMAIN}
+                              icon: sh:mail-archiver
+                            - title: Open WebUI
+                              url: https://open-webui.${DOMAIN}
+                              icon: di:open-webui
 
                       - type: releases
                         title: Upstream Releases
                         cache: 1d
                         show-source-icon: true
+                        token: ${GITHUB_TOKEN}
                         repositories:
                             - immich-app/immich
                             - paperless-ngx/paperless-ngx
@@ -84,15 +125,24 @@ pages:
                             - miniflux/v2
                             - mealie-recipes/mealie
                             - advplyr/audiobookshelf
-
-                - type: releases
-                  title: My Tools
-                  cache: 1d
-                  show-source-icon: true
-                  repositories:
-                      - glanceapp/glance
-                      - go-gitea/gitea
-                      - ZeroTricks/lumo-tamer
+                            - goauthentik/authentik
+                            - Freika/dawarich
+                            - firefly-iii/firefly-iii
+                            - firefly-iii/data-importer
+                            - karakeep-app/karakeep
+                            - crocodilestick/calibre-web-automated
+                            - amir20/dozzle
+                            - open-webui/open-webui
+                            - clusterzx/paperless-ai
+                            - icereed/paperless-gpt
+                            - jgraph/drawio
+                            - CorentinTh/it-tools
+                            - lukegus/termix
+                            - rustmailer/bichon
+                            - fccview/jotty
+                            - mudler/LocalAI
+                            - ggml-org/llama.cpp
+                            - ZeroTricks/lumo-tamer
 
           - size: small
             widgets:
@@ -121,37 +171,60 @@ pages:
                 - type: bookmarks
                   title: Services
                   groups:
+                      - title: Development
+                        color: 30 60 50
+                        links:
+                            - title: opencode
+                              url: https://opencode.${DOMAIN}
+                              icon: di:opencode
+                            - title: Forgejo
+                              url: https://forgejo.${DOMAIN}
+                              icon: di:forgejo
+
+                      - title: Server
+                        color: 40 100 80
+                        links:
+                            - title: Cockpit
+                              url: https://mila.${DOMAIN}
+                              icon: sh:cockpit
+                            - title: Authentik
+                              url: https://authentik.${DOMAIN}
+                              icon: sh:authentik
+                            - title: Termix
+                              url: https://termix.${DOMAIN}
+                              icon: sh:termix
+
+                      - title: Notes
+                        color: 240 40 45
+                        links:
+                            - title: Jotty
+                              url: https://jotty.${DOMAIN}
+                              icon: di:jotty
+                            - title: Draw.io
+                              url: https://drawio.${DOMAIN}
+                              icon: di:draw-io
+                            - title: Karakeep
+                              url: https://karakeep.${DOMAIN}
+                              icon: sh:karakeep
+
                       - title: Media
                         color: 340 60 50
                         links:
-                            - title: Immich
-                              url: https://immich.${DOMAIN}
-                              icon: si:immich
                             - title: Jellyfin
                               url: https://jellyfin.${DOMAIN}
-                              icon: si:jellyfin
+                              icon: di:jellyfin
                             - title: Audiobookshelf
                               url: https://audiobookshelf.${DOMAIN}
-                              icon: si:audiobookshelf
+                              icon: di:audiobookshelf
                             - title: Calibre
                               url: https://calibre.${DOMAIN}
-                              icon: si:calibre
-
-                      - title: Automation
-                        color: 200 50 50
-                        links:
-                            - title: Forgejo
-                              url: https://forgejo.${DOMAIN}
-                              icon: si:gitea
-                            - title: Miniflux
-                              url: https://miniflux.${DOMAIN}
-                              icon: si:miniflux
-                            - title: Mealie
-                              url: https://mealie.${DOMAIN}
-                              icon: si:mealie
-                            - title: Paperless
-                              url: https://paperless.${DOMAIN}
-                              icon: si:paperless-ngx
+                              icon: sh:calibre-web
+                            - title: Immich
+                              url: https://immich.${DOMAIN}
+                              icon: di:immich
+                            - title: Transmission
+                              url: https://transmission.${DOMAIN}
+                              icon: di:transmission
 
                       - title: Monitoring
                         color: 120 40 45
@@ -161,28 +234,42 @@ pages:
                               icon: di:dozzle
                             - title: Uptime Kuma
                               url: https://uptime-kuma.${DOMAIN}
-                              icon: si:uptime-kuma
+                              icon: sh:uptime-kuma
 
-                      - title: Tools
-                        color: 30 60 50
+                      - title: Services
+                        color: 200 50 50
                         links:
-                            - title: Authentik
-                              url: https://authentik.${DOMAIN}
-                              icon: si:goauthentik
+                            - title: Miniflux
+                              url: https://miniflux.${DOMAIN}
+                              icon: sh:miniflux
+                            - title: Mealie
+                              url: https://mealie.${DOMAIN}
+                              icon: di:mealie
+                            - title: Paperless
+                              url: https://paperless.${DOMAIN}
+                              icon: sh:paperless-ngx
                             - title: Dawarich
                               url: https://dawarich.${DOMAIN}
                               icon: di:dawarich
                             - title: Firefly
                               url: https://firefly.${DOMAIN}
-                              icon: si:firefly-iii
-                            - title: Karakeep
-                              url: https://karakeep.${DOMAIN}
-                            - title: Termix
-                              url: https://termix.${DOMAIN}
-                              icon: si:termix
-                            - title: Transmission
-                              url: https://transmission.${DOMAIN}
-                              icon: si:transmission
+                              icon: di:firefly-iii
+                            - title: Bichon
+                              url: https://bichon.${DOMAIN}
+                              icon: sh:mail-archiver
+
+                      - title: LLM
+                        color: 320 80 60
+                        links:
+                            - title: Open WebUi
+                              url: https://open-webui.${DOMAIN}
+                              icon: di:open-webui
+                            - title: llama-cpp
+                              url: https://llamacpp.${DOMAIN}
+                              icon: sh:llama-cpp
+                            - title: openai
+                              url: https://openai.${DOMAIN}
+                              icon: di:openai
 
                 - type: rss
                   title: selfh.st
