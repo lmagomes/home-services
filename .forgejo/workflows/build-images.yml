@@ -6,6 +6,7 @@ on:
     paths:
       - 'builds/**'
       - 'quadlets/**'
+      - 'timers/**'
 
 jobs:
   build:
@@ -39,3 +40,6 @@ jobs:
           just sync-secrets
           just install-quadlets
           just update-podman-images
+
+      - name: Install timers
+        run: just install-timers

@@ -41,14 +41,14 @@ This is a collection of podman quadlets that I use for selfhosting several servi
 
 ### 1. Initial Setup
 
-Create systemd symlinks for quadlets and timers:
+Install quadlet and timer files to systemd:
 
 ```bash
-just symlink-quadlets
-just symlink-timers
+just install-quadlets
+just install-timers
 ```
 
-This creates symlinks in `~/.config/containers/systemd/` and `~/.config/systemd/user/` respectively.
+This copies files into `~/.config/containers/systemd/` and `~/.config/systemd/user/` respectively.
 
 ### 2. Create Secrets
 
@@ -149,7 +149,7 @@ I have tailscale installed on the host server, so these network options work for
 
 ### 3. Reload systemd
 
-After creating symlinks, reload the systemd daemon:
+Reload the systemd daemon (the install recipes above do this automatically):
 
 ```bash
 systemctl --user daemon-reload
@@ -215,14 +215,11 @@ just build-dev
 ### Systemd Management
 
 ```bash
-# Create symlinks for quadlets
-just symlink-quadlets
+# Install quadlet files to systemd directory
+just install-quadlets
 
-# Create symlinks for timers
-just symlink-timers
-
-# Remove broken symlinks
-just clean-symlinks
+# Install timer files to systemd directory
+just install-timers
 ```
 
 ### Backup & Restore

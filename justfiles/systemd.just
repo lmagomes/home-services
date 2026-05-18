@@ -80,25 +80,41 @@ generate-registries-conf:
 
     echo "✅ Generated $dest_file"
 
-# create symlinks for timers in the systemd directory
-symlink-timers:
+# copy timer files to systemd directory, removing old symlinks and stale files
+install-timers:
     #!/usr/bin/env fish
-    # go through each item in the timer directory
-    set dir "./timers/"
-    for item in "$dir"*
-        set full_path "$(readlink -f "$dir")/$(basename "$item")"
-        set systemd_path "{{ systemd-user-dir }}/$(basename "$item")"
+    set repo_timers (readlink -f ./timers)
 
-        # check if a symlink already exists
-        if [ -L $systemd_path ]
-            echo "🔗 symlink for '$full_path' already exists. Skipping..."
-        else if [ -e $systemd_path ]
-            echo "❗ real file at '$systemd_path' already exists. Skipping..."
-        else
-            ln -s $full_path $systemd_path
-            echo "✅ created a symlink for '$full_path' at '$systemd_path'"
+    # 1. remove old symlinks (if any, from previous symlink approach)
+    find {{ systemd-user-dir }} -type l | while read -l symlink
+        set target (readlink -f $symlink)
+        if string match -q "$repo_timers/*" $target
+            echo "🗑️  Removing old symlink: $(basename $symlink)"
+            rm $symlink
         end
     end
+
+    # 2. copy all timer files into systemd dir
+    for item in ./timers/*
+        set basename (basename $item)
+        set dest "{{ systemd-user-dir }}/$basename"
+        cp $item $dest
+    end
+
+    # 3. remove stale files in systemd dir not present in timers/
+    for item in {{ systemd-user-dir }}/*
+        set basename (basename $item)
+        if not test -e "./timers/$basename"
+            echo "🗑️  Removing stale file: $basename"
+            rm -f $item
+        end
+    end
+
+    # 4. reload systemd
+    echo "🔄 Reloading systemd user daemon..."
+    systemctl --user daemon-reload
+
+    echo "✅ All timers installed to {{ systemd-user-dir }}"
 
 # update quadlet container versions and create a PR
 update-quadlet-pr quadlet *pairs:
