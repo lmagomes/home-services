@@ -114,6 +114,13 @@ install-timers:
     echo "🔄 Reloading systemd user daemon..."
     systemctl --user daemon-reload
 
+    # 5. enable and start all timer units
+    for timer_file in ./timers/*.timer
+        set timer_name (basename $timer_file)
+        echo "🔛 Enabling and starting $timer_name"
+        systemctl --user enable --now $timer_name
+    end
+
     echo "✅ All timers installed to {{ systemd-user-dir }}"
 
 # update quadlet container versions and create a PR
