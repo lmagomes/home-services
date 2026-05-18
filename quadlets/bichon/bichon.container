@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=bichon
 Pod=bichon.pod
-Image=docker.io/rustmailer/bichon:0.3.7
+Image=docker.io/rustmailer/bichon:1.1.0
 Volume=bichon-root-dir.volume:/data:Z
 Volume=bichon-data-index.volume:/data/envelope:Z
 Volume=bichon-data-mail.volume:/data/eml:Z
