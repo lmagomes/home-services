@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 Pod=portabase.pod
-Image=docker.io/postgres:18.3
+Image=docker.io/postgres:18.4
 ContainerName=portabase-db
 EnvironmentFile=./%N.env
 Secret=portabase-db-password,type=env,target=POSTGRES_PASSWORD

@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 Pod=paperless.pod
-Image=docker.io/postgres:18.3
+Image=docker.io/postgres:18.4
 ContainerName=paperless-postgres
 EnvironmentFile=./%N.env
 Secret=paperless-db-password,type=env,target=POSTGRES_PASSWORD
