@@ -15,8 +15,10 @@ Secret=portabase-trusted-domains,type=env,target=TRUSTED_DOMAINS
 Secret=portabase-oidc-client-id,type=env,target=AUTH_OIDC_CLIENT
 Secret=portabase-oidc-client-secret,type=env,target=AUTH_OIDC_SECRET
 Secret=portabase-oidc-issuer-url,type=env,target=AUTH_OIDC_ISSUER_URL
-Volume=portabase-data.volume:/app/private:Z
-Volume=/mnt/nas/backup/databases:/data:Z
+Volume=portabase-data.volume:/data/private:Z
+Volume=./portabase-wrapper.sh:/app/portabase-wrapper.sh:ro,Z
+Entrypoint=/bin/bash
+Exec=/app/portabase-wrapper.sh
 HealthCmd=wget -qO /dev/null http://127.0.0.1:80
 
 [Service]

@@ -195,7 +195,7 @@ paperless-gpt.{env.DOMAIN} {
 }
 
 portabase.{env.DOMAIN} {
-	reverse_proxy portabase.pod:80
+	reverse_proxy portabase.pod:3000
 	import cloudflare
 }
 

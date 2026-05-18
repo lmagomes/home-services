@@ -6,6 +6,10 @@ After=network-online.target
 PodName=portabase.pod
 Network=services.network
 AddHost=host.containers.internal:host-gateway
+# Next.js binds to $HOSTNAME — overriding Podman's default (pod name) so it binds to
+# all interfaces incl. loopback.
+# Commenting to test other options.
+# PodmanArgs=--hostname 0.0.0.0
 
 [Install]
 WantedBy=default.target
