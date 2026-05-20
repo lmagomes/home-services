@@ -5,12 +5,14 @@ After=network.target
 [Container]
 ContainerName=bichon
 Pod=bichon.pod
-Image=docker.io/rustmailer/bichon:1.1.0
+Image=docker.io/rustmailer/bichon:1.1.1
 Volume=bichon-root-dir.volume:/data:Z
-Volume=bichon-data-index.volume:/data/envelope:Z
-Volume=bichon-data-mail.volume:/data/eml:Z
+Volume=bichon-index-dir.volume:/data/envelope:Z
+Volume=bichon-data-dir.volume:/data/eml:Z
 EnvironmentFile=./%N.env
+Secret=bichon-public-url,type=env,target=BICHON_PUBLIC_URL
 Secret=bichon-cors-origins,type=env,target=BICHON_CORS_ORIGINS
+Secret=bichon-encrypt-password,type=env,target=BICHON_ENCRYPT_PASSWORD
 
 [Service]
 Restart=always

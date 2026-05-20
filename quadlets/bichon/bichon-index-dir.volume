@@ -1,0 +1,5 @@
+[Unit]
+Description=Bichon index dir volume
+
+[Volume]
+VolumeName=bichon-index-dir

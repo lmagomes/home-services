@@ -1,5 +1,0 @@
-[Unit]
-Description=Bichon Data Index volume
-
-[Volume]
-VolumeName=bichon-data-index
