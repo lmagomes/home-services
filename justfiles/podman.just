@@ -4,28 +4,17 @@
 sync-secrets:
     #!/usr/bin/env fish
 
-    # 1. Decrypt and collect desired secrets into parallel lists
-    set -l desired_names
-    set -l desired_values
-    set -l secrets_raw (sops decrypt .secrets/secrets.yaml | yq .secrets)
-    for secret in $secrets_raw
-        # skip YAML comment lines
-        if string match -qr '^\s*#' -- $secret
-            continue
-        end
-        set -l parts (string split ": " -- $secret)
-        set -l name $parts[1]
-        set -l value (string join ": " $parts[2..-1])
-        # remove leading/trailing single quotes if they exist
-        set value (string trim -c "'" -- $value)
-        set -a desired_names $name
-        set -a desired_values $value
-    end
+    # Decrypt to temp file to preserve multi-line YAML
+    set -l tmp (mktemp)
+    sops decrypt .secrets/secrets.yaml > $tmp
 
-    # 2. Get existing podman secrets
+    # Get all secret names
+    set -l desired_names (yq '.secrets | keys | .[]' $tmp)
+
+    # Get existing podman secrets
     set -l existing (podman secret ls --noheading | awk '{print $2}')
 
-    # 3. Delete secrets not present in the file
+    # Delete secrets not present in the file
     for name in $existing
         if not contains -- $name $desired_names
             echo "🗑️  Removing orphan secret $name..."
@@ -33,10 +22,14 @@ sync-secrets:
         end
     end
 
-    # 4. Create or recreate secrets from the file
-    for i in (seq (count $desired_names))
-        set -l name $desired_names[$i]
-        set -l value $desired_values[$i]
+    # Create or recreate secrets from the file
+    for name in $desired_names
+        set -l raw_value (yq -r ".secrets.\"$name\"" $tmp)
+
+        # Strip surrounding double-quotes that SOPS may add
+        set raw_value (string trim -c '"' -- $raw_value)
+        # Convert literal \n to actual newlines (e.g. for PEM keys)
+        set -l value (printf '%b' $raw_value)
 
         if podman secret exists $name
             set -l current (podman secret inspect --showsecret $name | jq -r '.[0].SecretData')
@@ -50,8 +43,10 @@ sync-secrets:
             echo "✅ Creating secret $name..."
         end
 
-        echo -n $value | podman secret create $name -
+        printf '%s' $value | podman secret create $name -
     end
+
+    rm $tmp
 
 # show status of podman pod services
 show-status:
