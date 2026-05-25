@@ -5,7 +5,7 @@ After=network.target dawarich-db.service dawarich-redis.service
 
 [Container]
 Pod=dawarich.pod
-Image=docker.io/freikin/dawarich:1.7.8
+Image=docker.io/freikin/dawarich:1.7.9
 ContainerName=dawarich-app
 EnvironmentFile=./%N.env
 Secret=dawarich-db-password,type=env,target=DATABASE_PASSWORD
