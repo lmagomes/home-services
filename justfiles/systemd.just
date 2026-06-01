@@ -227,6 +227,17 @@ update-podman-images *dirs:
 
     set root_dirs (printf '%s\n' $root_dirs | sort -u)
 
+    # Pre-pull images so quadlet doesn't create temp storage in /var/tmp on restart
+    for dir in $root_dirs
+        for container_file in (find $dir -name "*.container")
+            set image (grep '^Image=' $container_file | head -1 | string split '=' -f 2-)
+            if test -n "$image"
+                echo "📥 Pre-pulling $image"
+                podman pull $image 2>&1 | tail -1
+            end
+        end
+    end
+
     systemctl --user daemon-reload
 
     for dir in $root_dirs

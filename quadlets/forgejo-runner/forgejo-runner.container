@@ -10,6 +10,7 @@ User=0:0
 SecurityLabelDisable=true
 Environment=DOCKER_HOST=unix://%t/podman/podman.sock
 Environment=XDG_RUNTIME_DIR=%t
+EnvironmentFile=./forgejo-runner.env
 Volume=forgejo-runner-data.volume:/data:Z
 Volume=./%N-config.yml:/data/config.yml:ro,Z
 Mount=type=bind,source=%t/podman/podman.sock,destination=%t/podman/podman.sock
