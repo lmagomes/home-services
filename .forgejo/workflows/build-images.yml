@@ -12,12 +12,6 @@ jobs:
   build:
     runs-on: host
     steps:
-      - name: Set up SSH key for Podman
-        run: |
-          mkdir -p /root
-          echo "$SSH_PRIVATE_KEY" > /root/forgejo-runner-key
-          chmod 600 /root/forgejo-runner-key
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -36,12 +30,6 @@ jobs:
     needs: [build]
     runs-on: host
     steps:
-      - name: Set up SSH key for Podman
-        run: |
-          mkdir -p /root
-          echo "$SSH_PRIVATE_KEY" > /root/forgejo-runner-key
-          chmod 600 /root/forgejo-runner-key
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
