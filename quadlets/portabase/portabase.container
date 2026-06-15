@@ -5,7 +5,7 @@ After=network.target portabase-db.service
 
 [Container]
 Pod=portabase.pod
-Image=docker.io/portabase/portabase:1.15.1
+Image=docker.io/portabase/portabase:1.17.2
 ContainerName=portabase
 EnvironmentFile=./%N.env
 Secret=portabase-db-url,type=env,target=DATABASE_URL
