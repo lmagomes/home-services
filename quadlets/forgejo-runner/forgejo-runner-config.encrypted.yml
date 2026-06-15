@@ -1,54 +1,56 @@
 log:
-    level: ENC[AES256_GCM,data:lzP4gA==,iv:vmNdGie81WFr72+vZxB/I8mmaQvDCOhUVPhn2KlvOQE=,tag:J7gntYmrD16RziOv1dUQhA==,type:str]
-    job_level: ENC[AES256_GCM,data:IEPb0Q==,iv:psh3xp8JMUrkCm73Y/ekxyVJLU+eITHU1xEwVbdxkaM=,tag:0rFB69SLQk8i7lLdkHyVRQ==,type:str]
+    level_unencrypted: info
+    job_level_unencrypted: info
 runner:
-    file: ENC[AES256_GCM,data:WkH4F33f8ru82KIFlw==,iv:6+VZcZCQ430aljUDGliAFabwDFjnFIE81PSzmjPnfV4=,tag:UwuyYRcdZ4/Vi91z37/MjQ==,type:str]
-    capacity: ENC[AES256_GCM,data:wA==,iv:A0QofzgAOvbPzh0VuM0Yww2nNu2T85DO08/rtNFbvU4=,tag:NjmTkF3Rmd+s0afcLbiwcQ==,type:int]
-    timeout: ENC[AES256_GCM,data:oAM=,iv:VOWvKsye1MQBKPZ6h3yo32Ost1o3mPtktQ2zBBsYrW4=,tag:dvDw6rf/Wy827Z6wMpjjMg==,type:str]
-    shutdown_timeout: ENC[AES256_GCM,data:/nw=,iv:wRT74d/xP4zN0FHjFRGaAPdM0/U+rNSUhCRy18610sw=,tag:0FHHpMWbR4OrMnHwNK4Ajw==,type:str]
-    insecure: ENC[AES256_GCM,data:az6Ct/Q=,iv:eH9sMhXn4EJ9B3QnBUQH7t0LuJq+xuBOR4AGuJ136WY=,tag:rwjEfAgs48NoKD9Wxzq5Ww==,type:bool]
-    fetch_timeout: ENC[AES256_GCM,data:OQM=,iv:1jfRxXdh4bBxH5CAv8C5e8OCJ2I84E2rdKb2UP9nQII=,tag:kAeBXe5sVrRVPP90eC+mkQ==,type:str]
-    fetch_interval: ENC[AES256_GCM,data:zHw=,iv:RtJbuCcQHV/a1mEBVKM4bFGALZg9jmSPZRNReDRhut0=,tag:aiZF9ecNOeOXJ3kEQidogw==,type:str]
+    file_unencrypted: /data/.runner
+    capacity_unencrypted: 1
+    timeout_unencrypted: 3h
+    shutdown_timeout_unencrypted: 3h
+    insecure_unencrypted: false
+    fetch_timeout_unencrypted: 5s
+    fetch_interval_unencrypted: 2s
     envs:
-        CONTAINER_HOST: ENC[AES256_GCM,data:74naSxKR8HABQXmWv/eP00hNF7IjNjypEDiRFfWdulnzayAqA/Naqg==,iv:/hmgbYwdVpRx/hiPN+IN82JSFqfEurbbbeceL2yB3oY=,tag:4XNd8MyGz6r59sYlJqGBpw==,type:str]
-        SOPS_AGE_KEY: ENC[AES256_GCM,data:/lC/qp7NKru4MBElM1npvq6PkPkn88zhceFmSu9svv7d6Dv942WGiprdR5fIz096RT2ynhOVOsUc9L7MoNgrnGdTNFTX+Og1/hi5yl4rbHSFfhxDUSPc8c9lLkjNvWC3fzsvO9PpfG9nyFoxBD5bIrc0CBoKIba2V/qWeBSzYCI3vxhWjFp4CmKqjytUNEFu6Nu4X9MDpeNKY4Rl0TDU29wy+Az5z98O90Al6YvlQxhmOVcVikBp,iv:e6xzlXxhk2x4uJmXIeE0AmgE95gjgmSjWgzo7R6zoVU=,tag:cXeccFpAydP7EX/e4y6WgA==,type:str]
-        DBUS_SESSION_BUS_ADDRESS: ENC[AES256_GCM,data:MNofyksXTFNQczAB6KjT8dUm7VHlJpqMS+71tA==,iv:v+FzYU5jSOMzvLWiEJEVlA77QheXUcGMai8DcYx0344=,tag:cM9TvKK+dX+JGHyOefbidw==,type:str]
-    labels:
-        - ENC[AES256_GCM,data:Zo8UQjwJFMK9QJ4zxeVWoG7gdhDCw+JQvo3+sdzzkX/QrRq5G6eETNgw+oJeEA4RqQ==,iv:9jEHPK2eS+iVEM4HxitlFRFLh926PQo3oGtcot7zPn4=,tag:qwiHS/hLeMEOzTl3Pk+v9g==,type:str]
+        CONTAINER_HOST: ENC[AES256_GCM,data:1XFn+dZUgZ9E6XpZKNhh+XaT8pZ2OCehvzMrEagXhHlUGzbqFXNaq5jd,iv:s3xLvf4Rp/T03fvLhENZmZqU0l8Torh9YWTpGGDqRoA=,tag:gCQDr3SqA8Dzv2sj1boQrw==,type:str]
+        CONTAINER_SSHKEY_unencrypted: /etc/ssh/forgejo-runner-key
+        SSH_OPTIONS_unencrypted: -o StrictHostKeyChecking=accept-new
+        SOPS_AGE_KEY: ENC[AES256_GCM,data:w3HdlzUh7SAtpcNhN5kBKa7dFrXxyXQZOnCRgABFpNax/jxkNWnolfToIzoeqIy+M/NRO3mSizmAzL0Wo80EuNTDBVgHPRuP8aRHqVM8t1ja28TNNy9V+mE6SwigTYEdk0OjTS9MMPnZwvgDE3WTd/CJm6XwG9iKIAEw05OAnhLDKElEYXyapY9ubIHwFlkO+UKKO6MzF38Tf3+yS5BsgX/PPH73q5XWbhEdPElcaLsOaUINUI9oIg==,iv:rM7DshtFE67udBvn8HjpFspL77Rjf7Bz0G3iprBvC4Q=,tag:I3C39o8a90g4qLT3OwhdoQ==,type:str]
+        DBUS_SESSION_BUS_ADDRESS: ENC[AES256_GCM,data:CIR4SKb3+DhGbxwlUp9q6JTHuoVaiq1NvS4aUA==,iv:zL8bu+ZPIT0rBlQLfSQK0SbjYXm2KIuglIc3DD54tp4=,tag:su8HkRyGG5+sy9RA1vcvOQ==,type:str]
+    labels_unencrypted:
+        - host:docker://localhost/forgejo-runner-job:latest
 cache:
-    enabled: ENC[AES256_GCM,data:hNOh7vk=,iv:PwPQzD4IRQblr9w9QNIHHP5VgsVV4nN+mzbyk486hEY=,tag:5yZMykZLB22CDFbduSMc6A==,type:bool]
+    enabled_unencrypted: false
 container:
-    network: ""
-    enable_ipv6: ENC[AES256_GCM,data:ctTuuCQ=,iv:jIDjde+26klHU/h1XCm3rYSRNIfmeNqE4nALWYCEBqA=,tag:kfvAtOXGMEJ09ywWqvjmxw==,type:bool]
-    privileged: ENC[AES256_GCM,data:EWuQr8k=,iv:WlyL4QCZUZpkHpXaheOjpTnRt6Zoy2VVQ2Mu1JoEvjs=,tag:vO3Yacnh8jS/DNfgMbKFtg==,type:bool]
-    docker_host: ""
-    options: ENC[AES256_GCM,data:vqbNyF3FhSwFft+AbTGiJcID5DgE8Mfeh/CJbJEBL7itbW8pBm1r9jBiqAPFkJ1/Z1dZNR8qRlgNhNUNYVwwkE1IOzxsKQ+lv/e3zDurci9X1GEwZQKbmpJrKV4uiZy1Fjy6qLYoyq2OaXvexyCMN2PaSlK7hqKK5+jhleMqJUkn043c5I52XPCGOwTVhYYwTQ1sXyyyp2WLiQ0o14YLZ6x8ppTzHuNYKVGKeQyrava0C5qp1vCjpwKejuBh5MT1NGiBVjdRmsiu25IsdhI8nNs51rFWglEHmE/CxIp88MM3utX1EyRhoIS0NFhgSeUZLK6mB7D7KRnC/yp3jaNIeKBNcl5cpGI7jyiG/6KEtNEJcf8pkloK3i+HBbWF0UtKr6Vb9Q6pO57McALEmk9Ev7HZf7OIVf5RZDPWRq2hbEkI+JKznX8MSqo2GIGjzSRT/URlb35RU7Dn,iv:urRfbt9r5/MU97jVyvjLT1qfiyLX0HcgJpyvtEi/88s=,tag:DuRbVGbmh+xUZu3wiD1xzw==,type:str]
-    valid_volumes:
-        - ENC[AES256_GCM,data:Mg0SoymirlLxVEU9e6d8Z5sFXPvu50MLnWoI92Ni,iv:hAi/jkNa+3TUyZfXfJKNqq/Gb2VPR1YjLWqIEWGF7gg=,tag:hMjnr8aOadgOtZHLC3bUrQ==,type:str]
-        - ENC[AES256_GCM,data:YtrttTjbmnp7vGgt3gEAm+N9,iv:e4wFOvQmanRe6KVVA0eUvVSELtf2hRl/oSG/85crUyU=,tag:SW9yHJT9M4dbwRoinwVHBw==,type:str]
-        - ENC[AES256_GCM,data:7eOPE6M8s/ixiNijoiJkN1Ic5N7U5ni2pViIuZG+JriW,iv:kCQ2WSrI5TNpQBg1vFYQ8D05Cwd5qLGjtX8SJegOq6Q=,tag:5w/PbLHrh05o19KqBokIMQ==,type:str]
-        - ENC[AES256_GCM,data:2NyqJs8ZoSgIMqq4bkJFVTGw5UXtQPqKt4D84CpWyWeBrmpY1KtI,iv:eGXjbnXyuqIRBQgPWxqHyBeVKQ+z0VSI00hzv5/NG2w=,tag:bERRiWue9+5slQPNaLl+3Q==,type:str]
-        - ENC[AES256_GCM,data:XS6YuQ2w/dgJkPJ5nwIw1EPWHVT8XenUYZfrGfJUFGpr,iv:ozMrPVvOjEAmB03sPTeZupswqJEo8dhbjIHh6pilILo=,tag:NHqLbb96866PGqeBkdsgTw==,type:str]
+    network_unencrypted: ""
+    enable_ipv6_unencrypted: false
+    privileged_unencrypted: false
+    docker_host_unencrypted: ssh://forgejo-runner@<host-ip-or-hostname>
+    options_unencrypted: -v /run/user/1000/systemd/private:/run/user/1000/systemd/private -v /run/user/1000/bus:/run/user/1000/bus -v /home/lgomes/.config/containers/systemd:/root/.config/containers/systemd -v /home/lgomes/.config/systemd/user:/root/.config/systemd/user -v /home/lgomes/.ssh/forgejo-runner:/etc/ssh/forgejo-runner-key:ro
+    valid_volumes_unencrypted:
+        - /run/user/1000/systemd/private
+        - /run/user/1000/bus
+        - /home/lgomes/.config/containers/systemd
+        - /home/lgomes/.config/systemd/user
+        - /home/lgomes/.ssh/forgejo-runner
 host:
-    workdir_parent: ENC[AES256_GCM,data:v6275Q==,iv:naoxvZFaXIi2Ps4UcKqI/Kf0wo5JkIBvmzQo3YuFkoQ=,tag:GGhT77cghVJ/qx5ScRZ9XA==,type:str]
+    workdir_parent_unencrypted: /tmp
 server:
     connections:
         forgejo:
-            url: ENC[AES256_GCM,data:PxtE+SMu7VieRuPiDRi969rOYvn8tnkkapg=,iv:1Rn6qyXz0KYSiRluKsTnilPTdrIsREgIwOmkcG2liH8=,tag:ApyVf4qtw2CZ7BFXU3sqXw==,type:str]
-            uuid: ENC[AES256_GCM,data:MgEaIQCl4dn6O3e+EMfRE40S7WUzES4yDzSTzmTI9AEX4hol,iv:oBOec2kdgFuAqGg5PwKen12F659qmHmYbdaJqB9mvus=,tag:XEXoaUyNi4Bzr5tdSzp3Nw==,type:str]
-            token: ENC[AES256_GCM,data:jes6DOeNIbfUmC03irMM/yKt2DTffB9moMfBz916nRDa23h1NMgYYQ==,iv:qctEgHrNGAGWKJuzOXvAwx2kPGYL5FhnjYE+UDKd7tg=,tag:wkegp43Fi28VOrBMmEt0oQ==,type:str]
+            url: ENC[AES256_GCM,data:36eA+sBcoaYgnA5wzN6mcz43bX72vxnREpM=,iv:74hTvzinstjjTH0pPb35WjZlt4U6crAVQ6Oa89Ps9U0=,tag:9B3ZQFxXGub/H8ZqcXW/zA==,type:str]
+            uuid: ENC[AES256_GCM,data:GExMRLFr92oRbyz/b8PLXJJ8LxgTZCsi8QBQMHwFnP1OJ34C,iv:aGgDgmwXUp+Ja3Ni03Do2Ut6jivJFZ2AtELNFyUeXUk=,tag:ChQN4VbenTFwzRKPQMsHUA==,type:str]
+            token: ENC[AES256_GCM,data:fYebQRDgn2xe7wNdbhpG6W41SypcomT4nz9yYKv7J33tDe0zCU7ScA==,iv:2jl98pccEo0KAipBbyEreH+JS/hFMQgTSCOEgJjpyHo=,tag:SPCfhOpbZjw+fpILxCsMoQ==,type:str]
 sops:
     age:
         - recipient: age197damvmzfln6huddgr6ujg8qjnmphsv5rumdu5xfh7c69dvsadasdpvce7
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBPNGs5WnNsVWtNRWFabUNp
-            YkRWSExWT2tZeG5LL0NuUndBQnRiRjhCK3lFCkpUaDErVmVlYmhJbDVFSytTNERN
-            RytCdUdRQTFjN0FoMzhCNVpYcE9RY00KLS0tIDBZVTFvY1BIbS9EbUNNY3F0cFVJ
-            c3N4aEcyN0k3eTFsRExXRlphaHBQSEkK2B3ccVdCjbmQ93JjOzhb0yavTNOvC4WL
-            pWkS+S06vWI44661DYtz0Mt73BtSLoeSDSUoEXWWaNUMtmMTDIYiiQ==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA0VTZKZFVsRHJmNnFVcWVV
+            OWtLa0RqOWhjK3dHamV4MXpHRncwS1BOdDM0CkwyMXNja3ZyQ1huQXRmV2k4OElw
+            c2U0ZFErVzQwbWlZNWlMbXZWVVVveVEKLS0tIE5rVzVIdGl3Nm0xT2FpQ0I5TjMy
+            c29saXRkQWxiNE5CVkZkaVlZV3MzVkkKLHJNP8eUAKlFAx0gmPnYn5u56alyPz7U
+            +i2jytZzAvuBRqTwSk/3BbkCIIQ3ZCLbCkLV350UxkjPgTPbYufO4w==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-06-03T09:25:47Z"
-    mac: ENC[AES256_GCM,data:MpTWzxxaqinNEcgN89otol2Bs9P5LlrA0UYQz1UesiEj0tcHHVJH8b29B2Dy4ybmX00/D3VmDC97A1aWjydlHicxoyVA+RmMBD6RViV2koGM9jjbqsKIV2iTU3kkzdGhsj53kUKE+fYuMBlWBD8qqr6K0Pyiw2A7faCx9OocM+k=,iv:TiRDdiTLs1HDvDM8nFvIL5iIT1+PPsUI7RzY00diPvo=,tag:+cVPwtCCjyTk+YjUu+It8w==,type:str]
+    lastmodified: "2026-06-01T07:46:58Z"
+    mac: ENC[AES256_GCM,data:l1ueLbb0M5x+9JFPLaUu0T/6qYLHtZOu2w7i4a4F8qjrvSEBQCNU+C8H6ajtcrUGC26iBczVCx6f64ejgCwXSQL1EvdFSLrcSn8/RDOFP2zCLszwZw8Rwr7EoLEJSgkh/R2iBs/+u4XGGSy3aZDtBl2l8LIn+tk/hCtME9zf4X4=,iv:ichiDeGSEBcEykRSOYEHVkX93/gV2gejERF5+O1ejBw=,tag:HdU+2o3BI9/bFQ8STErWNQ==,type:str]
     unencrypted_suffix: _unencrypted
     version: 3.12.2

@@ -105,6 +105,7 @@ stop-all:
     end
 
 # decrypt quadlet config files stored encrypted (e.g., forgejo-runner-config.yml)
+# sops strips the _unencrypted suffix automatically on decrypt (v3.13+)
 decrypt-quadlet-configs:
     #!/usr/bin/env fish
     for encrypted in (find quadlets/ -name "*.encrypted.*")

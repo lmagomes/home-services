@@ -23,10 +23,14 @@ install-quadlets:
         end
     end
 
-    # 3. copy all quadlet files/dirs into systemd dir
+    # 3. copy all quadlet files/dirs into systemd dir (skip encrypted source files)
     for dir in ./quadlets/*/
         for item in "$dir"*
             set basename (basename $item)
+            # Skip encrypted source files — only decrypted copies are installed
+            if string match -q '*.encrypted.*' $basename
+                continue
+            end
             set dest "{{ systemd-container-dir }}/$basename"
             if test -d $item
                 cp -r $item $dest

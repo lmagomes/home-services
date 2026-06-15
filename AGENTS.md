@@ -84,14 +84,50 @@ decrypted copy of it.** If a task requires a new secret or updating an existing 
 tell the user the exact secret name needed (and which service/container it's for).
 The user will add it themselves.
 
-**Exception — encrypted quadlet configs (`*.encrypted.yml`):** Unlike `.secrets/secrets.yaml`,
+**Exception — encrypted quadlet configs (`*.encrypted.*`):** Unlike `.secrets/secrets.yaml`,
 these files are safe for agents to decrypt with `sops` for review or editing. If changes are
-made, re-encrypt the file back to its `.encrypted.yml` form. Decrypt with:
+made, re-encrypt the file back to its `.encrypted.*` form. Decrypt with:
 
 ```
 sops decrypt <file>.encrypted.yml > <file>.yml     # review/edit
 sops encrypt <file>.yml > <file>.encrypted.yml     # re-encrypt after edits
 rm <file>.yml                                      # clean up decrypted copy
+```
+
+### Encrypted config `_unencrypted` convention
+
+SOPS encrypted config files (`*.encrypted.*`) use SOPS's `unencrypted_suffix` feature
+set to `_unencrypted`. This allows non-sensitive configuration values to be stored in
+plaintext within the encrypted file so they are reviewable in PRs and `cat` output.
+
+Rules:
+- Append `_unencrypted` to keys whose values are **non-sensitive** (log levels,
+  timeouts, paths, labels, cache settings, container options, volume mounts, etc.).
+- Do **not** add `_unencrypted` to keys whose values are secrets (tokens, passwords,
+  API keys, encryption keys, etc.) — those stay fully encrypted.
+- sops v3.13+ strips the `_unencrypted` suffix automatically during decryption,
+  producing a clean config file that the consuming application expects.
+- To review an encrypted config: `cat` shows non-sensitive values in plaintext;
+  use `sops decrypt` for the full picture including secrets.
+
+Example — encrypted file content:
+```yaml
+server:
+    url: ENC[AES256_GCM,data:...]          # secret — encrypted
+    token: ENC[AES256_GCM,data:...]        # secret — encrypted
+log:
+    level_unencrypted: debug               # non-sensitive — readable
+    job_level_unencrypted: info            # non-sensitive — readable
+```
+
+After `sops decrypt`:
+```yaml
+server:
+    url: https://example.com
+    token: abc123def456
+log:
+    level: debug
+    job_level: info
 ```
 
 ## Domain Names
