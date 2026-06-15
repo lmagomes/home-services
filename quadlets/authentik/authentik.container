@@ -7,7 +7,7 @@ After=network.target authentik-db.service
 ContainerName=authentik
 Pod=authentik.pod
 Exec=server
-Image=ghcr.io/goauthentik/server:2026.2.3
+Image=ghcr.io/goauthentik/server:2026.5.2
 EnvironmentFile=./%N.env
 Secret=authentik-db-password,type=env,target=AUTHENTIK_POSTGRESQL__PASSWORD
 Secret=authentik-db-password,type=env,target=AUTHENTIK_POSTGRESQL__PASSWORD
