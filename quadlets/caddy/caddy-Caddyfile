@@ -139,6 +139,12 @@ glance.{env.DOMAIN} {
 	import cloudflare
 }
 
+# Home Assistant uses host networking; reachable via host.containers.internal (resolved via AddHost on the caddy pod)
+home-assistant.{env.DOMAIN} {
+	reverse_proxy host.containers.internal:8123
+	import cloudflare
+}
+
 firefly.{env.DOMAIN} {
 	reverse_proxy firefly.pod:8080
 	import cloudflare

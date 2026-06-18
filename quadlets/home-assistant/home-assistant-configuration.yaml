@@ -1,0 +1,21 @@
+# Home Assistant configuration
+# See https://www.home-assistant.io/docs/configuration/
+
+# Load default set of integrations
+default_config:
+
+# Reverse proxy (Caddy)
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 192.168.8.64
+
+# HACS
+hacs:
+  token: !secret hacs_token
+
+# OIDC / Authentik integration (install auth_oidc via HACS first)
+# auth_oidc:
+#   client_id: !secret authentik_client_id
+#   client_secret: !secret authentik_client_secret
+#   discovery_url: "https://authentik.your-domain.com/application/o/home-assistant/.well-known/openid-configuration"

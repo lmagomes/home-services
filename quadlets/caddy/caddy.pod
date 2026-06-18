@@ -7,6 +7,7 @@ PodName=caddy.pod
 PublishPort=192.168.8.64:443:443
 PublishPort=2019:2019
 Network=services.network
+AddHost=host.containers.internal:host-gateway
 
 [Install]
 WantedBy=default.target

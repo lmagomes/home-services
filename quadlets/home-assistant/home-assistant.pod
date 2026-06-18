@@ -1,0 +1,10 @@
+[Unit]
+Description=Home Assistant pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=home-assistant.pod
+Network=host
+
+[Install]
+WantedBy=default.target

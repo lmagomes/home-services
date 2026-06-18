@@ -1,0 +1,5 @@
+[Unit]
+Description=Home Assistant Config volume
+
+[Volume]
+VolumeName=home-assistant-config

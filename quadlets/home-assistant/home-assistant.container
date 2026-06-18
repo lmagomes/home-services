@@ -1,0 +1,20 @@
+[Unit]
+Description=Home Assistant container managed by Podman
+After=network-online.target
+
+[Container]
+ContainerName=home-assistant
+Pod=home-assistant.pod
+Image=ghcr.io/home-assistant/home-assistant:2026.6.3
+EnvironmentFile=./%N.env
+Volume=home-assistant-config.volume:/config:Z
+Mount=type=bind,source=./home-assistant-configuration.yaml,destination=/config/configuration.yaml,relabel=private
+Mount=type=bind,source=./home-assistant-secrets.yaml,destination=/config/secrets.yaml,relabel=private
+Mount=type=bind,source=/dev/ttyUSB0,destination=/dev/ttyUSB0,relabel=shared
+GroupAdd=keep-groups
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
