@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=glance
 Pod=glance.pod
-Image=docker.io/glanceapp/glance:v0.8.4
+Image=docker.io/glanceapp/glance:v0.8.5
 Mount=type=bind,source=./glance.yml,destination=/app/config/glance.yml,relabel=private,ro=true
 Volume=/run/user/%U/podman/podman.sock:/var/run/docker.sock
 SecurityLabelDisable=true

@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 Pod=dawarich.pod
-Image=docker.io/redis:8.6-alpine
+Image=docker.io/redis:8.8-alpine
 ContainerName=dawarich-redis
 Exec=redis-server --save 900 1 --save 300 10 --appendonly no
 Volume=dawarich-shared.volume:/data:Z

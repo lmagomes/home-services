@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=monitor-uptime-kuma
 Pod=monitor.pod
-Image=ghcr.io/louislam/uptime-kuma:2.3.2
+Image=ghcr.io/louislam/uptime-kuma:2.4.0
 Volume=monitor-uptime-kuma-data.volume:/app/data:Z
 Volume=/run/user/%U/podman/podman.sock:/run/podman/podman.sock
 SecurityLabelDisable=true
