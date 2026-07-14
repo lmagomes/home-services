@@ -10,11 +10,9 @@ runner:
     fetch_timeout_unencrypted: 5s
     fetch_interval_unencrypted: 2s
     envs:
-        CONTAINER_HOST: ENC[AES256_GCM,data:1XFn+dZUgZ9E6XpZKNhh+XaT8pZ2OCehvzMrEagXhHlUGzbqFXNaq5jd,iv:s3xLvf4Rp/T03fvLhENZmZqU0l8Torh9YWTpGGDqRoA=,tag:gCQDr3SqA8Dzv2sj1boQrw==,type:str]
-        CONTAINER_SSHKEY_unencrypted: /etc/ssh/forgejo-runner-key
-        SSH_OPTIONS_unencrypted: -o StrictHostKeyChecking=accept-new
-        SOPS_AGE_KEY: ENC[AES256_GCM,data:w3HdlzUh7SAtpcNhN5kBKa7dFrXxyXQZOnCRgABFpNax/jxkNWnolfToIzoeqIy+M/NRO3mSizmAzL0Wo80EuNTDBVgHPRuP8aRHqVM8t1ja28TNNy9V+mE6SwigTYEdk0OjTS9MMPnZwvgDE3WTd/CJm6XwG9iKIAEw05OAnhLDKElEYXyapY9ubIHwFlkO+UKKO6MzF38Tf3+yS5BsgX/PPH73q5XWbhEdPElcaLsOaUINUI9oIg==,iv:rM7DshtFE67udBvn8HjpFspL77Rjf7Bz0G3iprBvC4Q=,tag:I3C39o8a90g4qLT3OwhdoQ==,type:str]
-        DBUS_SESSION_BUS_ADDRESS: ENC[AES256_GCM,data:CIR4SKb3+DhGbxwlUp9q6JTHuoVaiq1NvS4aUA==,iv:zL8bu+ZPIT0rBlQLfSQK0SbjYXm2KIuglIc3DD54tp4=,tag:su8HkRyGG5+sy9RA1vcvOQ==,type:str]
+        CONTAINER_HOST_unencrypted: unix:///run/user/1000/podman/podman.sock
+        SOPS_AGE_KEY: ENC[AES256_GCM,data:/lC/qp7NKru4MBElM1npvq6PkPkn88zhceFmSu9svv7d6Dv942WGiprdR5fIz096RT2ynhOVOsUc9L7MoNgrnGdTNFTX+Og1/hi5yl4rbHSFfhxDUSPc8c9lLkjNvWC3fzsvO9PpfG9nyFoxBD5bIrc0CBoKIba2V/qWeBSzYCI3vxhWjFp4CmKqjytUNEFu6Nu4X9MDpeNKY4Rl0TDU29wy+Az5z98O90Al6YvlQxhmOVcVikBp,iv:e6xzlXxhk2x4uJmXIeE0AmgE95gjgmSjWgzo7R6zoVU=,tag:cXeccFpAydP7EX/e4y6WgA==,type:str]
+        DBUS_SESSION_BUS_ADDRESS_unencrypted: unix:path=/run/user/1000/bus
     labels_unencrypted:
         - host:docker://localhost/forgejo-runner-job:latest
 cache:
@@ -23,34 +21,34 @@ container:
     network_unencrypted: ""
     enable_ipv6_unencrypted: false
     privileged_unencrypted: false
-    docker_host_unencrypted: ssh://forgejo-runner@<host-ip-or-hostname>
-    options_unencrypted: -v /run/user/1000/systemd/private:/run/user/1000/systemd/private -v /run/user/1000/bus:/run/user/1000/bus -v /home/lgomes/.config/containers/systemd:/root/.config/containers/systemd -v /home/lgomes/.config/systemd/user:/root/.config/systemd/user -v /home/lgomes/.ssh/forgejo-runner:/etc/ssh/forgejo-runner-key:ro
+    docker_host_unencrypted: ""
+    options_unencrypted: --security-opt label=disable -v /run/user/1000/systemd/private:/run/user/1000/systemd/private -v /run/user/1000/bus:/run/user/1000/bus -v /run/user/1000/podman/podman.sock:/run/user/1000/podman/podman.sock -v /home/lgomes/.config/containers/systemd:/root/.config/containers/systemd -v /home/lgomes/.config/systemd/user:/root/.config/systemd/user
     valid_volumes_unencrypted:
         - /run/user/1000/systemd/private
         - /run/user/1000/bus
+        - /run/user/1000/podman/podman.sock
         - /home/lgomes/.config/containers/systemd
         - /home/lgomes/.config/systemd/user
-        - /home/lgomes/.ssh/forgejo-runner
 host:
     workdir_parent_unencrypted: /tmp
 server:
     connections:
         forgejo:
-            url: ENC[AES256_GCM,data:36eA+sBcoaYgnA5wzN6mcz43bX72vxnREpM=,iv:74hTvzinstjjTH0pPb35WjZlt4U6crAVQ6Oa89Ps9U0=,tag:9B3ZQFxXGub/H8ZqcXW/zA==,type:str]
-            uuid: ENC[AES256_GCM,data:GExMRLFr92oRbyz/b8PLXJJ8LxgTZCsi8QBQMHwFnP1OJ34C,iv:aGgDgmwXUp+Ja3Ni03Do2Ut6jivJFZ2AtELNFyUeXUk=,tag:ChQN4VbenTFwzRKPQMsHUA==,type:str]
-            token: ENC[AES256_GCM,data:fYebQRDgn2xe7wNdbhpG6W41SypcomT4nz9yYKv7J33tDe0zCU7ScA==,iv:2jl98pccEo0KAipBbyEreH+JS/hFMQgTSCOEgJjpyHo=,tag:SPCfhOpbZjw+fpILxCsMoQ==,type:str]
+            url: ENC[AES256_GCM,data:PxtE+SMu7VieRuPiDRi969rOYvn8tnkkapg=,iv:1Rn6qyXz0KYSiRluKsTnilPTdrIsREgIwOmkcG2liH8=,tag:ApyVf4qtw2CZ7BFXU3sqXw==,type:str]
+            uuid: ENC[AES256_GCM,data:MgEaIQCl4dn6O3e+EMfRE40S7WUzES4yDzSTzmTI9AEX4hol,iv:oBOec2kdgFuAqGg5PwKen12F659qmHmYbdaJqB9mvus=,tag:XEXoaUyNi4Bzr5tdSzp3Nw==,type:str]
+            token: ENC[AES256_GCM,data:jes6DOeNIbfUmC03irMM/yKt2DTffB9moMfBz916nRDa23h1NMgYYQ==,iv:qctEgHrNGAGWKJuzOXvAwx2kPGYL5FhnjYE+UDKd7tg=,tag:wkegp43Fi28VOrBMmEt0oQ==,type:str]
 sops:
     age:
-        - recipient: age197damvmzfln6huddgr6ujg8qjnmphsv5rumdu5xfh7c69dvsadasdpvce7
-          enc: |
+        - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA0VTZKZFVsRHJmNnFVcWVV
-            OWtLa0RqOWhjK3dHamV4MXpHRncwS1BOdDM0CkwyMXNja3ZyQ1huQXRmV2k4OElw
-            c2U0ZFErVzQwbWlZNWlMbXZWVVVveVEKLS0tIE5rVzVIdGl3Nm0xT2FpQ0I5TjMy
-            c29saXRkQWxiNE5CVkZkaVlZV3MzVkkKLHJNP8eUAKlFAx0gmPnYn5u56alyPz7U
-            +i2jytZzAvuBRqTwSk/3BbkCIIQ3ZCLbCkLV350UxkjPgTPbYufO4w==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBPNGs5WnNsVWtNRWFabUNp
+            YkRWSExWT2tZeG5LL0NuUndBQnRiRjhCK3lFCkpUaDErVmVlYmhJbDVFSytTNERN
+            RytCdUdRQTFjN0FoMzhCNVpYcE9RY00KLS0tIDBZVTFvY1BIbS9EbUNNY3F0cFVJ
+            c3N4aEcyN0k3eTFsRExXRlphaHBQSEkK2B3ccVdCjbmQ93JjOzhb0yavTNOvC4WL
+            pWkS+S06vWI44661DYtz0Mt73BtSLoeSDSUoEXWWaNUMtmMTDIYiiQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-06-01T07:46:58Z"
-    mac: ENC[AES256_GCM,data:l1ueLbb0M5x+9JFPLaUu0T/6qYLHtZOu2w7i4a4F8qjrvSEBQCNU+C8H6ajtcrUGC26iBczVCx6f64ejgCwXSQL1EvdFSLrcSn8/RDOFP2zCLszwZw8Rwr7EoLEJSgkh/R2iBs/+u4XGGSy3aZDtBl2l8LIn+tk/hCtME9zf4X4=,iv:ichiDeGSEBcEykRSOYEHVkX93/gV2gejERF5+O1ejBw=,tag:HdU+2o3BI9/bFQ8STErWNQ==,type:str]
+          recipient: age197damvmzfln6huddgr6ujg8qjnmphsv5rumdu5xfh7c69dvsadasdpvce7
+    lastmodified: "2026-07-13T09:31:10Z"
+    mac: ENC[AES256_GCM,data:SzffHgXEV3uWalSjnCfPbfkr3lyizHpoaE2X+5GJxmno38i+L/sCn5YPsHrE2dc/doix3G1RYpRrOFwD6pZDKWUPXhuRzYBrhyE0Ql/qcOgfz/w75zZxSxDFfopU+XpC2Qe/oKWjchjEYOkCvDrqgOY81ooKZf1cySV7UzfT5O8=,iv:ipLwrfHrpcAasYp7QvdSjScvgwu6CFP2U0G7McElap0=,tag:DAvI4pJL1ATeDAJj+wngIA==,type:str]
     unencrypted_suffix: _unencrypted
-    version: 3.12.2
+    version: 3.13.1
