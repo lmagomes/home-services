@@ -5,7 +5,7 @@ After=network.target firefly-db.service
 [Container]
 ContainerName=firefly
 Pod=firefly.pod
-Image=docker.io/fireflyiii/core:version-6.6.3
+Image=docker.io/fireflyiii/core:version-6.6.6
 EnvironmentFile=./%N.env
 Secret=firefly-db-password,type=env,target=DB_PASSWORD
 Secret=firefly-app-url,type=env,target=APP_URL
