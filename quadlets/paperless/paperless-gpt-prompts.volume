@@ -1,5 +1,0 @@
-[Unit]
-Description=Paperless Gpt Prompts volume
-
-[Volume]
-VolumeName=paperless-gpt-prompts

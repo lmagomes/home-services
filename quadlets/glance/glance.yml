@@ -88,12 +88,6 @@ pages:
                             - title: Paperless
                               url: https://paperless.${DOMAIN}
                               icon: sh:paperless-ngx
-                            - title: Paperless AI
-                              url: https://paperless-ai.${DOMAIN}
-                              icon: di:paperless-ngx
-                            - title: Paperless GPT
-                              url: https://paperless-gpt.${DOMAIN}
-                              icon: di:paperless-gpt
                             - title: Dawarich
                               url: https://dawarich.${DOMAIN}
                               icon: di:dawarich
@@ -136,8 +130,6 @@ pages:
                             - crocodilestick/calibre-web-automated
                             - amir20/dozzle
                             - open-webui/open-webui
-                            - clusterzx/paperless-ai
-                            - icereed/paperless-gpt
                             - jgraph/drawio
                             - CorentinTh/it-tools
                             - lukegus/termix

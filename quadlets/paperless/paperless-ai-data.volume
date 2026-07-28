@@ -1,5 +1,0 @@
-[Unit]
-Description=Paperless Ai Data volume
-
-[Volume]
-VolumeName=paperless-ai-data

@@ -190,16 +190,6 @@ paperless.{env.DOMAIN} {
 	import cloudflare
 }
 
-paperless-ai.{env.DOMAIN} {
-	reverse_proxy paperless.pod:3000
-	import cloudflare
-}
-
-paperless-gpt.{env.DOMAIN} {
-	reverse_proxy paperless.pod:8080
-	import cloudflare
-}
-
 portabase.{env.DOMAIN} {
 	reverse_proxy portabase.pod:3000
 	import cloudflare
