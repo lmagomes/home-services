@@ -47,7 +47,7 @@ build-dev:
     set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/dev/Containerfile)
     set build_version (cat builds/dev/build-version | string trim)
     set image_version "$image_version-r$build_version"
-    podman build -t localhost/dev:$image_version builds/dev/
+    podman build --build-arg CACHEBUST=(date +%s) -t localhost/dev:$image_version builds/dev/
     podman tag localhost/dev:$image_version localhost/dev:latest
 
 # create a container image for json-path-finder

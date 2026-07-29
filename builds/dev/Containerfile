@@ -28,6 +28,15 @@ RUN usermod -s /usr/bin/fish root && \
     echo 'cd /home/dev' > /etc/profile.d/dev-home.sh && \
     echo 'cd /home/dev' >> /etc/fish/config.fish
 
+COPY sshd_config /etc/ssh/sshd_config.d/50-dev.conf
+COPY entrypoint.fish /entrypoint.fish
+RUN chmod +x /entrypoint.fish
+
+# Re-issue all external apps install
+ARG CACHEBUST=1
+
+RUN dnf up --refresh
+
 RUN curl -fsSL https://opencode.ai/install | bash && \
     ln -sf /root/.opencode/bin/opencode /usr/local/bin/opencode
 
@@ -37,11 +46,6 @@ RUN curl -sSL https://github.com/getsops/sops/releases/download/v3.13.3/sops-v3.
 RUN curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 
 RUN npm install -g @earendil-works/pi-coding-agent
-
-COPY sshd_config /etc/ssh/sshd_config.d/50-dev.conf
-COPY entrypoint.fish /entrypoint.fish
-
-RUN chmod +x /entrypoint.fish
 
 EXPOSE 22 3000
 
