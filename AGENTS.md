@@ -105,8 +105,10 @@ Rules:
   timeouts, paths, labels, cache settings, container options, volume mounts, etc.).
 - Do **not** add `_unencrypted` to keys whose values are secrets (tokens, passwords,
   API keys, encryption keys, etc.) — those stay fully encrypted.
-- sops v3.13+ strips the `_unencrypted` suffix automatically during decryption,
-  producing a clean config file that the consuming application expects.
+- The `_unencrypted` suffix is **not** stripped by sops on decrypt. Use
+  `just decrypt-quadlet-configs` to decrypt and automatically strip the suffix
+  via yq post-processing, producing a clean config file the consuming
+  application expects.
 - To review an encrypted config: `cat` shows non-sensitive values in plaintext;
   use `sops decrypt` for the full picture including secrets.
 
@@ -120,7 +122,7 @@ log:
     job_level_unencrypted: info            # non-sensitive — readable
 ```
 
-After `sops decrypt`:
+After `just decrypt-quadlet-configs` (sops decrypt + yq suffix strip):
 ```yaml
 server:
     url: https://example.com

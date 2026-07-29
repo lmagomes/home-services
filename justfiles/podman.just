@@ -105,7 +105,7 @@ stop-all:
     end
 
 # decrypt quadlet config files stored encrypted (e.g., forgejo-runner-config.yml)
-# sops strips the _unencrypted suffix automatically on decrypt (v3.13+)
+# sops does NOT strip the _unencrypted suffix — we use yq post-processing for that
 decrypt-quadlet-configs:
     #!/usr/bin/env fish
     for encrypted in (find quadlets/ -name "*.encrypted.*")
@@ -120,7 +120,10 @@ decrypt-quadlet-configs:
             continue
         end
         echo "🔓 Decrypting $encrypted → $decrypted"
-        sops decrypt --input-type $type --output-type $type $encrypted > $decrypted
+        set -l tmp (mktemp)
+        sops decrypt --input-type $type --output-type $type $encrypted > $tmp
+        yq -o $type '(.. | select(tag == "!!map")) |= with_entries(.key |= sub("_unencrypted$"; ""))' $tmp > $decrypted
+        rm $tmp
     end
     echo "✅ Quadlet configs decrypted"
 
