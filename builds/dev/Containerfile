@@ -35,7 +35,7 @@ RUN chmod +x /entrypoint.fish
 # Re-issue all external apps install
 ARG CACHEBUST=1
 
-RUN dnf up --refresh
+RUN dnf up -y
 
 RUN curl -fsSL https://opencode.ai/install | bash && \
     ln -sf /root/.opencode/bin/opencode /usr/local/bin/opencode
@@ -43,7 +43,7 @@ RUN curl -fsSL https://opencode.ai/install | bash && \
 RUN curl -sSL https://github.com/getsops/sops/releases/download/v3.13.3/sops-v3.13.3.linux.amd64 -o /usr/local/bin/sops && \
     chmod +x /usr/local/bin/sops
 
-RUN curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+RUN curl -LsSf https://github.com/atuinsh/atuin/releases/latest/download/atuin-x86_64-unknown-linux-gnu.tar.gz | tar xz -C /usr/local/bin
 
 RUN npm install -g @earendil-works/pi-coding-agent
 
