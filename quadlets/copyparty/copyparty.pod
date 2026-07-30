@@ -1,0 +1,10 @@
+[Unit]
+Description=Copyparty pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=copyparty.pod
+Network=services.network
+
+[Install]
+WantedBy=default.target

@@ -129,6 +129,11 @@ calibre.{env.DOMAIN} {
 	import cloudflare
 }
 
+copyparty.{env.DOMAIN} {
+	reverse_proxy copyparty.pod:3923
+	import cloudflare
+}
+
 dawarich.{env.DOMAIN} {
 	reverse_proxy dawarich.pod:3000
 	import cloudflare

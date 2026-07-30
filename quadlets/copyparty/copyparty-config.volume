@@ -1,0 +1,5 @@
+[Unit]
+Description=Copyparty config volume
+
+[Volume]
+VolumeName=copyparty-config
