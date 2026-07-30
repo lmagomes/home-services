@@ -30,6 +30,9 @@ RUN usermod -s /usr/bin/fish root && \
 
 COPY sshd_config /etc/ssh/sshd_config.d/50-dev.conf
 COPY entrypoint.fish /entrypoint.fish
+COPY terminfo/xterm-ghostty.src /tmp/terminfo/
+RUN tic -x -o /usr/share/terminfo /tmp/terminfo/xterm-ghostty.src && \
+    rm -rf /tmp/terminfo
 RUN chmod +x /entrypoint.fish
 
 # Re-issue all external apps install
