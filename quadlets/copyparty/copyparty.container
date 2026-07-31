@@ -8,7 +8,7 @@ Pod=copyparty.pod
 Image=docker.io/copyparty/ac:1.20.19
 EnvironmentFile=./%N.env
 Volume=copyparty-config.volume:/cfg:Z
-Mount=type=bind,source=/mnt/nas/media,destination=/w,relabel=private
+Mount=type=bind,source=/mnt/nas/media,destination=/w,ro=true,relabel=shared
 Mount=type=bind,source=./copyparty.conf,destination=/cfg/copyparty.conf,relabel=private,ro=true
 HealthCmd=wget --spider -q http://127.0.0.1:3923/?reset=/_
 Exec=--xff-src any

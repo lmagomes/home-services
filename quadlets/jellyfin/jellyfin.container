@@ -8,7 +8,7 @@ Pod=jellyfin.pod
 Image=docker.io/jellyfin/jellyfin:10.11.11
 Volume=jellyfin-cache.volume:/cache:Z
 Volume=jellyfin-config.volume:/config:Z
-Mount=type=bind,source=/mnt/nas/media,destination=/media,ro=true,relabel=private
+Mount=type=bind,source=/mnt/nas/media,destination=/media,ro=true,relabel=shared
 AddDevice=/dev/dri
 
 [Service]
