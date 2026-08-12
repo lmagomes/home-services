@@ -1,0 +1,10 @@
+[Unit]
+Description=FeedBack pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=feedback.pod
+Network=services.network
+
+[Install]
+WantedBy=default.target

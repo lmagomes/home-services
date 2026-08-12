@@ -209,3 +209,8 @@ transmission.{env.DOMAIN} {
 	reverse_proxy transmission.pod:9091
 	import cloudflare
 }
+
+feedback.{env.DOMAIN} {
+	reverse_proxy feedback.pod:8000
+	import cloudflare
+}

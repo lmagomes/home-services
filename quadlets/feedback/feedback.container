@@ -1,0 +1,17 @@
+[Unit]
+Description=FeedBack container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=feedback
+Pod=feedback.pod
+Image=ghcr.io/got-feedback/feedback:0.3.0-alpha.1
+EnvironmentFile=./%N.env
+Volume=feedback-config.volume:/config:Z
+Volume=feedback-dlc.volume:/dlc:Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
