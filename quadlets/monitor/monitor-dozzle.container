@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=monitor-dozzle
 Pod=monitor.pod
-Image=docker.io/amir20/dozzle:v10.6.13
+Image=docker.io/amir20/dozzle:v10.7.1
 EnvironmentFile=./%N.env
 Volume=/run/user/%U/podman/podman.sock:/var/run/docker.sock
 SecurityLabelDisable=true
