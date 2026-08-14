@@ -1,0 +1,10 @@
+[Unit]
+Description=Redlib pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=redlib.pod
+Network=services.network
+
+[Install]
+WantedBy=default.target

@@ -200,6 +200,11 @@ portabase.{env.DOMAIN} {
 	import cloudflare
 }
 
+redlib.{env.DOMAIN} {
+	reverse_proxy redlib.pod:8080
+	import cloudflare
+}
+
 termix.{env.DOMAIN} {
 	reverse_proxy termix.pod:8080
 	import cloudflare

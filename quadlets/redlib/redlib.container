@@ -1,0 +1,22 @@
+[Unit]
+Description=Redlib container managed by Podman
+After=network.target
+
+[Container]
+Pod=redlib.pod
+ContainerName=redlib
+Image=quay.io/redlib/redlib:v0.36.0
+EnvironmentFile=./%N.env
+User=nobody
+DropCapability=ALL
+NoNewPrivileges=true
+ReadOnly=true
+HealthCmd=["wget","--spider","-q","--tries=1","http://localhost:8080/settings"]
+HealthInterval=5m
+HealthTimeout=3s
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
