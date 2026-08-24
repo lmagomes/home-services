@@ -5,7 +5,7 @@ After=network-online.target
 [Container]
 Pod=forgejo-runner.pod
 ContainerName=forgejo-runner
-Image=data.forgejo.org/forgejo/runner:12
+Image=data.forgejo.org/forgejo/runner:13
 User=0:0
 SecurityLabelDisable=true
 Environment=DOCKER_HOST=unix://%t/podman/podman.sock
