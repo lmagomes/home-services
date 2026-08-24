@@ -5,7 +5,7 @@ After=network-online.target
 [Container]
 ContainerName=home-assistant
 Pod=home-assistant.pod
-Image=ghcr.io/home-assistant/home-assistant:2026.7.4
+Image=ghcr.io/home-assistant/home-assistant:2026.8.3
 EnvironmentFile=./%N.env
 Volume=home-assistant-config.volume:/config:Z
 Mount=type=bind,source=./home-assistant-configuration.yaml,destination=/config/configuration.yaml,relabel=private
