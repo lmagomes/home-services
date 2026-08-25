@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=karakeep-meilisearch
 Pod=karakeep.pod
-Image=docker.io/getmeili/meilisearch:v1.51.0
+Image=docker.io/getmeili/meilisearch:v1.53.1
 Volume=karakeep-meilisearch-data.volume:/app/data:Z
 Environment=MEILI_NO_ANALYTICS="true"
 
