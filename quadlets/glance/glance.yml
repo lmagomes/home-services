@@ -58,6 +58,15 @@ pages:
                             - title: Karakeep
                               url: https://karakeep.${DOMAIN}
                               icon: sh:karakeep
+                            - title: BentoPDF
+                              url: https://bentopdf.${DOMAIN}
+                              icon: sh:bentopdf
+                            - title: IT Tools
+                              url: https://it-tools.${DOMAIN}
+                              icon: di:it-tools
+                            - title: JSON Path Finder
+                              url: https://json-path-finder.${DOMAIN}
+                              icon: mdi:code-json
                             - title: Jellyfin
                               url: https://jellyfin.${DOMAIN}
                               icon: di:jellyfin
@@ -73,6 +82,9 @@ pages:
                             - title: Transmission
                               url: https://transmission.${DOMAIN}
                               icon: di:transmission
+                            - title: Home Assistant
+                              url: https://home-assistant.${DOMAIN}
+                              icon: di:home-assistant
                             - title: Dozzle
                               url: https://dozzle.${DOMAIN}
                               icon: di:dozzle
@@ -100,9 +112,21 @@ pages:
                             - title: Bichon
                               url: https://bichon.${DOMAIN}
                               icon: sh:mail-archiver
+                            - title: Copyparty
+                              url: https://copyparty.${DOMAIN}
+                              icon: sh:copyparty
+                            - title: Feedback
+                              url: https://feedback.${DOMAIN}
+                              icon: mdi:comment-question-outline
                             - title: Open WebUI
                               url: https://open-webui.${DOMAIN}
                               icon: di:open-webui
+                            - title: LocalAI
+                              url: https://localai.${DOMAIN}
+                              icon: sh:localai
+                            - title: llama-cpp
+                              url: https://llamacpp.${DOMAIN}
+                              icon: sh:llama-cpp
                             - title: Portabase
                               url: https://portabase.${DOMAIN}
                               icon: sh:portabase
@@ -205,6 +229,19 @@ pages:
                               url: https://karakeep.${DOMAIN}
                               icon: sh:karakeep
 
+                      - title: Tools
+                        color: 60 60 50
+                        links:
+                            - title: IT Tools
+                              url: https://it-tools.${DOMAIN}
+                              icon: di:it-tools
+                            - title: BentoPDF
+                              url: https://bentopdf.${DOMAIN}
+                              icon: sh:bentopdf
+                            - title: JSON Path Finder
+                              url: https://json-path-finder.${DOMAIN}
+                              icon: mdi:code-json
+
                       - title: Media
                         color: 340 60 50
                         links:
@@ -255,6 +292,19 @@ pages:
                             - title: Bichon
                               url: https://bichon.${DOMAIN}
                               icon: sh:mail-archiver
+                            - title: Copyparty
+                              url: https://copyparty.${DOMAIN}
+                              icon: sh:copyparty
+                            - title: Feedback
+                              url: https://feedback.${DOMAIN}
+                              icon: mdi:comment-question-outline
+
+                      - title: Home
+                        color: 20 60 50
+                        links:
+                            - title: Home Assistant
+                              url: https://home-assistant.${DOMAIN}
+                              icon: di:home-assistant
 
                       - title: LLM
                         color: 320 80 60
@@ -265,6 +315,9 @@ pages:
                             - title: llama-cpp
                               url: https://llamacpp.${DOMAIN}
                               icon: sh:llama-cpp
+                            - title: LocalAI
+                              url: https://localai.${DOMAIN}
+                              icon: sh:localai
                             - title: openai
                               url: https://openai.${DOMAIN}
                               icon: di:openai
