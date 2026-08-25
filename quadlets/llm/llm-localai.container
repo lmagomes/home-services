@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=llm-localai
 Pod=llm.pod
-Image=docker.io/localai/localai:v4.6.2-gpu-intel
+Image=docker.io/localai/localai:v4.9.0-gpu-intel
 Volume=llm-llamacpp-models.volume:/models:z
 Volume=llm-localai-backends.volume:/backends:Z
 Volume=llm-localai-configuration.volume:/configuration:Z
