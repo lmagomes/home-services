@@ -6,7 +6,7 @@ After=network.target termix-guacd.service
 [Container]
 ContainerName=termix
 Pod=termix.pod
-Image=ghcr.io/lukegus/termix:release-2.6.0
+Image=ghcr.io/lukegus/termix:release-2.7.1
 Volume=termix-data.volume:/app/data:Z
 EnvironmentFile=./%N.env
 # Network=host
