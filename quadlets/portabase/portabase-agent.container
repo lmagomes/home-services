@@ -5,7 +5,7 @@ After=network.target portabase.service
 
 [Container]
 Pod=portabase.pod
-Image=docker.io/portabase/agent:1.18.5
+Image=docker.io/portabase/agent:1.19.1
 ContainerName=portabase-agent
 EnvironmentFile=./%N.env
 Secret=portabase-agent-edge-key,type=env,target=EDGE_KEY
