@@ -1,0 +1,11 @@
+[Unit]
+Description=Seerr pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=seerr.pod
+Network=services.network
+UserNS=keep-id:uid=1000,gid=1000
+
+[Install]
+WantedBy=default.target

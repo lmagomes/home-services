@@ -205,6 +205,11 @@ redlib.{env.DOMAIN} {
 	import cloudflare
 }
 
+seerr.{env.DOMAIN} {
+	reverse_proxy seerr.pod:5055
+	import cloudflare
+}
+
 termix.{env.DOMAIN} {
 	reverse_proxy termix.pod:8080
 	import cloudflare

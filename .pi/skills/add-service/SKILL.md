@@ -89,7 +89,17 @@ Secret=<name>,type=env,target=<ENV_VAR>
 
 Add a host entry in `quadlets/caddy/caddy-Caddyfile`. Match the style of existing entries.
 
-### 8. Symlink and reload
+### 8. Add the service to the Glance dashboard
+
+Don't forget `quadlets/glance/glance.yml` — add the service in **three** places:
+
+1. The `Services` monitor widget `sites` list.
+2. The `Upstream Releases` widget `repositories` list (if the project is on GitHub).
+3. The relevant `bookmarks` group (e.g. `Media`, `Services`, `Tools`).
+
+Use `https://<service>.${DOMAIN}` for URLs and an icon slug from `sh:` (selfh.st icons) or `di:` (dashboard icons), matching the existing entries.
+
+### 9. Symlink and reload
 
 ```bash
 just install-quadlets

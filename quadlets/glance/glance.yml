@@ -82,6 +82,9 @@ pages:
                             - title: Transmission
                               url: https://transmission.${DOMAIN}
                               icon: di:transmission
+                            - title: Seerr
+                              url: https://seerr.${DOMAIN}
+                              icon: sh:seerr
                             - title: Home Assistant
                               url: https://home-assistant.${DOMAIN}
                               icon: di:home-assistant
@@ -142,6 +145,7 @@ pages:
                             - glanceapp/glance
                             - go-gitea/gitea
                             - jellyfin/jellyfin
+                            - seerr-team/seerr
                             - louislam/uptime-kuma
                             - miniflux/v2
                             - mealie-recipes/mealie
@@ -260,6 +264,9 @@ pages:
                             - title: Transmission
                               url: https://transmission.${DOMAIN}
                               icon: di:transmission
+                            - title: Seerr
+                              url: https://seerr.${DOMAIN}
+                              icon: sh:seerr
 
                       - title: Monitoring
                         color: 120 40 45
