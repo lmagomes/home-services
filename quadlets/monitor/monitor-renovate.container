@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=monitor-renovate
 Pod=monitor.pod
-Image=ghcr.io/renovatebot/renovate:44.45.1-full
+Image=ghcr.io/renovatebot/renovate:44.46.4-full
 EnvironmentFile=./%N.env
 Secret=monitor-renovate-forgejo-token,type=env,target=RENOVATE_TOKEN
 Secret=monitor-renovate-registry-alias,type=env,target=RENOVATE_REGISTRY_ALIASES
