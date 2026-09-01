@@ -5,12 +5,13 @@ After=network.target
 [Container]
 Pod=redlib.pod
 ContainerName=redlib
-Image=quay.io/redlib/redlib:v0.36.0
+Image=ghcr.io/cycneuramus/containers@sha256:4b607fd58f2c170d9bbf073bfedbe570c5b6f29c7e72b3a2285e86d5c7f98af9
 EnvironmentFile=./%N.env
 User=nobody
 DropCapability=ALL
 NoNewPrivileges=true
 ReadOnly=true
+AutoUpdate=registry
 HealthCmd=["wget","--spider","-q","--tries=1","http://localhost:8080/settings"]
 HealthInterval=5m
 HealthTimeout=3s
