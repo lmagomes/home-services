@@ -1,0 +1,5 @@
+[Unit]
+Description=RustFS data volume
+
+[Volume]
+VolumeName=rustfs-data

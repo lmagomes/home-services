@@ -1,0 +1,23 @@
+[Unit]
+Description=RustFS container managed by Podman
+After=network.target
+
+[Container]
+Pod=rustfs.pod
+ContainerName=rustfs
+Image=docker.io/rustfs/rustfs:1.0.0-rc.4
+EnvironmentFile=./%N.env
+Secret=rustfs-access-key,type=env,target=RUSTFS_ACCESS_KEY
+Secret=rustfs-secret-key,type=env,target=RUSTFS_SECRET_KEY
+Volume=rustfs-data.volume:/data:Z
+HealthCmd=curl -fsS http://127.0.0.1:9000/health
+HealthInterval=30s
+HealthTimeout=10s
+HealthRetries=3
+HealthStartPeriod=40s
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

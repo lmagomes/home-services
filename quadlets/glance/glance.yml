@@ -133,6 +133,9 @@ pages:
                             - title: Portabase
                               url: https://portabase.${DOMAIN}
                               icon: sh:portabase
+                            - title: RustFS
+                              url: https://rustfs.${DOMAIN}
+                              icon: di:minio
 
                       - type: releases
                         title: Upstream Releases
@@ -166,6 +169,7 @@ pages:
                             - mudler/LocalAI
                             - ggml-org/llama.cpp
                             - ZeroTricks/lumo-tamer
+                            - rustfs/rustfs
 
           - size: small
             widgets:
@@ -219,6 +223,9 @@ pages:
                             - title: Portabase
                               url: https://portabase.${DOMAIN}
                               icon: sh:portabase
+                            - title: RustFS
+                              url: https://rustfs.${DOMAIN}
+                              icon: di:minio
 
                       - title: Notes
                         color: 240 40 45
