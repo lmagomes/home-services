@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=transmission
 Pod=transmission.pod
-Image=home-services/transmission-flood:4.1.1
+Image=home-services/transmission-flood:4.1.3
 Volume=transmission-data.volume:/config:Z
 Volume=transmission-watch-folder.volume:/watch:Z
 Mount=type=bind,source=/mnt/nas/downloads,destination=/downloads,relabel=private
