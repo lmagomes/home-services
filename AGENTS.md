@@ -196,3 +196,5 @@ Issues and pull requests are tracked on **Forgejo** (not GitHub). Use the `fj` C
 Detailed workflow (listing, viewing, branching, committing, pushing, PR creation) is in the `forgejo-issue` agent skill — load it with `/skill forgejo-issue` or by asking about issues or working on an issue.
 
 To expand a request into a new issue, use the `create-issue` skill — load it with `/skill create-issue` or by asking to create an issue.
+
+To do a request end-to-end (file the issue, implement it on a branch, open a PR that closes it), use the `ship-issue` skill — load it with `/skill ship-issue`, run the `/ship` command, or just ask to work on something and open a PR.
