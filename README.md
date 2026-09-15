@@ -85,6 +85,15 @@ just registry-login            # log in to the Forgejo container registry
 just build-and-push-all        # build and push all images
 ```
 
+Old image versions accumulate over time, since each build pushes a new version tag plus `:latest`. To prune them, keeping `latest` and the two most recent version tags per image:
+
+```bash
+just prune-registry-images      # keep latest + 2 versions (default)
+just prune-registry-images 3    # keep latest + 3 versions
+```
+
+Only packages under this repo's registry namespace are considered. Deleting a version marks its blobs as unreferenced; Forgejo reclaims them through its `cron.cleanup_packages` job (runs at midnight, removes unreferenced data older than 24h). This recipe uses the Forgejo API with the `forgejo-registry-user` and `forgejo-registry-token` secrets, so the token needs package write/delete scope.
+
 ### podman socket
 
 Some services use the podman socket (originally docker, but this works just as well). For the user, this can be enabled with:

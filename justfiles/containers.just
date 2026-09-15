@@ -177,3 +177,101 @@ registry-login-ci:
     set registry_domain (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-domain')
     echo "$REGISTRY_TOKEN" | podman login $registry_domain -u "$REGISTRY_USER" --password-stdin
     echo "✅ Logged in to $registry_domain container registry"
+
+# prune old container image versions from the forgejo registry, keeping `latest` and the <keep> most recent versions per image
+prune-registry-images keep="2":
+    #!/usr/bin/env fish
+    set keep {{ keep }}
+
+    set registry_domain (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-domain')
+    set registry_path (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-path')
+    set user (sops decrypt .secrets/secrets.yaml | yq '.secrets.forgejo-registry-user')
+    set token (sops decrypt .secrets/secrets.yaml | yq '.secrets.forgejo-registry-token')
+
+    if test -z "$registry_domain" -o "$registry_domain" = "null" -o -z "$registry_path" -o "$registry_path" = "null" -o -z "$user" -o "$user" = "null" -o -z "$token" -o "$token" = "null"
+        echo "❌ registry-domain, registry-path, forgejo-registry-user and forgejo-registry-token must be set in .secrets/secrets.yaml"
+        exit 1
+    end
+
+    # derive the package owner and the repo's image-name prefix from registry-path
+    # e.g. <domain>/<owner>/<namespace> -> owner=<owner>, prefix=<namespace>
+    set path_parts (string split '/' $registry_path)
+    set owner $path_parts[2]
+    set prefix (string join '/' $path_parts[3..-1])
+
+    if test -z "$owner" -o -z "$prefix"
+        echo "❗ Could not derive owner/prefix from registry-path"
+        exit 1
+    end
+
+    set api "https://$registry_domain/api/v1"
+
+    # fetch all container packages for the owner, paginating through the API
+    set packages_file (mktemp)
+    printf '[]' > $packages_file
+    set page 1
+    while true
+        set page_file (mktemp)
+        curl -sf -u "$user:$token" "$api/packages/$owner?type=container&limit=50&page=$page" -o $page_file
+        if test $status -ne 0
+            echo "❌ Failed to list packages (page $page). Check the registry credentials."
+            rm -f $packages_file $page_file
+            exit 1
+        end
+        if test (jq 'length' $page_file) -eq 0
+            rm -f $page_file
+            break
+        end
+        set merged_file (mktemp)
+        jq -s '.[0] + .[1]' $packages_file $page_file > $merged_file
+        mv $merged_file $packages_file
+        rm -f $page_file
+        set page (math $page + 1)
+    end
+
+    # every non-latest version beyond the newest `keep` per image is pruned
+    set delete_file (mktemp)
+    jq -r --arg prefix "$prefix/" --argjson keep $keep '
+        [ .[] | select(.type == "container") | select(.name | startswith($prefix)) ]
+        | group_by(.name)
+        | .[]
+        | (.[0].name) as $name
+        | [ .[] | select(.version != "latest") ]
+        | sort_by(.created_at) | reverse
+        | .[$keep:]
+        | .[]
+        | "\($name) \(.version)"
+    ' $packages_file > $delete_file
+
+    set total (count (cat $delete_file))
+    if test $total -eq 0
+        echo "✅ Nothing to prune — every image already has $keep or fewer versions (plus latest)."
+        rm -f $packages_file $delete_file
+        exit 0
+    end
+
+    echo "🗑️  Pruning $total old image version(s), keeping latest + the newest $keep per image:"
+    set deleted 0
+    set failed 0
+    for line in (cat $delete_file)
+        set parts (string split ' ' $line)
+        set pkg_name $parts[1]
+        set tag $parts[2]
+        set encoded_name (string replace -a '/' '%2F' -- $pkg_name)
+        set code (curl -s -o /dev/null -w '%{http_code}' -X DELETE -u "$user:$token" "$api/packages/$owner/container/$encoded_name/$tag")
+        if test "$code" = "204"
+            echo "  🗑️  $pkg_name:$tag"
+            set deleted (math $deleted + 1)
+        else
+            echo "  ❌ Failed to delete $pkg_name:$tag (HTTP $code)"
+            set failed (math $failed + 1)
+        end
+    end
+
+    rm -f $packages_file $delete_file
+
+    echo "✅ Deleted $deleted version(s)."
+    if test $failed -gt 0
+        echo "❗ $failed deletion(s) failed."
+        exit 1
+    end
