@@ -65,7 +65,7 @@ build-forgejo-runner-job:
     set image_version "44"
     set build_version (cat builds/forgejo-runner-job/build-version | string trim)
     set image_version "$image_version-r$build_version"
-    podman build -t localhost/forgejo-runner-job:$image_version builds/forgejo-runner-job/
+    podman build --build-arg CACHEBUST=(date +%s) -t localhost/forgejo-runner-job:$image_version builds/forgejo-runner-job/
     podman tag localhost/forgejo-runner-job:$image_version localhost/forgejo-runner-job:latest
     echo "Done! Built localhost/forgejo-runner-job:$image_version"
 
