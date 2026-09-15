@@ -1,5 +1,8 @@
 FROM fedora:44
 
+ARG CACHEBUST=1
+RUN echo "cachebust=$CACHEBUST"
+
 RUN dnf install -y \
     fish \
     just \
@@ -34,9 +37,6 @@ COPY terminfo/xterm-ghostty.src /tmp/terminfo/
 RUN tic -x -o /usr/share/terminfo /tmp/terminfo/xterm-ghostty.src && \
     rm -rf /tmp/terminfo
 RUN chmod +x /entrypoint.fish
-
-# Re-issue all external apps install
-ARG CACHEBUST=1
 
 RUN dnf up -y
 

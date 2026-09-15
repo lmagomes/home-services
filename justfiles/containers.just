@@ -112,7 +112,7 @@ build-and-push image dir version-strategy:
 
     if not $skip_build
         echo "🔄 Building {{ image }}:$image_version..."
-        podman build -t localhost/{{ image }}:$image_version {{ dir }}
+        podman build --build-arg CACHEBUST=(date +%s) -t localhost/{{ image }}:$image_version {{ dir }}
         podman tag localhost/{{ image }}:$image_version localhost/{{ image }}:latest
     end
 
