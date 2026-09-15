@@ -41,7 +41,8 @@
             "matchPackageNames": [
                 "/mcr\\.microsoft\\.com/mssql/server/",
                 "/immich-app/postgres/",
-                "/zenika-hub/alpine-chrome/"
+                "/zenika-hub/alpine-chrome/",
+                "/cycneuramus/containers/"
             ]
         },
         {
