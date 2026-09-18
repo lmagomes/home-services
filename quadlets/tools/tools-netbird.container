@@ -1,0 +1,17 @@
+[Unit]
+Description=NetBird container managed by Podman
+After=network.target
+
+[Container]
+Pod=tools.pod
+ContainerName=tools-netbird
+Image=docker.io/netbirdio/netbird:0.78.2-rootless
+Hostname=tools-netbird
+Secret=tools-netbird-setup-key,type=env,target=NB_SETUP_KEY
+Volume=tools-netbird.volume:/var/lib/netbird:Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
