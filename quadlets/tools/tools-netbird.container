@@ -6,7 +6,7 @@ After=network.target
 Pod=tools.pod
 ContainerName=tools-netbird
 Image=docker.io/netbirdio/netbird:0.78.2-rootless
-Hostname=tools-netbird
+Environment=NB_HOSTNAME=tools-netbird
 Secret=tools-netbird-setup-key,type=env,target=NB_SETUP_KEY
 Volume=tools-netbird.volume:/var/lib/netbird:Z
 
