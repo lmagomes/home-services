@@ -1,5 +1,0 @@
-[Unit]
-Description=Notes Jotty Cache volume
-
-[Volume]
-VolumeName=notes-jotty-cache

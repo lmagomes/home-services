@@ -52,18 +52,6 @@ uptime-kuma.{env.DOMAIN} {
 	import cloudflare
 }
 
-# Notes services
-
-jotty.{env.DOMAIN} {
-	reverse_proxy notes.pod:3000
-	import cloudflare
-}
-
-drawio.{env.DOMAIN} {
-	reverse_proxy notes.pod:8080
-	import cloudflare
-}
-
 # Misc tools
 
 bentopdf.{env.DOMAIN} {
