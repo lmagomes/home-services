@@ -1,0 +1,12 @@
+[Unit]
+Description=Minecraft Bedrock pod managed by Podman
+After=network-online.target
+
+[Pod]
+PodName=minecraft-bedrock.pod
+PublishPort=19132:19132/udp
+PublishPort=19133:19133/udp
+Network=services.network
+
+[Install]
+WantedBy=default.target

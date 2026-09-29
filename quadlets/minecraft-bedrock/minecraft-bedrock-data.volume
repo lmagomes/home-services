@@ -1,0 +1,5 @@
+[Unit]
+Description=Minecraft Bedrock data volume
+
+[Volume]
+VolumeName=minecraft-bedrock-data

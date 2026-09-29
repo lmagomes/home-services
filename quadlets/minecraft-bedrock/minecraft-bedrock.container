@@ -1,0 +1,17 @@
+[Unit]
+Description=Minecraft Bedrock container managed by Podman
+After=network.target
+
+[Container]
+ContainerName=minecraft-bedrock
+Pod=minecraft-bedrock.pod
+Image=docker.io/itzg/minecraft-bedrock-server:2026.9.0
+Volume=minecraft-bedrock-data.volume:/data:Z
+Volume=./%N-server.properties:/data/server.properties:Z
+EnvironmentFile=./%N.env
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
