@@ -6,7 +6,7 @@ After=network-online.target
 PodName=termix.pod
 Network=services.network
 # Network=podman
-# AddHost=host.containers.internal:host-gateway
+AddHost=host.containers.internal:host-gateway
 
 [Install]
 WantedBy=default.target
