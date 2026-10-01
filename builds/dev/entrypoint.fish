@@ -2,7 +2,7 @@
 
 function cleanup
     echo "Shutting down..."
-    kill %1 %2 2>/dev/null
+    kill %1 %2 %3 2>/dev/null
     exit 0
 end
 
@@ -36,6 +36,11 @@ if test -z "$port"
     set port 3000
 end
 
+set ide_port $OPENVSCODE_SERVER_PORT
+if test -z "$ide_port"
+    set ide_port 8080
+end
+
 mkdir -p /home/dev/.ssh-host
 if not test -f /home/dev/.ssh-host/ssh_host_ed25519_key
     ssh-keygen -t ed25519 -f /home/dev/.ssh-host/ssh_host_ed25519_key -N "" -q
@@ -47,5 +52,7 @@ end
 /usr/sbin/sshd -D &
 
 opencode web --hostname 0.0.0.0 --port $port &
+
+openvscode-server --host 0.0.0.0 --port $ide_port --without-connection-token &
 
 wait

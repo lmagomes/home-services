@@ -91,6 +91,11 @@ opencode.{env.DOMAIN} {
 	import cloudflare
 }
 
+code.{env.DOMAIN} {
+	reverse_proxy dev.pod:8080
+	import cloudflare
+}
+
 # Single services
 
 audiobookshelf.{env.DOMAIN} {

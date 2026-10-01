@@ -50,6 +50,10 @@ RUN curl -LsSf https://github.com/atuinsh/atuin/releases/latest/download/atuin-x
 
 RUN npm install -g @earendil-works/pi-coding-agent
 
-EXPOSE 22 3000
+RUN curl -fsSL https://github.com/gitpod-io/openvscode-server/releases/download/openvscode-server-v1.109.5/openvscode-server-v1.109.5-linux-x64.tar.gz \
+    | tar -xz -C /usr/local/lib \
+    && ln -sf /usr/local/lib/openvscode-server-v1.109.5-linux-x64/bin/openvscode-server /usr/local/bin/openvscode-server
+
+EXPOSE 22 3000 8080
 
 ENTRYPOINT ["/entrypoint.fish"]
