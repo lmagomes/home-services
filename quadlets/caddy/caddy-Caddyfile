@@ -33,8 +33,9 @@
 
 # Home servers
 
+# Cockpit runs on the host; reachable via host.containers.internal (resolved via AddHost on the caddy pod)
 mila.{env.DOMAIN} {
-	reverse_proxy mila:9090
+	reverse_proxy host.containers.internal:9090
 	import cloudflare
 }
 
