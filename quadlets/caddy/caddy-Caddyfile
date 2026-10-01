@@ -118,6 +118,11 @@ bichon.{env.DOMAIN} {
 	import cloudflare
 }
 
+bookorbit.{env.DOMAIN} {
+	reverse_proxy bookorbit.pod:3000
+	import cloudflare
+}
+
 calibre.{env.DOMAIN} {
 	reverse_proxy calibre-web-automated.pod:8083
 	import cloudflare

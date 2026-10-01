@@ -1,0 +1,5 @@
+[Unit]
+Description=BookOrbit Postgres Data volume
+
+[Volume]
+VolumeName=bookorbit-db-data

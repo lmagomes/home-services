@@ -1,0 +1,33 @@
+[Unit]
+Description=BookOrbit container managed by Podman
+Requires=bookorbit-db.service
+After=network.target bookorbit-db.service
+
+[Container]
+Pod=bookorbit.pod
+ContainerName=bookorbit
+Image=ghcr.io/bookorbit/bookorbit:3.1.0
+EnvironmentFile=./%N.env
+Secret=bookorbit-app-url,type=env,target=APP_URL
+Secret=bookorbit-db-password,type=env,target=POSTGRES_PASSWORD
+Secret=bookorbit-jwt-secret,type=env,target=JWT_SECRET
+Secret=bookorbit-setup-bootstrap-token,type=env,target=SETUP_BOOTSTRAP_TOKEN
+Secret=bookorbit-podcast-encryption-key,type=env,target=PODCAST_ENCRYPTION_KEY
+Volume=bookorbit-data.volume:/data:Z
+Mount=type=bind,source=/mnt/nas/media/books,destination=/books,relabel=private
+NoNewPrivileges=true
+DropCapability=ALL
+AddCapability=CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER CAP_SETGID CAP_SETUID
+ReadOnly=true
+ReadOnlyTmpfs=true
+HealthCmd=wget -q -T 4 -O /dev/null http://127.0.0.1:3000/api/v1/health
+HealthInterval=30s
+HealthTimeout=5s
+HealthStartPeriod=20s
+HealthRetries=3
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

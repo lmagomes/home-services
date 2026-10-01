@@ -1,0 +1,23 @@
+[Unit]
+Description=BookOrbit Postgres container managed by Podman
+After=network.target
+
+[Container]
+Pod=bookorbit.pod
+Image=docker.io/pgvector/pgvector:0.8.6-pg18
+ContainerName=bookorbit-db
+EnvironmentFile=./%N.env
+Secret=bookorbit-db-password,type=env,target=POSTGRES_PASSWORD
+Volume=bookorbit-db-data.volume:/var/lib/postgresql/data:Z
+ShmSize=128mb
+HealthCmd=pg_isready -U ${POSTGRES_USER:-bookorbit} -d ${POSTGRES_DB:-bookorbit}
+HealthInterval=10s
+HealthTimeout=5s
+HealthStartPeriod=20s
+HealthRetries=10
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

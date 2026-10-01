@@ -70,6 +70,9 @@ pages:
                             - title: Calibre
                               url: https://calibre.${DOMAIN}
                               icon: sh:calibre-web
+                            - title: BookOrbit
+                              url: https://bookorbit.${DOMAIN}
+                              icon: mdi:book-open-variant
                             - title: Immich
                               url: https://immich.${DOMAIN}
                               icon: di:immich
@@ -153,6 +156,7 @@ pages:
                             - firefly-iii/data-importer
                             - karakeep-app/karakeep
                             - crocodilestick/calibre-web-automated
+                            - bookorbit/bookorbit
                             - amir20/dozzle
                             - open-webui/open-webui
                             - CorentinTh/it-tools
@@ -251,6 +255,9 @@ pages:
                             - title: Calibre
                               url: https://calibre.${DOMAIN}
                               icon: sh:calibre-web
+                            - title: BookOrbit
+                              url: https://bookorbit.${DOMAIN}
+                              icon: mdi:book-open-variant
                             - title: Immich
                               url: https://immich.${DOMAIN}
                               icon: di:immich
