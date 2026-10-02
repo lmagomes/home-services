@@ -5,6 +5,7 @@ After=network-online.target
 [Pod]
 PodName=bookorbit.pod
 Network=services.network
+UserNS=keep-id:uid=1000,gid=1000
 
 [Install]
 WantedBy=default.target
