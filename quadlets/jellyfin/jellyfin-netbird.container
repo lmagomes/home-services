@@ -1,0 +1,17 @@
+[Unit]
+Description=NetBird in jellyfin container managed by Podman
+After=network.target
+
+[Container]
+Pod=jellyfin.pod
+ContainerName=jellyfin-netbird
+Image=docker.io/netbirdio/netbird:0.79.0-rootless
+Environment=NB_HOSTNAME=jellyfin-netbird
+Secret=jellyfin-netbird-setup-key,type=env,target=NB_SETUP_KEY
+Volume=jellyfin-netbird.volume:/var/lib/netbird:Z
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
