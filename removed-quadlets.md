@@ -22,3 +22,4 @@ git show <last-commit>:quadlets/<service>/ > quadlets/<service>/
 | monitor-argus       | 2026-05-07   | c66a653     | replaced with Renovate                                                     |
 | proton-drive-sync   | 2026-05-10   | 628e60f     | replaced by rclone for Proton Drive sync                                   |
 | notes               | 2026-09-22   | dd94a1d     | jotty and drawio notes services no longer needed                           |
+| calibre-web-automated| 2026-10-08   | 1ee7063     | no longer needed                                                           |

@@ -123,11 +123,6 @@ bookorbit.{env.DOMAIN} {
 	import cloudflare
 }
 
-calibre.{env.DOMAIN} {
-	reverse_proxy calibre-web-automated.pod:8083
-	import cloudflare
-}
-
 copyparty.{env.DOMAIN} {
 	reverse_proxy copyparty.pod:3923
 	import cloudflare

@@ -1,5 +1,0 @@
-[Unit]
-Description=Calibre Web Automated Plugins volume
-
-[Volume]
-VolumeName=calibre-web-automated-plugins

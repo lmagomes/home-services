@@ -67,9 +67,6 @@ pages:
                             - title: Audiobookshelf
                               url: https://audiobookshelf.${DOMAIN}
                               icon: di:audiobookshelf
-                            - title: Calibre
-                              url: https://calibre.${DOMAIN}
-                              icon: sh:calibre-web
                             - title: BookOrbit
                               url: https://bookorbit.${DOMAIN}
                               icon: mdi:book-open-variant
@@ -155,7 +152,6 @@ pages:
                             - firefly-iii/firefly-iii
                             - firefly-iii/data-importer
                             - karakeep-app/karakeep
-                            - crocodilestick/calibre-web-automated
                             - bookorbit/bookorbit
                             - amir20/dozzle
                             - open-webui/open-webui
@@ -252,9 +248,6 @@ pages:
                             - title: Audiobookshelf
                               url: https://audiobookshelf.${DOMAIN}
                               icon: di:audiobookshelf
-                            - title: Calibre
-                              url: https://calibre.${DOMAIN}
-                              icon: sh:calibre-web
                             - title: BookOrbit
                               url: https://bookorbit.${DOMAIN}
                               icon: mdi:book-open-variant
