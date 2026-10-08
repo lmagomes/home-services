@@ -4,7 +4,7 @@ After=network.target
 
 [Container]
 Pod=bookorbit.pod
-Image=docker.io/pgvector/pgvector:0.8.6-pg18
+Image=docker.io/pgvector/pgvector:0.8.7-pg18
 ContainerName=bookorbit-db
 EnvironmentFile=./%N.env
 Secret=bookorbit-db-password,type=env,target=POSTGRES_PASSWORD
