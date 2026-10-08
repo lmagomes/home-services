@@ -5,7 +5,7 @@ After=network.target
 [Container]
 Pod=jellyfin.pod
 ContainerName=jellyfin-netbird
-Image=docker.io/netbirdio/netbird:0.79.0-rootless
+Image=docker.io/netbirdio/netbird:0.80.0-rootless
 Environment=NB_HOSTNAME=jellyfin-netbird
 Secret=jellyfin-netbird-setup-key,type=env,target=NB_SETUP_KEY
 Volume=jellyfin-netbird.volume:/var/lib/netbird:Z
