@@ -6,7 +6,7 @@ After=network.target bookorbit-db.service
 [Container]
 Pod=bookorbit.pod
 ContainerName=bookorbit
-Image=ghcr.io/bookorbit/bookorbit:3.1.0
+Image=ghcr.io/bookorbit/bookorbit:3.3.0
 EnvironmentFile=./%N.env
 Secret=bookorbit-app-url,type=env,target=APP_URL
 Secret=bookorbit-db-password,type=env,target=POSTGRES_PASSWORD
