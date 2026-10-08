@@ -7,7 +7,7 @@ Requires=immich-postgres.service immich-redis.service
 Pod=immich.pod
 ContainerName=immich-server
 EnvironmentFile=./immich.env
-Image=ghcr.io/immich-app/immich-server:v3.2.2
+Image=ghcr.io/immich-app/immich-server:v3.3.0
 Volume=/etc/localtime:/etc/localtime:ro
 Mount=type=bind,source=/mnt/nas/media/photos/,destination=/data,relabel=private
 
