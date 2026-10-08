@@ -5,7 +5,7 @@ After=network.target
 [Container]
 ContainerName=seerr
 Pod=seerr.pod
-Image=ghcr.io/seerr-team/seerr:v3.4.1
+Image=ghcr.io/seerr-team/seerr:v3.5.0
 Volume=seerr-config.volume:/app/config:nocopy,Z
 EnvironmentFile=./%N.env
 HealthCmd=["wget","--no-verbose","--tries=1","--spider","http://localhost:5055/api/v1/settings/public"]
