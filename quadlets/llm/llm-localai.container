@@ -9,6 +9,7 @@ Image=docker.io/localai/localai:v4.11.0-gpu-intel
 Volume=llm-llamacpp-models.volume:/models:z
 Volume=llm-localai-backends.volume:/backends:Z
 Volume=llm-localai-configuration.volume:/configuration:Z
+Volume=llm-localai-data.volume:/data:Z
 AddDevice=/dev/dri
 EnvironmentFile=./%N.env
 
