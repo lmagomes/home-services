@@ -5,7 +5,7 @@ After=network.target
 [Container]
 Pod=redlib.pod
 ContainerName=redlib
-Image=ghcr.io/cycneuramus/containers@sha256:4b607fd58f2c170d9bbf073bfedbe570c5b6f29c7e72b3a2285e86d5c7f98af9
+Image=quay.io/redlib/redlib:latest
 EnvironmentFile=./%N.env
 User=nobody
 DropCapability=ALL
