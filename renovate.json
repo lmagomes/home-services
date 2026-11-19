@@ -8,6 +8,7 @@
     "schedule": ["before 6am"],
     "prHourlyLimit": 10,
     "prConcurrentLimit": 5,
+    "rebaseWhen": "behind-base-branch",
     "customManagers": [
         {
             "customType": "regex",
@@ -84,6 +85,23 @@
             "description": "pgvector uses {pgvector-version}-pg{pg-major} tag format",
             "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-pg(?<compatibility>\\d+)$",
             "matchPackageNames": ["/pgvector/pgvector/"]
+        },
+        {
+            "description": "Group non-major image updates per pod",
+            "matchManagers": ["quadlet"],
+            "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+            "groupName": "{{parentDir}} (non-major)",
+            "groupSlug": "{{parentDir}}-non-major",
+            "groupSingleUpdates": true,
+            "automerge": true
+        },
+        {
+            "description": "Group major image updates per pod (manual review)",
+            "matchManagers": ["quadlet"],
+            "matchUpdateTypes": ["major"],
+            "groupName": "{{parentDir}} (major)",
+            "groupSlug": "{{parentDir}}-major",
+            "groupSingleUpdates": true
         }
     ]
 }

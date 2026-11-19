@@ -8,6 +8,10 @@ on:
       - 'quadlets/**'
       - 'timers/**'
 
+concurrency:
+  group: deploy-${{ forgejo.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: host
