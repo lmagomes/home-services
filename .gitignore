@@ -1,2 +1,3 @@
 quadlets/forgejo-runner/forgejo-runner-config.yml
 quadlets/portabase/databases.json
+quadlets/home-assistant/home-assistant-secrets.yaml

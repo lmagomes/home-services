@@ -2,6 +2,7 @@
 
 systemd-container-dir := "$HOME/.config/containers/systemd"
 systemd-user-dir := "$HOME/.config/systemd/user"
+state-dir := "$HOME/.local/state/home-services"
 
 # copy quadlet files to systemd directory, decrypting encrypted configs first
 install-quadlets:
@@ -23,15 +24,39 @@ install-quadlets:
         end
     end
 
-    # 3. copy all quadlet files/dirs into systemd dir (skip encrypted source files)
+    # 3. collect everything this repo installs (skip encrypted source files)
+    set -l desired
     for dir in ./quadlets/*/
         for item in "$dir"*
-            set basename (basename $item)
+            set -l basename (basename $item)
             # Skip encrypted source files — only decrypted copies are installed
             if string match -q '*.encrypted.*' $basename
                 continue
             end
-            set dest "{{ systemd-container-dir }}/$basename"
+            set -a desired $basename
+        end
+    end
+
+    # 4. remove old files we installed previously that no longer exist
+    set -l manifest "{{ state-dir }}/installed-quadlets"
+    mkdir -p {{ state-dir }}
+    if test -f $manifest
+        for name in (cat $manifest)
+            if not contains -- $name $desired
+                echo "🗑️  Removing stale file: $name"
+                rm -rf "{{ systemd-container-dir }}/$name"
+            end
+        end
+    end
+
+    # 5. copy current quadlet files/dirs into systemd dir
+    for dir in ./quadlets/*/
+        for item in "$dir"*
+            set -l basename (basename $item)
+            if string match -q '*.encrypted.*' $basename
+                continue
+            end
+            set -l dest "{{ systemd-container-dir }}/$basename"
             if test -d $item
                 cp -r $item $dest
             else
@@ -40,23 +65,9 @@ install-quadlets:
         end
     end
 
-    # 4. remove stale files in systemd dir not present in any quadlet dir
-    for item in {{ systemd-container-dir }}/*
-        set basename (basename $item)
-        set found 0
-        for dir in ./quadlets/*/
-            if test -e "$dir$basename"
-                set found 1
-                break
-            end
-        end
-        if test $found -eq 0
-            echo "🗑️  Removing stale file: $basename"
-            rm -rf $item
-        end
-    end
+    printf '%s\n' $desired | sort > $manifest
 
-    # 5. reload systemd
+    # 6. reload systemd
     echo "🔄 Reloading systemd user daemon..."
     systemctl --user daemon-reload
 
@@ -98,27 +109,37 @@ install-timers:
         end
     end
 
-    # 2. copy all timer files into systemd dir
+    # 2. collect the timer files this repo manages
+    set -l desired
     for item in ./timers/*
-        set basename (basename $item)
-        set dest "{{ systemd-user-dir }}/$basename"
-        cp $item $dest
+        set -a desired (basename $item)
     end
 
-    # 3. remove stale files in systemd dir not present in timers/
-    for item in {{ systemd-user-dir }}/*
-        set basename (basename $item)
-        if not test -e "./timers/$basename"
-            echo "🗑️  Removing stale file: $basename"
-            rm -f $item
+    # 3. remove old files we installed previously that no longer exist
+    set -l manifest "{{ state-dir }}/installed-timers"
+    mkdir -p {{ state-dir }}
+    if test -f $manifest
+        for name in (cat $manifest)
+            if not contains -- $name $desired
+                echo "🗑️  Removing stale file: $name"
+                rm -f "{{ systemd-user-dir }}/$name"
+            end
         end
     end
 
-    # 4. reload systemd
+    # 4. copy all timer files into systemd dir
+    for item in ./timers/*
+        set -l basename (basename $item)
+        cp $item "{{ systemd-user-dir }}/$basename"
+    end
+
+    printf '%s\n' $desired | sort > $manifest
+
+    # 5. reload systemd
     echo "🔄 Reloading systemd user daemon..."
     systemctl --user daemon-reload
 
-    # 5. enable and start all timer units
+    # 6. enable and start all timer units
     for timer_file in ./timers/*.timer
         set timer_name (basename $timer_file)
         echo "🔛 Enabling and starting $timer_name"

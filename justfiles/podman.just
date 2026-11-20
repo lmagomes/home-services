@@ -11,14 +11,16 @@ sync-secrets:
     # Get all secret names
     set -l desired_names (yq '.secrets | keys | .[]' $tmp)
 
-    # Get existing podman secrets
-    set -l existing (podman secret ls --noheading | awk '{print $2}')
-
-    # Delete secrets not present in the file
-    for name in $existing
-        if not contains -- $name $desired_names
-            echo "🗑️  Removing orphan secret $name..."
-            podman secret rm $name
+    # Only delete secrets this repo previously managed
+    set -l state_dir "$HOME/.local/state/home-services"
+    set -l manifest "$state_dir/podman-secrets"
+    mkdir -p $state_dir
+    if test -f $manifest
+        for name in (cat $manifest)
+            if not contains -- $name $desired_names
+                echo "🗑️  Removing orphan secret $name..."
+                podman secret rm $name
+            end
         end
     end
 
@@ -46,6 +48,7 @@ sync-secrets:
         printf '%s' $value | podman secret create $name -
     end
 
+    printf '%s\n' $desired_names | sort > $manifest
     rm $tmp
 
 # show status of podman pod services
@@ -118,6 +121,11 @@ decrypt-quadlet-configs:
         else
             echo "⚠️ Unknown file type .$ext, skipping $encrypted"
             continue
+        end
+        # Never write plaintext unless git will ignore it
+        if not git check-ignore -q -- $decrypted
+            echo "❌ $decrypted is not gitignored. Add it to .gitignore before decrypting."
+            exit 1
         end
         echo "🔓 Decrypting $encrypted → $decrypted"
         set -l tmp (mktemp)
