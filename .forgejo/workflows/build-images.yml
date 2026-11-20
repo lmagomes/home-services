@@ -19,7 +19,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Login to Forgejo Container Registry
         run: just registry-login-ci
@@ -28,7 +28,9 @@ jobs:
           REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
 
       - name: Build and push changed images
-        run: just build-and-push-changed
+        env:
+          BEFORE_SHA: ${{ forgejo.event.before }}
+        run: just build-and-push-changed "$BEFORE_SHA"
 
   update-podman:
     needs: [build]
@@ -37,13 +39,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Sync quadlets and update images
+        env:
+          BEFORE_SHA: ${{ forgejo.event.before }}
         run: |
           just sync-secrets
           just install-quadlets
-          just update-podman-images
+          just update-podman-images-since "$BEFORE_SHA"
 
       - name: Install timers
         run: just install-timers

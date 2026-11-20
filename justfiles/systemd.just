@@ -220,7 +220,7 @@ merge-quadlet-pr pr_number:
     echo "✅ Merged PR #$pr_number into main"
 
 # restart podman services so they pull new images on start
-# pass optional quadlet directories to restart only specific pods (default: auto-detect from git or restart all)
+# pass optional quadlet directories to restart only specific pods (default: auto-detect changed quadlet files since HEAD~1)
 update-podman-images *dirs:
     #!/usr/bin/env fish
     set root_dirs
@@ -232,21 +232,23 @@ update-podman-images *dirs:
         end
         echo "🔄 Restarting explicitly specified pod(s)"
     else
-        set changed_files (git diff --name-only HEAD~1 -- 'quadlets/*.container' 2>/dev/null)
-        if test (count $changed_files) -gt 0
-            echo "🔄 Detected changed container files from git diff"
-            for file in $changed_files
-                set -a root_dirs (dirname $file)
-            end
-        else
-            for container_file in (find quadlets/ -name "*.container")
-                set -a root_dirs (dirname $container_file)
-            end
+        if not git rev-parse --verify --quiet HEAD~1 >/dev/null
+            echo "No parent commit to compare against; nothing to restart."
+            exit 0
+        end
+        set changed_files (git diff --name-only HEAD~1 -- 'quadlets/' 2>/dev/null)
+        if test (count $changed_files) -eq 0
+            echo "No changed quadlet files detected; nothing to restart."
+            exit 0
+        end
+        echo "🔄 Detected changed quadlet files from git diff"
+        for file in $changed_files
+            set -a root_dirs (dirname $file)
         end
     end
 
     if test (count $root_dirs) -eq 0
-        echo "No container files found."
+        echo "No quadlet directories to restart."
         exit 0
     end
 
@@ -254,6 +256,10 @@ update-podman-images *dirs:
 
     # Pre-pull images so quadlet doesn't create temp storage in /var/tmp on restart
     for dir in $root_dirs
+        if not test -d $dir
+            echo "⏭️  Skipping missing directory: $dir"
+            continue
+        end
         for container_file in (find $dir -name "*.container")
             set image (grep '^Image=' $container_file | head -1 | string split -f 2 '=')
             if test -n "$image"
@@ -266,6 +272,9 @@ update-podman-images *dirs:
     systemctl --user daemon-reload
 
     for dir in $root_dirs
+        if not test -d $dir
+            continue
+        end
         for pod_file in (find $dir -name "*.pod")
             set service_name (basename $pod_file .pod)-pod.service
             echo "🔄 Restarting $service_name"
@@ -274,6 +283,43 @@ update-podman-images *dirs:
     end
 
     echo "✅ Updated services restarted."
+
+# restart pods affected by quadlet changes since a base ref (for CI)
+update-podman-images-since base_ref="":
+    #!/usr/bin/env fish
+    # base_ref defaults to HEAD~1; pass the push event's before SHA from CI
+    set -l all_dirs
+    for container_file in (find quadlets/ -name "*.container")
+        set -a all_dirs (dirname $container_file)
+    end
+    set all_dirs (printf '%s\n' $all_dirs | sort -u)
+
+    set -l base "{{ base_ref }}"
+    if test -z "$base" -o "$base" = "0000000000000000000000000000000000000000"
+        set base (git rev-parse HEAD~1 2>/dev/null)
+    end
+
+    # If the base is missing or unusable, restart everything rather than skip the deploy
+    if test -z "$base"
+        echo "❗ No usable base ref; restarting all pods."
+        just update-podman-images $all_dirs
+        exit $status
+    end
+    if not git cat-file -e "$base^{commit}" 2>/dev/null
+        echo "❗ Base ref $base not found; restarting all pods."
+        just update-podman-images $all_dirs
+        exit $status
+    end
+
+    set changed_dirs (git diff --name-only "$base" HEAD -- 'quadlets/' | while read -l file; dirname $file; end | sort -u)
+
+    if test (count $changed_dirs) -eq 0
+        echo "No quadlet changes since $base; nothing to restart."
+        exit 0
+    end
+
+    echo "Changed quadlet dirs since $base: $changed_dirs"
+    just update-podman-images $changed_dirs
 
 # record a removed quadlet service in the removed-quadlets.md journal (run after committing the removal)
 record-removed-quadlet service *notes:

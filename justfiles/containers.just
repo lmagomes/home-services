@@ -126,10 +126,29 @@ build-and-push image dir version-strategy:
 
     echo "✅ Pushed $remote_image"
 
-# detect changed build directories since previous commit and build+push them (for CI)
-build-and-push-changed:
+# detect changed build directories since a base ref and build+push them (for CI)
+build-and-push-changed base_ref="":
     #!/usr/bin/env fish
-    set changed_dirs (git diff --name-only HEAD~1 HEAD -- builds/ | cut -d'/' -f2 | sort -u)
+    # base_ref defaults to HEAD~1; pass the push event's before SHA from CI
+    set -l base "{{ base_ref }}"
+    if test -z "$base" -o "$base" = "0000000000000000000000000000000000000000"
+        set base (git rev-parse HEAD~1 2>/dev/null)
+    end
+
+    # If the base is missing or unusable, rebuild everything rather than skipping work
+    set -l base_ok 1
+    if test -z "$base"
+        set base_ok 0
+    else if not git cat-file -e "$base^{commit}" 2>/dev/null
+        set base_ok 0
+    end
+    if test $base_ok -eq 0
+        echo "❗ No usable base ref; building all images."
+        just build-and-push-all
+        exit 0
+    end
+
+    set changed_dirs (git diff --name-only "$base" HEAD -- builds/ | cut -d'/' -f2 | sort -u)
 
     if test (count $changed_dirs) -eq 0
         echo "No build directories changed."
