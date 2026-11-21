@@ -31,7 +31,7 @@ timers/                    # Systemd timer + service units
 | Network | `<name>.network` | `services.network` |
 | Env file | `<container-name>.env` | `caddy.env` |
 | Extra config | `<container-name>-<file>` | `glance.yml` |
-| Just modules | `<domain>.just` | `backup.just` |
+| Just modules | `<domain>.just` | `validate.just` |
 | Container builds | `builds/<image>/Containerfile` | `builds/caddy/Containerfile` |
 
 ### Quadlet directory structure
@@ -176,13 +176,15 @@ log:
 - Workflows live in `.forgejo/workflows/`.
 - Use YAML format with standard Forgejo Actions / GitHub Actions syntax.
 - Runner is `host` (runs directly on the host machine, not in a container).
-- The CI workflow triggers on merged PRs whose branch starts with `updates/`.
+- `build-images.yml` runs on pushes to `main` that touch `builds/`, `quadlets/`, or `timers/`. It builds changed images and restarts the affected pods.
+- `validate.yml` runs `just validate` on pull requests.
+- `prune-registry.yml` runs `just prune-registry-images` weekly and can be triggered manually.
 
 ## Version Management
 
 - Container image versions are updated via `just update-quadlet-pr <quadlet> <container> <version>`.
 - This creates a branch `updates/<quadlet>-<date>-<containers>`, commits the change, pushes, and opens a PR.
-- When the PR is merged, the Forgejo workflow pulls images and restarts affected services via `just update-podman-images`.
+- When the PR is merged, the Forgejo workflow pulls images and restarts only the affected services via `just update-podman-images-since`.
 - Renovate monitors upstream releases and triggers Service-Hub webhooks to auto-create PRs.
 
 ## Adding a New Service

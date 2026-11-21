@@ -8,12 +8,12 @@ This is a collection of podman quadlets that I use for selfhosting several servi
 .
 ├── justfile                  # Main justfile (imports all others)
 ├── justfiles/                # Modular justfile commands
-│   ├── backup.just           # Backup and restore operations
 │   ├── containers.just       # Container image building
-│   ├── podman.just           # Podman management commands
-│   └── systemd.just          # Systemd linking and updates
+│   ├── podman.just           # Podman and secret management
+│   ├── systemd.just          # Quadlet/timer installation and updates
+│   └── validate.just         # Static validation
 ├── quadlets/                 # Service definitions
-│   ├── transmission/          # Example: Transmission service
+│   ├── transmission/         # Example: Transmission service
 │   │   ├── transmission.pod
 │   │   ├── transmission.container
 │   │   ├── transmission-data.volume
@@ -22,9 +22,10 @@ This is a collection of podman quadlets that I use for selfhosting several servi
 ├── builds/                   # Custom Containerfiles
 │   ├── caddy/
 │   └── transmission/
-└── timers/                   # Systemd timers (e.g., backups)
-    ├── backup.service
-    └── backup.timer
+├── timers/                   # Systemd timers (e.g., backups)
+│   ├── backup.service
+│   └── backup.timer
+└── .forgejo/workflows/       # CI workflows
 ```
 
 ## Prerequisites
@@ -34,8 +35,8 @@ This is a collection of podman quadlets that I use for selfhosting several servi
 - **just** - Command runner ([installation](https://github.com/casey/just))
 - **fish** - Shell (used in justfile commands)
 - **sops** - For encrypted secrets
-- **restic** - For automated backups
-- **yq** - YAML processor, for handling the secrets
+- **restic** - For manual repository initialization and inspection (automated backups run in a container)
+- **yq** - YAML processor, used for secrets and workflow validation
 
 ## Getting Started
 
@@ -52,30 +53,27 @@ This copies files into `~/.config/containers/systemd/` and `~/.config/systemd/us
 
 ### 2. Create Secrets
 
-If your services require secrets (stored in `.secrets/secrets.yaml`):
+Secrets live encrypted in `.secrets/secrets.yaml`. Sync them into Podman:
 
 ```bash
-just create-secrets
+just sync-secrets
 ```
 
-This decrypts the SOPS-encrypted secrets file and creates Podman secrets.
+This decrypts the SOPS file with the age key and creates or updates Podman secrets. Secrets previously managed by this repo that are no longer in the file are removed; secrets owned by other projects are left alone.
 
-### 3. Create images
+### 3. Create Images
 
-Run the just recipe to create all the necessary custom images for the containers:
+Build the custom images used by the quadlets:
 
 ```bash
 just build-all
 ```
 
-This will create a few custom containers:
-- caddy with cloudflare (used for let's encrypt certificates), l4 (layer 4 to redirect ssh through port 443)
-- transmission with the flood Web UI
-- lumo tamer. Note that it will clone the lumo tamer repository into a temporary folder, in order to build the necessary images.
+This builds Caddy with the Cloudflare and layer-4 plugins (for Let's Encrypt certificates and SSH over port 443), Transmission with the Flood web UI, lumo-tamer, json-path-finder, backup-restic, the Forgejo runner job image, and the development environment. Images are built from `builds/<image>/Containerfile`; upstream versions are tracked in `.upstream-version` and `build-version` files.
 
 ### 4. Container registry alias
 
-Custom container images are stored in the **Forgejo container registry** and referenced in quadlet files using the short alias `home-services/` (e.g., `Image=home-services/caddy-cloudflare-l4:2.11.2-alpine`).
+Custom container images are stored in the **Forgejo container registry** and referenced in quadlet files using the short alias `home-services/` (e.g., `Image=home-services/caddy-cloudflare-l4:2.11.4-alpine`).
 
 The alias mapping is generated at deploy time by `just install-quadlets` from the `registry-path` secret in `.secrets/secrets.yaml`. It writes a Podman `registries.conf.d` drop-in that maps `home-services/` to the full registry namespace. No domain appears in any file in the repository — only in the encrypted secrets file.
 
@@ -92,71 +90,9 @@ just prune-registry-images      # keep latest + 2 versions (default)
 just prune-registry-images 3    # keep latest + 3 versions
 ```
 
-Only packages under this repo's registry namespace are considered. Deleting a version marks its blobs as unreferenced; Forgejo reclaims them through its `cron.cleanup_packages` job (runs at midnight, removes unreferenced data older than 24h). This recipe uses the Forgejo API with the `forgejo-registry-user` and `forgejo-registry-token` secrets, so the token needs package write/delete scope.
+Only packages under this repo's registry namespace are considered. Deleting a version marks its blobs as unreferenced; Forgejo reclaims them through its `cron.cleanup_packages` job (runs at midnight, removes unreferenced data older than 24h). This recipe uses the Forgejo API with the `forgejo-registry-user` and `forgejo-registry-token` secrets, so the token needs package write/delete scope. The `prune-registry.yml` workflow also runs this weekly and can be triggered manually.
 
-### podman socket
-
-Some services use the podman socket (originally docker, but this works just as well). For the user, this can be enabled with:
-
-#### uptime kuma
-
-uptime-kuma is one of the services that use a socket. This is configured to point to `/run/podman/podman.sock`. Podman containers can now be added as a monitoring
-
-For direct database connections, they can can be added through the pod (not the individual service). e.g. `postgres://authentik:******@authentik.pod:5432/authentik`
-
-```bash
-sudo systemctl enable --now
-```
-
-### lumo tamer
-
-Lumo tamer is a project that builds an openai API on top of proton's lumo. Mainly used by karakeep to create tags for the added links.
-
-For login, an easy enough flow for the initial authentication is to change the container (`lumo-tamer.container`) to just run sleep.
-
-```
-[Container]
-ContainerName=lumo-tamer
-...
-Exec=sleep 10m
-
-[Service]
-...
-```
-
-For the browser authentication, open a port to the outside inside the pod (`llm.pod`) (here it is open as port 8888). This only has to be done once, and the port can be disabled afterwards.
-
-```
-[Pod]
-PodName=llm.pod
-# port for the browser, temporarly used for logging in to lumo
-PublishPort=8888:3001
-...
-```
-
-Open the browser, on port `8888`: https://home-services:8888/ and login to proton inside the browser.
-
-Afterwards, run from a shell:
-```bash
-podman exec -it lumo-tamer /bin/sh
-```
-
-and inside the container
-```bash
-npm run auth
-```
-
-You can then remove the `Exec` part of the container.
-
-### llama.cpp and localai models
-
-llama.cpp and localai share the same models directory. localai can download the models and these can also be used by llama.cpp. It may require that files be moved from `llama-cpp/models/` to the root directory, and the companion `.yaml` file edited to change the path.
-
-### termix
-
-I have tailscale installed on the host server, so these network options work for me. You may need to adjust the podman network options to suite your needs.
-
-### 3. Reload systemd
+### 5. Reload systemd
 
 Reload the systemd daemon (the install recipes above do this automatically):
 
@@ -164,7 +100,7 @@ Reload the systemd daemon (the install recipes above do this automatically):
 systemctl --user daemon-reload
 ```
 
-### 4. Start Services
+### 6. Start Services
 
 Start all pod services:
 
@@ -177,6 +113,70 @@ Or start individual services:
 ```bash
 systemctl --user start transmission-pod.service
 ```
+
+## Service Notes
+
+### podman socket
+
+Some services use the Podman socket (originally Docker, but this works just as well). For the current user, enable it with:
+
+```bash
+systemctl --user enable --now podman.socket
+```
+
+#### uptime kuma
+
+uptime-kuma uses the socket and is configured to point to `/run/podman/podman.sock`. Podman containers can then be added as monitoring targets.
+
+For direct database connections, add them through the pod (not the individual service), e.g. `postgres://authentik:******@authentik.pod:5432/authentik`.
+
+### lumo tamer
+
+Lumo tamer is a project that builds an OpenAI API on top of Proton's Lumo. It is mainly used by karakeep to create tags for added links.
+
+For login, an easy flow for the initial authentication is to change the container (`lumo-tamer.container`) to just run sleep:
+
+```
+[Container]
+ContainerName=lumo-tamer
+...
+Exec=sleep 10m
+
+[Service]
+...
+```
+
+For the browser authentication, open a port to the outside inside the pod (`llm.pod`) (here it is opened as port 8888). This only has to be done once, and the port can be disabled afterwards.
+
+```
+[Pod]
+PodName=llm.pod
+# port for the browser, temporarily used for logging in to lumo
+PublishPort=8888:3001
+...
+```
+
+Open the browser on port `8888`: https://home-services:8888/ and log in to Proton inside the browser.
+
+Afterwards, run from a shell:
+```bash
+podman exec -it lumo-tamer /bin/sh
+```
+
+and inside the container:
+```bash
+npm run auth
+```
+
+You can then remove the `Exec` part of the container.
+
+### llama.cpp and localai models
+
+llama.cpp and localai share the same models directory. localai can download the models, and these can also be used by llama.cpp. It may require that files be moved from `llama-cpp/models/` to the root directory, and the companion `.yaml` file edited to change the path.
+
+### termix
+
+I have Tailscale installed on the host server, so these network options work for me. You may need to adjust the Podman network options to suit your needs.
 
 ## Common Commands
 
@@ -231,37 +231,46 @@ just install-quadlets
 just install-timers
 ```
 
+### Validation
+
+```bash
+# Run the static checks used by the pull request workflow
+just validate
+```
+
 ### Backup & Restore
 
-#### initialize
+Backups run from the `backup` pod. The `backup.timer` starts `backup.service` daily at 02:00, which starts `backup-restic.service` and then `backup-rclone.service`.
 
-The backup repositories can be initialized with something like (adjust for your own needs):
+- `backup-restic` stops each pod, exports its volumes to `~/podman_volume_backup/`, runs `restic backup` against the configured repositories, and applies a 7 daily / 4 weekly / 6 monthly retention policy.
+- `backup-rclone` syncs the books, audiobooks, and Podman volume backups to the configured rclone remote. The remote is configured in the `backup-rclone-config` volume.
 
-```bash
-restic init --password-command 'just get-restic-password' --repo /mnt/nas/backup/podman-volumes/
-restic init --password-command 'just get-restic-password' --repo /mnt/nas/backup/audiobooks/
-restic init --password-command 'just get-restic-password' --repo /mnt/nas/backup/books/
-```
-
-These all use the same password, but the `just get-restic-password` could be adjusted to have a different password per backup repository.
+Run a backup manually:
 
 ```bash
-# Run full backup (volumes + restic backup)
-just backup
-
-# Backup only podman volumes
-just backup-volumes
-
-# Backup to remote location with restic
-just backup-with-restic
+systemctl --user start backup.service
 ```
 
-**Backup Process:**
-1. Stops each service
-2. Exports volumes to tar archives in `~/podman_volume_backup/`
-3. Restarts the service
-4. Uses restic to backup to remote location (NAS)
-5. Applies retention policy (7 daily, 4 weekly, 6 monthly)
+Check the timer:
+
+```bash
+systemctl --user status backup.timer
+systemctl --user list-timers backup.timer
+```
+
+#### Initialize repositories
+
+The restic repositories can be initialized with the same password used by the `restic-password` Podman secret:
+
+```bash
+export RESTIC_PASSWORD="$(podman secret inspect --showsecret restic-password | jq -r '.[0].SecretData')"
+restic init --repo /mnt/nas/backup/podman-volumes/
+restic init --repo /mnt/nas/backup/audiobooks/
+restic init --repo /mnt/nas/backup/books/
+unset RESTIC_PASSWORD
+```
+
+Backup paths and repositories are defined in `quadlets/backup/backup-restic.container` and `builds/backup-restic/entrypoint.sh`; adjust them to match your own layout.
 
 ### Version Management
 
@@ -287,7 +296,7 @@ This workflow:
 
 ## Development Environment
 
-A containerized development environment accessible via SSH and a web-based OpenCode interface. The container runs Fedora 44 with fish, just, git, jq, yq, sops, forgejo-cli, tmux, vim, htop, and opencode.
+A containerized development environment accessible via SSH and a web-based OpenCode interface. The container runs Fedora 44 with fish, just, git, jq, yq, sops, forgejo-cli (`fj`), tmux, vim, htop, and opencode.
 
 ### Setup
 
@@ -364,17 +373,5 @@ The quadlet files are converted to systemd units automatically by Podman, creati
 
 - **Quadlets:** Define containers, pods, and volumes in `quadlets/`
 - **Secrets:** Encrypted with SOPS in `.secrets/secrets.yaml`
-- **Backups:** Configure paths in `justfiles/backup.just`
+- **Backups:** Configure repositories and sources in `quadlets/backup/backup-restic.container` and `builds/backup-restic/entrypoint.sh`
 - **Custom Images:** Containerfiles in `builds/`
-
-## Automated Backups
-
-A systemd timer runs automated backups:
-
-```bash
-# Check timer status
-systemctl --user status backup.timer
-
-# View timer schedule
-systemctl --user list-timers backup.timer
-```
