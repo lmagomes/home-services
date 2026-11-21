@@ -43,7 +43,7 @@ Each service lives in `quadlets/<service>/` and contains one `.pod` file, one or
 All quadlet files use INI-style systemd unit syntax. Section order: `[Unit]` → type-specific → `[Service]` → `[Install]`.
 
 Key rules:
-- Pin image versions explicitly — no `:latest` or floating tags
+- Pin image versions explicitly — no `:latest` or floating tags. The one documented exception is `redlib`, which tracks `:latest` with `AutoUpdate=registry` because upstream uses a version scheme Renovate cannot follow.
 - **Use `home-services/` as the image prefix** for all locally-built images (e.g., `Image=home-services/caddy-cloudflare-l4:2.11.2-alpine`). This is a Podman short-name alias that resolves to the Forgejo container registry. The alias config is generated at deploy time from the `registry-path` secret in `.secrets/secrets.yaml` by `just generate-registries-conf` (called automatically by `just install-quadlets`). Do NOT put the full registry domain in `Image=` directives — always use the `home-services/` alias.
 - Use `EnvironmentFile=./%N.env` (`%N` expands to the unit name) for env files placed alongside the container. Use `Volume=./%N-<config-file>` for config files.
 - For containers that share an env file, use an explicit filename (e.g., `EnvironmentFile=./immich.env`).

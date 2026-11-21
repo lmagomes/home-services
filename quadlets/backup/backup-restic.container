@@ -8,8 +8,8 @@ Pod=backup.pod
 Image=home-services/backup-restic:44-r1
 
 # Podman socket for stopping/starting pods and exporting volumes
-Mount=type=bind,source=/run/user/1000/podman/podman.sock,destination=/run/user/1000/podman/podman.sock,relabel=private
-Environment=XDG_RUNTIME_DIR=/run/user/1000
+Mount=type=bind,source=%t/podman/podman.sock,destination=%t/podman/podman.sock,relabel=private
+Environment=XDG_RUNTIME_DIR=%t
 
 # Tarball export destination
 Mount=type=bind,source=%h/podman_volume_backup,destination=/data/podman-volume-backup,relabel=private

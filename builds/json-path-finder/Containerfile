@@ -1,5 +1,5 @@
 # Stage 1: Build the static assets
-FROM node:22-alpine AS builder
+FROM node:22.22-alpine AS builder
 RUN apk add --no-cache git
 # Enable corepack to install pnpm
 RUN corepack enable pnpm
@@ -12,7 +12,7 @@ RUN pnpm install
 RUN pnpm run build
 
 # Stage 2: Serve the static files using caddy
-FROM caddy:alpine AS runner
+FROM caddy:2.11.4-alpine AS runner
 # Copy the built assets to caddy's default directory
 COPY --from=builder /app/dist /srv
 

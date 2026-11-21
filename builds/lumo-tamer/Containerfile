@@ -8,7 +8,7 @@ RUN git clone --depth 1 https://github.com/ZeroTricks/lumo-tamer.git /tmp/lumo-t
     CGO_ENABLED=0 go build -o proton-auth
 
 # Stage 2: Node builder - install dependencies and compile TypeScript
-FROM node:22-alpine AS builder
+FROM node:22.22-alpine AS builder
 RUN apk add --no-cache git python3 py3-setuptools make g++ libc6-compat \
     cairo-dev pango-dev jpeg-dev giflib-dev librsvg-dev
 WORKDIR /app
@@ -17,7 +17,7 @@ RUN npm ci
 RUN npm run build && npm prune --production
 
 # Stage 3: Runner
-FROM node:22-alpine
+FROM node:22.22-alpine
 WORKDIR /app
 COPY --from=builder /app/package.json /app/package-lock.json ./
 COPY --from=builder /app/node_modules ./node_modules

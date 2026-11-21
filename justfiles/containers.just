@@ -1,73 +1,62 @@
 # Justfile for building container images for various services.
+
+# build all images described by builds/*/build.conf without pushing
 build-all:
-    just build-transmission
-    just build-caddy
-    just build-lumo-tamer
-    just build-json-path-finder
-    just build-forgejo-runner-job
-    just build-backup-restic
-    just build-dev
+    #!/usr/bin/env fish
+    for conf in builds/*/build.conf
+        just build-from-conf $conf false
+    end
 
 # create a container image for transmission
 build-transmission:
     #!/usr/bin/env fish
-    set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/transmission/Containerfile)
-    podman build -t transmission-flood:$image_version builds/transmission/
-    podman tag transmission-flood:$image_version transmission-flood:latest
+    just build-from-conf builds/transmission/build.conf false
 
 # create a container image for caddy with cloudflare and l4 plugins
 build-caddy:
     #!/usr/bin/env fish
-    set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/caddy/Containerfile | tail -1)
-    echo $image_version
-    podman build -t caddy-cloudflare-l4:$image_version builds/caddy/
-    podman tag caddy-cloudflare-l4:$image_version caddy-cloudflare-l4:latest
+    just build-from-conf builds/caddy/build.conf false
 
-# create a container image for lumo-tamer and the companion browser image
+# create a container image for lumo-tamer
 build-lumo-tamer:
     #!/usr/bin/env fish
-    set latest_version (cat builds/lumo-tamer/.upstream-version | string trim)
-    echo "Building lumo-tamer:$latest_version..."
-    podman build -t localhost/lumo-tamer:$latest_version builds/lumo-tamer/
-    podman tag localhost/lumo-tamer:$latest_version localhost/lumo-tamer:latest
-    echo "Done! Built localhost/lumo-tamer:$latest_version"
+    just build-from-conf builds/lumo-tamer/build.conf false
 
 # create a container image for backup-restic
 build-backup-restic:
     #!/usr/bin/env fish
-    set image_version "44"
-    set build_version (cat builds/backup-restic/build-version | string trim)
-    set image_version "$image_version-r$build_version"
-    podman build -t localhost/backup-restic:$image_version builds/backup-restic/
-    podman tag localhost/backup-restic:$image_version localhost/backup-restic:latest
+    just build-from-conf builds/backup-restic/build.conf false
 
 # create a container image for the dev environment
 build-dev:
     #!/usr/bin/env fish
-    set image_version (sed -n 's/^FROM .*:\(.*\)$/\1/p' builds/dev/Containerfile)
-    set build_version (cat builds/dev/build-version | string trim)
-    set image_version "$image_version-r$build_version"
-    podman build --build-arg CACHEBUST=(date +%s) -t localhost/dev:$image_version builds/dev/
-    podman tag localhost/dev:$image_version localhost/dev:latest
+    just build-from-conf builds/dev/build.conf false
 
 # create a container image for json-path-finder
 build-json-path-finder:
     #!/usr/bin/env fish
-    set latest_version (cat builds/json-path-finder/.upstream-version | string trim)
-    echo "Building json-path-finder..."
-    podman build -t localhost/json-path-finder:$latest_version builds/json-path-finder/
-    podman tag localhost/json-path-finder:$latest_version localhost/json-path-finder:latest
-    echo "Done! Built localhost/json-path-finder:$latest_version"
+    just build-from-conf builds/json-path-finder/build.conf false
 
 # create a container image for the forgejo runner job execution environment
 build-forgejo-runner-job:
     #!/usr/bin/env fish
-    set image_version "44"
-    set build_version (cat builds/forgejo-runner-job/build-version | string trim)
-    set image_version "$image_version-r$build_version"
-    podman build --build-arg CACHEBUST=(date +%s) -t localhost/forgejo-runner-job:$image_version builds/forgejo-runner-job/
-    podman tag localhost/forgejo-runner-job:$image_version localhost/forgejo-runner-job:latest
-    echo "Done! Built localhost/forgejo-runner-job:$image_version"
+    just build-from-conf builds/forgejo-runner-job/build.conf false
+
+# build or build+push an image described by a build.conf file
+build-from-conf conf push="true":
+    #!/usr/bin/env fish
+    set -l conf "{{ conf }}"
+    if not test -f $conf
+        echo "❌ Build config not found: $conf"
+        exit 1
+    end
+    set -l image (sed -n 's/^image=//p' $conf | head -1)
+    set -l strategy (sed -n 's/^version-strategy=//p' $conf | head -1)
+    if test -z "$image" -o -z "$strategy"
+        echo "❌ $conf must define image= and version-strategy="
+        exit 1
+    end
+    just build-and-push $image (dirname $conf) $strategy "{{ push }}"
 
 # fetch the latest release version from a GitHub repository
 github-latest-version repo:
@@ -75,7 +64,8 @@ github-latest-version repo:
 
 # build and push a container image to the forgejo container registry.
 # version-strategy: "first" (first FROM line), "last" (last FROM line), "github:owner/repo", "rpm:package-name", "upstream-file:<path>", or literal version string.
-build-and-push image dir version-strategy:
+# pass push=false to build and tag locally without decrypting secrets or pushing.
+build-and-push image dir version-strategy push="true":
     #!/usr/bin/env fish
     set -l image_version
     set -l skip_build false
@@ -107,14 +97,19 @@ build-and-push image dir version-strategy:
         set image_version "$image_version-r$build_version"
     end
 
-    set registry_path (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-path')
-    set remote_image "$registry_path/{{ image }}:$image_version"
-
     if not $skip_build
         echo "🔄 Building {{ image }}:$image_version..."
         podman build --build-arg CACHEBUST=(date +%s) -t localhost/{{ image }}:$image_version {{ dir }}
         podman tag localhost/{{ image }}:$image_version localhost/{{ image }}:latest
     end
+
+    if test "{{ push }}" = "false"
+        echo "✅ Built localhost/{{ image }}:$image_version"
+        exit 0
+    end
+
+    set registry_path (sops decrypt .secrets/secrets.yaml | yq '.secrets.registry-path')
+    set remote_image "$registry_path/{{ image }}:$image_version"
 
     echo "🔖 Tagging $remote_image..."
     podman tag localhost/{{ image }}:$image_version $remote_image
@@ -158,36 +153,20 @@ build-and-push-changed base_ref="":
     echo "Changed build directories: $changed_dirs"
 
     for dir in $changed_dirs
-        switch $dir
-            case caddy
-                just build-and-push caddy-cloudflare-l4 builds/caddy last
-            case transmission
-                just build-and-push transmission-flood builds/transmission first
-            case json-path-finder
-                just build-and-push json-path-finder builds/json-path-finder "upstream-file:.upstream-version"
-            case lumo-tamer
-                just build-and-push lumo-tamer builds/lumo-tamer "upstream-file:.upstream-version"
-            case backup-restic
-                just build-and-push backup-restic builds/backup-restic "44"
-            case forgejo-runner-job
-                just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
-            case dev
-                just build-and-push dev builds/dev first
-            case '*'
-                echo "⏭️  No build-and-push configured for builds/$dir"
+        set -l conf "builds/$dir/build.conf"
+        if not test -f $conf
+            echo "⏭️  No build.conf for builds/$dir"
+            continue
         end
+        just build-from-conf $conf
     end
 
 # build and push all images to the forgejo container registry
 build-and-push-all:
     #!/usr/bin/env fish
-    just build-and-push caddy-cloudflare-l4 builds/caddy last
-    just build-and-push transmission-flood builds/transmission first
-    just build-and-push json-path-finder builds/json-path-finder "upstream-file:.upstream-version"
-    just build-and-push forgejo-runner-job builds/forgejo-runner-job "44"
-    just build-and-push dev builds/dev first
-    just build-and-push lumo-tamer builds/lumo-tamer "upstream-file:.upstream-version"
-    just build-and-push backup-restic builds/backup-restic "44"
+    for conf in builds/*/build.conf
+        just build-from-conf $conf
+    end
 
 
 # log in to the forgejo container registry (for CI, uses Actions secrets as env vars)
