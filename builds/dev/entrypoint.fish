@@ -2,6 +2,7 @@
 
 function cleanup
     echo "Shutting down..."
+    pkill -f 'server.js --host 0.0.0.0' 2>/dev/null
     kill %1 %2 %3 2>/dev/null
     exit 0
 end
@@ -53,7 +54,63 @@ end
 
 # pi-web replaces `opencode web` here. The opencode binary is still installed as a
 # fallback; delete its install step in the Containerfile once pi-web has proven itself.
-pi-web --host 0.0.0.0 --port $port --cwd /home/dev &
+#
+# It runs from the checkout in the persistent volume when one exists, so updating is
+# `git pull` + restart (or the Reload button) instead of a new image: rebuilding takes
+# minutes, pulling takes seconds. The image copy is the fallback for a fresh volume.
+function pi_web_source
+    set -l checkout /home/dev/projects/pi-web/server.js
+    if test -f $checkout
+        # A broken checkout must never lock the UI out; fall back to the image copy.
+        if node --check $checkout >/dev/null 2>&1
+            echo volume
+            return
+        end
+        echo "⚠️  $checkout does not parse; using the image copy" >&2
+    end
+    echo image
+end
+
+function pi_web_run
+    set -l forced_source $argv[1]
+    set -l source (pi_web_source)
+    if test "$forced_source" = image; and test "$source" = volume
+        echo "⚠️  volume checkout keeps failing; using the image copy" >&2
+        set source image
+    end
+    echo "pi-web source: $source"
+    if test "$source" = volume
+        set -lx PI_WEB_SOURCE volume
+        node /home/dev/projects/pi-web/server.js --host 0.0.0.0 --port $port --cwd /home/dev
+    else
+        set -lx PI_WEB_SOURCE image
+        pi-web --host 0.0.0.0 --port $port --cwd /home/dev
+    end
+end
+
+# Respawn loop: killing pi-web reloads it from disk, which is what POST /api/reload does.
+function pi_web_loop
+    set -l failures 0
+    while true
+        set -lx PI_WEB_SUPERVISED 1
+        set -l forced_source ""
+        if test $failures -ge 3
+            set forced_source image
+            echo "⚠️  3 consecutive failures; trying the image copy" >&2
+        end
+        pi_web_run $forced_source
+        set -l code $status
+        if test "$forced_source" = image; or test $code -eq 0
+            set failures 0
+        else
+            set failures (math $failures + 1)
+        end
+        echo "pi-web exited ($code); restarting in 2s" >&2
+        sleep 2
+    end
+end
+
+pi_web_loop &
 
 openvscode-server --host 0.0.0.0 --port $ide_port --without-connection-token &
 
