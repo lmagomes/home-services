@@ -31,7 +31,7 @@ if test -f /run/secrets/sops-age-key
     chmod 600 /home/dev/.config/sops/age/keys.txt
 end
 
-set port $OPENCODE_SERVER_PORT
+set port $PI_WEB_PORT
 if test -z "$port"
     set port 3000
 end
@@ -51,7 +51,9 @@ end
 
 /usr/sbin/sshd -D &
 
-opencode web --hostname 0.0.0.0 --port $port &
+# pi-web replaces `opencode web` here. The opencode binary is still installed as a
+# fallback; delete its install step in the Containerfile once pi-web has proven itself.
+pi-web --host 0.0.0.0 --port $port --cwd /home/dev &
 
 openvscode-server --host 0.0.0.0 --port $ide_port --without-connection-token &
 

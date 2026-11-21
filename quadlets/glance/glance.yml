@@ -34,9 +34,9 @@ pages:
                         title: Services
                         cache: 1m
                         sites:
-                            - title: opencode
-                              url: https://opencode.${DOMAIN}
-                              icon: di:opencode
+                            - title: pi
+                              url: https://pi.${DOMAIN}
+                              icon: mdi:robot-happy
                             - title: Forgejo
                               url: https://forgejo.${DOMAIN}
                               icon: di:forgejo
@@ -193,9 +193,9 @@ pages:
                       - title: Development
                         color: 30 60 50
                         links:
-                            - title: opencode
-                              url: https://opencode.${DOMAIN}
-                              icon: di:opencode
+                            - title: pi
+                              url: https://pi.${DOMAIN}
+                              icon: mdi:robot-happy
                             - title: Forgejo
                               url: https://forgejo.${DOMAIN}
                               icon: di:forgejo

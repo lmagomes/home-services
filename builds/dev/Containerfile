@@ -43,6 +43,12 @@ RUN dnf up -y
 RUN curl -fsSL https://opencode.ai/install | bash && \
     ln -sf /root/.opencode/bin/opencode /usr/local/bin/opencode
 
+# pi-web: browser UI for the pi coding agent (https://forgejo.example.com/lgomes/pi-web)
+# Pinned to a release tag; bump both the tag and build-version to roll forward.
+RUN git clone --depth 1 --branch v0.2.0 https://forgejo.example.com/lgomes/pi-web /opt/pi-web \
+    && chmod +x /opt/pi-web/server.js \
+    && ln -sf /opt/pi-web/server.js /usr/local/bin/pi-web
+
 RUN curl -sSL https://github.com/getsops/sops/releases/download/v3.13.3/sops-v3.13.3.linux.amd64 -o /usr/local/bin/sops && \
     chmod +x /usr/local/bin/sops
 
