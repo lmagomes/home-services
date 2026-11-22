@@ -12,7 +12,7 @@ RUN pnpm install
 RUN pnpm run build
 
 # Stage 2: Serve the static files using caddy
-FROM caddy:2.11.4-alpine AS runner
+FROM caddy:2.11.9-alpine AS runner
 # Copy the built assets to caddy's default directory
 COPY --from=builder /app/dist /srv
 
