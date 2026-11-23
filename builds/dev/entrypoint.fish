@@ -52,8 +52,7 @@ end
 
 /usr/sbin/sshd -D &
 
-# pi-web replaces `opencode web` here. The opencode binary is still installed as a
-# fallback; delete its install step in the Containerfile once pi-web has proven itself.
+# pi-web is the browser UI for the pi coding agent.
 #
 # It runs from the checkout in the persistent volume when one exists, so updating is
 # `git pull` + restart (or the Reload button) instead of a new image: rebuilding takes

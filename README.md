@@ -296,7 +296,7 @@ This workflow:
 
 ## Development Environment
 
-A containerized development environment accessible via SSH and a web-based OpenCode interface. The container runs Fedora 44 with fish, just, git, jq, yq, sops, forgejo-cli (`fj`), tmux, vim, htop, and opencode.
+A containerized development environment accessible via SSH, a web-based pi coding agent interface (pi-web), and a browser IDE. The container runs Fedora 44 with fish, just, git, jq, yq, sops, forgejo-cli (`fj`), tmux, vim, htop, pi-web, and OpenVSCode Server.
 
 ### Setup
 
@@ -306,8 +306,8 @@ A containerized development environment accessible via SSH and a web-based OpenC
 secrets:
   # ... existing secrets ...
 
-  # OpenCode web authentication
-  dev-opencode-server-password: "<password>"
+  # pi-web authentication
+  dev-pi-web-password: "<password>"
 
   # SSH public key for logging into the container (single line)
   dev-ssh-pubkey: ssh-ed25519 AAAA... user@host
@@ -346,7 +346,8 @@ just build-dev
 | Access | Address |
 |---|---|
 | SSH | `ssh -p 2224 root@<host>` |
-| OpenCode Web | `https://opencode.<domain>` |
+| pi Web | `https://pi.<domain>` |
+| IDE | `https://code.<domain>` |
 | Forgejo CLI | `fj --host forgejo.<domain> auth add-key` (one-time, token persists in volume) |
 
 On first SSH login, clone your repos into `/home/dev/projects/`. The home directory is backed by a persistent volume, so code and sessions survive container rebuilds.
@@ -355,7 +356,7 @@ On first SSH login, clone your repos into `/home/dev/projects/`. The home direct
 
 - `/home/dev/.ssh/` — authorized_keys, private key for Forgejo
 - `/home/dev/projects/` — git repositories
-- `/home/dev/.config/` — forgejo-cli auth, sops keys, opencode sessions
+- `/home/dev/.config/` — forgejo-cli auth, sops keys, pi sessions
 - `/home/dev/.ssh-host/` — SSH host keys (avoids fingerprint warnings on rebuilds)
 
 ## Services
