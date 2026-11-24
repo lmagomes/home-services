@@ -43,13 +43,18 @@ What `scripts/postgres-major-upgrade.sh` does:
    custom `PGDATA` override.
 3. Discovers the cluster superuser from `<container-name>.env`
    (`POSTGRES_USER`), verifies it with `psql`, and falls back to `postgres`.
-4. Stops the pod, removes any stale `<new-major>/` directory, and runs
+4. Asks the running server for `data_directory` and `server_version_num` via
+   `podman exec`, so it works with both the `<major>/docker` layout and older
+   layouts, and without relying on `podman unshare` working in the CI runner.
+5. Pulls the upgrade image, clears any stale `<new-major>/` directory, stops
+   the pod, and runs
    `docker.io/tianon/postgres-upgrade:<old>-to-<new> --link --username <user>`.
-5. Copies the old `pg_hba.conf` into the new cluster (the tianon image's
+6. Copies the old `pg_hba.conf` into the new cluster (the tianon image's
    `initdb` does not add Docker's `host all all all` rule).
-6. Renames the old cluster directory to `.pre-<new>` so the new image's
-   `*/docker` scan ignores it.
-7. Leaves the pod stopped; the caller restarts it. With `--no-start` omitted,
+7. Renames the old cluster directory to `.pre-<new>` so the new image's
+   `*/docker` scan ignores it. This uses the upgrade image, not
+   `podman unshare`.
+8. Leaves the pod stopped; the caller restarts it. With `--no-start` omitted,
    the script restarts the pod itself.
 
 Useful flags:

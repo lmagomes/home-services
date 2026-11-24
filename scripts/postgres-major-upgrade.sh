@@ -166,17 +166,36 @@ for cf in "$DIR"/*.container; do
   fi
   log "$NAME: cluster superuser is $superuser"
 
-  mountpoint=$(podman volume inspect -f '{{.Mountpoint}}' "$vol")
-  pgdata_old="/var/lib/postgresql/$old_major/docker"
-  pgdata_new="/var/lib/postgresql/$new_major/docker"
+  # Everything here runs through podman exec against the running old
+  # container (or the upgrade image), so it does not depend on podman unshare
+  # being usable in the deploy environment (e.g. the CI runner).
+  old_mount=$(podman inspect -f '{{range .Mounts}}{{.Name}}|{{.Destination}};{{end}}' "$NAME" \
+    | tr ';' '\n' | awk -F'|' -v v="$vol" '$1 == v { print $2; exit }')
+  [ "$old_mount" = /var/lib/postgresql ] \
+    || die "$NAME: expected volume $vol mounted at /var/lib/postgresql in the old container, found '${old_mount:-nothing}'"
 
-  [ "$(podman unshare cat "$mountpoint/$old_major/docker/PG_VERSION" 2>/dev/null || true)" = "$old_major" ] \
-    || die "$NAME: expected $old_major data in $mountpoint/$old_major/docker"
-  if podman unshare cat "$mountpoint/$new_major/docker/PG_VERSION" >/dev/null 2>&1; then
-    die "$NAME: $mountpoint/$new_major/docker already contains a cluster"
+  data_dir=$(podman exec "$NAME" psql -U "$superuser" -Atc 'show data_directory')
+  case "$data_dir" in
+    /var/lib/postgresql)
+      die "$NAME: cluster is at the volume root; this needs a manual migration" ;;
+    /var/lib/postgresql/*) ;;
+    *) die "$NAME: unexpected data_directory '$data_dir'" ;;
+  esac
+
+  version_num=$(podman exec "$NAME" psql -U "$superuser" -Atc 'show server_version_num')
+  running_major=$((version_num / 10000))
+  [ "$running_major" -eq "$old_major" ] \
+    || die "$NAME: running server is major $running_major, expected $old_major"
+
+  pgdata_old=$data_dir
+  pgdata_new="/var/lib/postgresql/$new_major/docker"
+  log "$NAME: old cluster data at $pgdata_old"
+
+  if podman exec "$NAME" sh -c "test -s '$pgdata_new/PG_VERSION'"; then
+    die "$NAME: $pgdata_new already contains a cluster"
   fi
-  if [ -e "$mountpoint/.pre-$new_major" ]; then
-    die "$NAME: $mountpoint/.pre-$new_major already exists; remove it first"
+  if podman exec "$NAME" sh -c "test -e '/var/lib/postgresql/.pre-$new_major'"; then
+    die "$NAME: /var/lib/postgresql/.pre-$new_major already exists; remove it first"
   fi
 
   if [ "$DRY_RUN" -eq 1 ]; then
@@ -189,12 +208,14 @@ for cf in "$DIR"/*.container; do
     systemctl --user daemon-reload
   fi
 
-  systemctl --user stop "$POD_SVC"
-  podman unshare rm -rf "$mountpoint/$new_major"
-
   upgrade_image="docker.io/tianon/postgres-upgrade:${old_major}-to-${new_major}"
   log "$NAME: pulling $upgrade_image"
   podman pull -q "$upgrade_image" >/dev/null
+
+  # clear a stale empty <new-major>/ left by a previous failed start
+  podman exec "$NAME" sh -c "rm -rf '/var/lib/postgresql/$new_major'"
+
+  systemctl --user stop "$POD_SVC"
 
   init_args="-U $superuser"
   if [ -n "$initdb_args" ]; then
@@ -207,7 +228,8 @@ for cf in "$DIR"/*.container; do
         -e "PGDATANEW=$pgdata_new" \
         -e "POSTGRES_INITDB_ARGS=$init_args" \
         "$upgrade_image" --link --username "$superuser"; then
-    podman unshare rm -rf "$mountpoint/$new_major"
+    podman run --rm -v "$vol:/var/lib/postgresql:Z" --entrypoint /bin/sh "$upgrade_image" \
+      -c "rm -rf '/var/lib/postgresql/$new_major'" || true
     if [ -f "$installed" ]; then
       sed -i "s|^Image=.*|Image=$old_image|" "$installed"
       systemctl --user daemon-reload
@@ -218,11 +240,12 @@ for cf in "$DIR"/*.container; do
 
   # the tianon image initdbs the new cluster itself and does not add the
   # Docker entrypoint's "host all all all" rule, so carry pg_hba.conf over
-  podman unshare cp -a \
-    "$mountpoint/$old_major/docker/pg_hba.conf" \
-    "$mountpoint/$new_major/docker/pg_hba.conf"
-  podman unshare mv "$mountpoint/$old_major" "$mountpoint/.pre-$new_major"
-  log "$NAME: upgraded to $new_major (old cluster kept at $mountpoint/.pre-$new_major)"
+  podman run --rm -v "$vol:/var/lib/postgresql:Z" --entrypoint /bin/sh "$upgrade_image" -c "
+    set -e
+    cp -a '$pgdata_old/pg_hba.conf' '$pgdata_new/pg_hba.conf'
+    mv '$pgdata_old' '/var/lib/postgresql/.pre-$new_major'
+  "
+  log "$NAME: upgraded to $new_major (old cluster kept at /var/lib/postgresql/.pre-$new_major)"
 
   if [ "$NO_START" -eq 0 ]; then
     systemctl --user start "$POD_SVC"
