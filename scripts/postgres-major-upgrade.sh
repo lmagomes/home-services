@@ -120,9 +120,8 @@ for cf in "$DIR"/*.container; do
   [ -n "$pod_ref" ] || die "$NAME: not part of a pod (Pod= is missing)"
   pod_file="$DIR/$pod_ref"
   [ -f "$pod_file" ] || die "$NAME: pod unit $pod_ref not found in $DIR"
-  pod_name=$(sed -n 's/^PodName=//p' "$pod_file" | head -1)
-  [ -n "$pod_name" ] || pod_name=${pod_ref%.pod}
-  POD_SVC="${pod_name}-pod.service"
+  # quadlet names the generated service after the pod file, not after PodName=
+  POD_SVC="$(basename "$pod_file" .pod)-pod.service"
 
   envf="$DIR/$NAME.env"
   if [ -f "$envf" ] && grep -q '^PGDATA=' "$envf"; then
