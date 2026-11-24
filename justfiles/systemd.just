@@ -275,6 +275,15 @@ update-podman-images *dirs:
         if not test -d $dir
             continue
         end
+
+        # only invoke the migration for dirs that declare a postgres-family image
+        set -l container_files (find $dir -name "*.container")
+        if test (count $container_files) -gt 0
+            if grep -qE '^Image=.*(postgres|postgis|pgvector)' $container_files
+                bash scripts/postgres-major-upgrade.sh $dir --no-start; or exit 1
+            end
+        end
+
         for pod_file in (find $dir -name "*.pod")
             set service_name (basename $pod_file .pod)-pod.service
             echo "🔄 Restarting $service_name"

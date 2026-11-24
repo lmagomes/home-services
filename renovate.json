@@ -102,6 +102,16 @@
             "groupName": "{{parentDir}} (major)",
             "groupSlug": "{{parentDir}}-major",
             "groupSingleUpdates": true
+        },
+        {
+            "description": "Postgres majors need a data migration - require dashboard approval",
+            "matchPackageNames": [
+                "/postgres$/",
+                "/pgvector\\/pgvector/",
+                "/postgis\\/postgis/"
+            ],
+            "matchUpdateTypes": ["major"],
+            "dependencyDashboardApproval": true
         }
     ]
 }

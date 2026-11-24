@@ -47,7 +47,7 @@ validate:
 
     # shell scripts lint
     if command -q shellcheck
-        for f in builds/*/*.sh
+        for f in builds/*/*.sh scripts/*.sh
             if test -f $f
                 if not shellcheck $f
                     echo "❌ shellcheck failed: $f"

@@ -22,6 +22,8 @@ This is a collection of podman quadlets that I use for selfhosting several servi
 ├── builds/                   # Custom Containerfiles
 │   ├── caddy/
 │   └── transmission/
+├── scripts/                  # Operational helper scripts
+├── docs/                     # Documentation
 ├── timers/                   # Systemd timers (e.g., backups)
 │   ├── backup.service
 │   └── backup.timer
