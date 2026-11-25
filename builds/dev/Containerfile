@@ -45,7 +45,7 @@ RUN dnf up -y
 
 # pi-web: browser UI for the pi coding agent (https://forgejo.example.com/lgomes/pi-web)
 # Pinned to a release tag; bump both the tag and build-version to roll forward.
-RUN git clone --depth 1 --branch v0.3.0 https://forgejo.example.com/lgomes/pi-web /opt/pi-web \
+RUN git clone --depth 1 --branch v0.11.1 https://forgejo.example.com/lgomes/pi-web /opt/pi-web \
     && chmod +x /opt/pi-web/server.js \
     && ln -sf /opt/pi-web/server.js /usr/local/bin/pi-web
 
