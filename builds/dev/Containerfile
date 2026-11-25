@@ -43,11 +43,19 @@ RUN chmod +x /entrypoint.fish
 
 RUN dnf up -y
 
-# pi-web: browser UI for the pi coding agent (https://forgejo.example.com/lgomes/pi-web)
+# pi-web: browser UI for the pi coding agent, from our self-hosted Forgejo repo.
+# The clone URL is injected as the `pi-web-repo` build secret so the git host
+# never lands in a tracked file; `just build-and-push` resolves it through
+# `just forgejo-repo-url pi-web`.
 # Pinned to a release tag; bump both the tag and build-version to roll forward.
-RUN git clone --depth 1 --branch v0.11.1 https://forgejo.example.com/lgomes/pi-web /opt/pi-web \
-    && chmod +x /opt/pi-web/server.js \
-    && ln -sf /opt/pi-web/server.js /usr/local/bin/pi-web
+RUN --mount=type=secret,id=pi-web-repo \
+    test -s /run/secrets/pi-web-repo || { \
+        echo "❌ pi-web-repo build secret is missing or empty — build with 'just build-dev'" >&2; \
+        exit 1; \
+    }; \
+    git clone --depth 1 --branch v0.11.1 "$(cat /run/secrets/pi-web-repo)" /opt/pi-web \
+        && chmod +x /opt/pi-web/server.js \
+        && ln -sf /opt/pi-web/server.js /usr/local/bin/pi-web
 
 RUN curl -sSL https://github.com/getsops/sops/releases/download/v3.13.3/sops-v3.13.3.linux.amd64 -o /usr/local/bin/sops && \
     chmod +x /usr/local/bin/sops

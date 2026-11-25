@@ -158,6 +158,7 @@ log:
 - Place in `builds/<image-name>/Containerfile`.
 - Tag locally-built images as `localhost/<image-name>:<version>`.
 - Extract the version from the base image's `FROM` line when possible (via `sed` in the build recipe).
+- Never hard-code a host name, registry domain, or other per-instance value in a `Containerfile`. Resolve it at build time in `justfiles/containers.just` and pass it in with `podman build --secret` (e.g. `id=pi-web-repo`, mounted at `/run/secrets/<id>`); build args end up in the image history, secrets do not.
 - Avoid tagging locally-built images as `:latest` — always include a version. Images referenced in `.container` files must have pinned versions.
 
 ## Systemd Timers

@@ -62,13 +62,52 @@ build-from-conf conf push="true":
 github-latest-version repo:
     curl -s https://api.github.com/repos/{{ repo }}/releases/latest | jq -r '.tag_name'
 
+# print the clone URL for one of our forgejo repos. The git host and owner are
+# derived from the registry-path secret so no domain appears in tracked files;
+# set git-base-url (e.g. https://example.com/owner) to override the derivation.
+forgejo-repo-url repo:
+    #!/usr/bin/env fish
+    set -l secrets (sops decrypt .secrets/secrets.yaml)
+
+    set -l override (printf '%s\n' $secrets | yq '.secrets.git-base-url // ""' | string trim)
+    if test -n "$override"
+        echo "$override/{{ repo }}"
+        exit 0
+    end
+
+    set -l parts (string split '/' (printf '%s\n' $secrets | yq '.secrets.registry-path'))
+    if test (count $parts) -lt 2 -o -z "$parts[1]" -o -z "$parts[2]" -o "$parts[1]" = "null"
+        echo "❌ Could not derive the git URL from registry-path; set git-base-url in .secrets/secrets.yaml"
+        exit 1
+    end
+
+    echo "https://$parts[1]/$parts[2]/{{ repo }}"
+
 # build and push a container image to the forgejo container registry.
 # version-strategy: "first" (first FROM line), "last" (last FROM line), "github:owner/repo", "rpm:package-name", "upstream-file:<path>", or literal version string.
-# pass push=false to build and tag locally without decrypting secrets or pushing.
+# pass push=false to build and tag locally without pushing or decrypting registry secrets.
 build-and-push image dir version-strategy push="true":
     #!/usr/bin/env fish
     set -l image_version
     set -l skip_build false
+    set -l build_secrets
+    set -l secret_file
+
+    # Build-time values that must not live in tracked files (e.g. the pi-web clone
+    # URL) are resolved here and handed to podman as build secrets, which stay out
+    # of the image history. Only images whose Containerfile mounts the secret pay
+    # for the sops decrypt.
+    if grep -q 'type=secret,id=pi-web-repo' "{{ dir }}/Containerfile" 2>/dev/null
+        set -l repo_url (just forgejo-repo-url pi-web)
+        if test $status -ne 0 -o -z "$repo_url"
+            echo "❌ Could not resolve the pi-web repo URL (try 'just forgejo-repo-url pi-web')"
+            exit 1
+        end
+        set secret_file (mktemp)
+        printf '%s' "$repo_url" > $secret_file
+        set build_secrets --secret id=pi-web-repo,src=$secret_file
+    end
+
     if test "{{ version-strategy }}" = "first"
         set image_version (sed -n 's/^FROM .*:\([^ ]*\).*/\1/p' {{ dir }}/Containerfile | head -1)
     else if test "{{ version-strategy }}" = "last"
@@ -79,7 +118,7 @@ build-and-push image dir version-strategy push="true":
     else if string match -q 'rpm:*' "{{ version-strategy }}"
         set package (string replace 'rpm:' '' "{{ version-strategy }}")
         echo "🔄 Building {{ image }} with temp tag for RPM version extraction..."
-        podman build -t localhost/{{ image }}:temp {{ dir }}
+        podman build $build_secrets -t localhost/{{ image }}:temp {{ dir }}
         set image_version (podman run --rm localhost/{{ image }}:temp rpm -q --qf '%{VERSION}-%{RELEASE}' $package)
         podman tag localhost/{{ image }}:temp localhost/{{ image }}:$image_version
         podman tag localhost/{{ image }}:temp localhost/{{ image }}:latest
@@ -99,8 +138,12 @@ build-and-push image dir version-strategy push="true":
 
     if not $skip_build
         echo "🔄 Building {{ image }}:$image_version..."
-        podman build --build-arg CACHEBUST=(date +%s) -t localhost/{{ image }}:$image_version {{ dir }}
+        podman build $build_secrets --build-arg CACHEBUST=(date +%s) -t localhost/{{ image }}:$image_version {{ dir }}
         podman tag localhost/{{ image }}:$image_version localhost/{{ image }}:latest
+    end
+
+    if test -n "$secret_file"
+        rm -f $secret_file
     end
 
     if test "{{ push }}" = "false"

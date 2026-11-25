@@ -300,6 +300,8 @@ This workflow:
 
 A containerized development environment accessible via SSH, a web-based pi coding agent interface (pi-web), and a browser IDE. The container runs Fedora 44 with fish, just, git, jq, yq, sops, forgejo-cli (`fj`), tmux, vim, htop, pi-web, and OpenVSCode Server.
 
+The image clones pi-web from our Forgejo git host at build time. `just build-and-push` resolves the URL with `just forgejo-repo-url pi-web` (git host and owner derived from the `registry-path` secret, or from an optional `git-base-url` secret) and passes it to `podman build` as the `pi-web-repo` build secret, so no domain appears in any tracked file.
+
 ### Setup
 
 **1. Add secrets** to `.secrets/secrets.yaml`:
