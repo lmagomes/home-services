@@ -3,7 +3,9 @@
     "enabledManagers": ["quadlet", "dockerfile"],
     "labels": ["renovate"],
     "branchPrefix": "updates/renovate-",
-    "dependencyDashboard": true,
+    "dependencyDashboard": {
+        "enabled": true
+    },
     "dependencyDashboardApproval": false,
     "schedule": ["before 6am"],
     "prHourlyLimit": 10,
