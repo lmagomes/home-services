@@ -3,6 +3,8 @@ FROM fedora:44
 ARG CACHEBUST=1
 RUN echo "cachebust=$CACHEBUST"
 
+# chromium: full browser (not chromium-headless) so pi-web's test/browser/*.mjs
+# checks have CDP and can grant notifications; installs /usr/bin/chromium-browser.
 RUN dnf install -y \
     fish \
     just \
@@ -20,6 +22,7 @@ RUN dnf install -y \
     dnf-plugins-core \
     nodejs \
     npm \
+    chromium \
     && dnf copr enable lihaohong/forgejo-cli -y \
     && dnf install forgejo-cli -y \
     && dnf copr enable atim/lazygit -y \

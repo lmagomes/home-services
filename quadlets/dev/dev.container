@@ -5,7 +5,7 @@ After=network.target
 [Container]
 Pod=dev.pod
 ContainerName=dev
-Image=home-services/dev:44-r16
+Image=home-services/dev:44-r17
 Secret=dev-pi-web-password,type=env,target=PI_WEB_PASSWORD
 Secret=dev-ssh-pubkey,type=env,target=DEV_SSH_PUBKEY
 Secret=dev-ssh-private-key,type=env,target=DEV_SSH_PRIVATE_KEY
